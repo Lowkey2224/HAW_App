@@ -1,4 +1,4 @@
-package veranstaltungsplan.interfaces;
+package com.example.haw_app.veranstaltungsplan.interfaces;
 
 import java.util.Date;
 

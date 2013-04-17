@@ -1,15 +1,12 @@
-package veranstaltungsplan.implementations;
+package com.example.haw_app.veranstaltungsplan.implementations;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Arrays;
 import java.util.List;
 
-import veranstaltungsplan.interfaces.Iveranstaltungsplan;
-
-public class Veranstaltungsplan implements Iveranstaltungsplan{
+public class Veranstaltungsplan implements com.example.haw_app.veranstaltungsplan.interfaces.Iveranstaltungsplan{
 	
 	private static Veranstaltungsplan instance = null;
 	

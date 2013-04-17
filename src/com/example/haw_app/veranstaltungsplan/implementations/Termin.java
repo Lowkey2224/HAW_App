@@ -1,10 +1,8 @@
-package veranstaltungsplan.implementations;
+package com.example.haw_app.veranstaltungsplan.implementations;
 
 import java.util.Date;
 
-import veranstaltungsplan.interfaces.Itermin;
-
-public class Termin implements Itermin{
+public class Termin implements com.example.haw_app.veranstaltungsplan.interfaces.Itermin{
 	
 	private int semester;
 	private String name;
