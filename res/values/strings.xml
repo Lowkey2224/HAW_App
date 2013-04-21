@@ -1,8 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">HAW App</string>
+    <string name="app_name">Meta</string>
     <string name="action_settings">Settings</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="essensplan">Essensplan</string>
+    <string name="pc_pool">PC Pool</string>
+    <string name="veranstaltungsplan">Veranstaltungsplan</string>
+    <string name="social_features">Social Features</string>
+    <string name="stisys">StISys</string>
+    <string name="schnitzeljagd">Schnitzeljagd</string>
+    <string name="optionen">Optionen</string>
+    <string name="meine_noten">Meine Noten</string>
+    <color name="black">#000000</color>
+    <color name="white">#ffffff</color>
 
 </resources>
