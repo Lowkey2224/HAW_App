@@ -8,10 +8,22 @@ package com.example.haw_app.socialfeatures.interfaces;
  */
 
 public interface IPraktika {
+	/**
+	 * Erzeugt einen neuen Partner ohne Daten bis auf Matrikelnummer.
+	 * Die Partner sind eindeutig unter den Matrikelnummer unterscheidbar.
+	 * Dafür wird ein Hashmap genutzt und key ist die matNr.
+	 * @param matNr
+	 * @return boolean true wenn es ein neuen Partner erzeugt wurde
+	 */
+	public boolean createPartner(String matNr);
+	
 
-	public boolean create();
-	public boolean update();
-	public boolean delete();
+	/**
+	 * Löscht einen Partner eindeutig nach dem Matrikelnummer.
+	 * @param matNr
+	 * @return
+	 */
+	public boolean deletePartner(String matNr);
 	
 	/**
 	 * Gibt den Vorlesungzurück
