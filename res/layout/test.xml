@@ -4,13 +4,11 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <Button
-        android:id="@+id/button1"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="50dp"
-        android:layout_marginTop="10dp"
-        android:text="@string/meine_noten"
-        android:onClick = "notenClick" />
+        android:text="PLatzhaltertext -> hier die Anwendung"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 </LinearLayout>

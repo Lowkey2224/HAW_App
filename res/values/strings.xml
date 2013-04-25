@@ -11,7 +11,18 @@
     <string name="schnitzeljagd">Schnitzeljagd</string>
     <string name="optionen">Optionen</string>
     <string name="meine_noten">Meine Noten</string>
+
     <color name="black">#000000</color>
     <color name="white">#ffffff</color>
+
+    <string name="title_activity_stisys">MainActivity</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_mensa">MensaActivity</string>
+    <string name="platzhalter">platzhalter</string>
+    <string name="title_activity_schnitzeljagd">SchnitzeljagdActivity</string>
+    <string name="title_activity_social_features">SocialFeaturesActivity</string>
+    <string name="title_activity_veranstaltungsplan">VeranstaltungsplanActivity</string>
+    <string name="title_activity_optionen">OptionenActivity</string>
+    <string name="webtest">webtest</string>
 
 </resources>

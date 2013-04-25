@@ -2,6 +2,7 @@ package com.example.haw_app;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.content.Intent;
 import android.view.Menu;
 import android.view.View;
 
@@ -22,33 +23,42 @@ public class MainActivity extends Activity {
 	
 
 	public void veranstaltungsClick(View view){
-	    	setContentView(R.layout.veranstaltungsplan);
+		startActivity(new Intent(MainActivity.this,VeranstaltungsplanActivity.class));
 	}
 	    
 	public void essensClick(View view){
-	    	setContentView(R.layout.essensplan);
+	    	//setContentView(R.layout.essensplan);
+		startActivity(new Intent(MainActivity.this,MensaActivity.class));
 	}
 	    
 	    public void socialClick(View view){
-	    	setContentView(R.layout.socialfeatures);
+	    	startActivity(new Intent(MainActivity.this,SocialFeaturesActivity.class));
 	    }
 	    
+	    /*
 	    public void poolClick(View view){
-	    	setContentView(R.layout.pcpool);
+	    	//setContentView(R.layout.pcpool);
+	    	
 	    }
+	    */
 	    
 	    public void stisysClick(View view){
-	    	setContentView(R.layout.stisys);
+	    	//setContentView(R.layout.stisys);
+	    	startActivity(new Intent(MainActivity.this,StisysActivity.class));
 	    }
 	    
 	    
 	    public void schnitzelClick(View view){
-	    	setContentView(R.layout.schnitzeljagd);
+	    	//setContentView(R.layout.schnitzeljagd);
+	    	startActivity(new Intent(MainActivity.this,SchnitzeljagdActivity.class));
 	    }
 	    
 	    public void optionClick(View view){
-	    	setContentView(R.layout.optionen);
+	    	//setContentView(R.layout.optionen);
+	    	startActivity(new Intent(MainActivity.this,OptionenActivity.class));
 	    }
+	    
+
 
 	}
 
