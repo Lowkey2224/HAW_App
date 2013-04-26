@@ -24,5 +24,10 @@
     <string name="title_activity_veranstaltungsplan">VeranstaltungsplanActivity</string>
     <string name="title_activity_optionen">OptionenActivity</string>
     <string name="webtest">webtest</string>
+    <string name="buttonLogin">Login</string>
+    <string name="textLogin">Kennung</string>
+    <string name="hintLogin"/>
+    <string name="textPassword">Passwort</string>
+    <string name="hintPassword"/>
 
 </resources>

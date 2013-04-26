@@ -1,22 +1,56 @@
 package com.example.haw_app;
 
+
 import android.os.Bundle;
 import android.app.Activity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.EditText;
 import android.support.v4.app.NavUtils;
 import android.annotation.TargetApi;
 import android.os.Build;
 
 public class StisysActivity extends Activity {
-
+	EditText editLogin;
+	EditText editPassword;
+	Button buttonLogin;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_stisys);
-		// Show the Up button in the action bar.
-		setupActionBar();
+
+		
+		setContentView(R.layout.act_stisys_login);
+		editLogin = (EditText) findViewById(R.id.editLogin);
+		editPassword = (EditText) findViewById(R.id.editPassword);
+
+		findViewById(R.id.buttonLogin).setOnClickListener(
+				new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						String loginName = editLogin.getText().toString();
+						Log.d("MainActivity", "onClick'd with loginName: "
+								+ loginName);
+						String loginPassword = editPassword.getText()
+								.toString();
+						Log.d("MainActivity", "onClick'd with loginPassword: "
+								+ loginPassword);
+						
+						
+						//
+						setContentView(R.layout.activity_stisys);
+						// Show the Up button in the action bar.
+						setupActionBar();
+					    //
+					}
+				});
+
+
 	}
 
 	/**
