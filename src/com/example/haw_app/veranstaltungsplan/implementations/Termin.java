@@ -1,40 +1,32 @@
 package com.example.haw_app.veranstaltungsplan.implementations;
 
-import java.util.Date;
+import org.joda.time.DateTime;
 
 public class Termin implements com.example.haw_app.veranstaltungsplan.interfaces.Itermin{
 	
-	private int semester;
+	private String semesterGruppe;
 	private String name;
-	private Date von;
-	private Date bis;
-	private String wochentag;
-	private int start;
-	private int ende;
+	private DateTime von;
+	private DateTime bis;
 	private String prof;
-	private String assistent;
 	private int raum;
 	
-	private Termin(int semester,String name, Date von,Date bis,String wochentag,int start,int ende,String prof,String assistent,int raum){
-		this.semester = semester;
+	private Termin(String semesterGruppe,String name, DateTime von,DateTime bis,String prof,int raum){
+		this.semesterGruppe = semesterGruppe;
 		this.name = name;
 		this.von = von;
 		this.bis = bis;
-		this.wochentag = wochentag;
-		this.start = start;
-		this.ende = ende;
 		this.prof = prof;
-		this.assistent = assistent;
 		this.raum = raum;
 	}
 	
-	public static Termin valueOf(int semester,String name, Date von,Date bis,String wochentag,int start,int ende,String prof,String assistent,int raum) {
-        return new Termin(semester,name,von,bis,wochentag,start,ende,prof,assistent,raum);
+	public static Termin valueOf(String semesterGruppe,String name, DateTime von,DateTime bis,String prof,int raum) {
+        return new Termin(semesterGruppe,name,von,bis,prof,raum);
     }
 
 	@Override
-	public int semester(){
-		return semester;
+	public String semesterGruppe(){
+		return semesterGruppe;
 	}
 	
 	@Override
@@ -43,38 +35,18 @@ public class Termin implements com.example.haw_app.veranstaltungsplan.interfaces
 	}
 	
 	@Override
-	public Date von(){
+	public DateTime von(){
 		return von;
 	}
 	
 	@Override
-	public Date bis(){
+	public DateTime bis(){
 		return bis;
-	}
-	
-	@Override
-	public String wochentag(){
-		return wochentag;
-	}
-	
-	@Override
-	public int start(){
-		return start;
-	}
-	
-	@Override
-	public int ende(){
-		return ende;
 	}
 	
 	@Override
 	public String prof(){
 		return prof;
-	}
-	
-	@Override
-	public String assistent(){
-		return assistent;
 	}
 	
 	@Override

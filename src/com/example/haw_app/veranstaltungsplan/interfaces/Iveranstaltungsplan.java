@@ -12,7 +12,7 @@ public interface Iveranstaltungsplan {
 	/**
 	 * Downloaded die aktuelle Termin .txt Datei vom Server und parst diese.
 	 */
-	public void aktualisieren();
+	public void aktualisieren()throws Exception;
 	
 	/**
 	 * Methode zum aendern der belegten Faecher.(Nur belegte Faecher werden auch exportiert.) 
