@@ -1,79 +1,95 @@
 package com.example.haw_app.socialfeatures.interfaces;
 
+import java.util.List;
+
+import com.example.haw_app.database.Database;
+
 /**
- * Schnittstelle für das Social Features.
- * Ermöglicht Zugriff und eintragen von Praktikas
- * @version 0.1
+ * Schnittstelle für das Social Features. Ermöglicht Zugriff und eintragen von
+ * Praktikas
+ * 
+ * @version 0.5
  * @author Aria Rafi Nazari
  */
 
 public interface IPraktika {
-	/**
-	 * Erzeugt einen neuen Partner ohne Daten bis auf Matrikelnummer.
-	 * Die Partner sind eindeutig unter den Matrikelnummer unterscheidbar.
-	 * Dafür wird ein Hashmap genutzt und key ist die matNr.
-	 * @param matNr
-	 * @return boolean true wenn es ein neuen Partner erzeugt wurde
-	 */
-	public boolean createPartner(String matNr);
-	
 
 	/**
-	 * Löscht einen Partner eindeutig nach dem Matrikelnummer.
-	 * @param matNr
+	 * Erzeugen eines neuen Praktikumpartner
+	 * 
+	 * @param matNr  Wichtig um eindeutig die Partner unterscheiden zu können.
+	 * @param firstname
+	 * @param surname
+	 * @param email
+	 * @param handy
+	 * @param dbSF
 	 * @return
 	 */
-	public boolean deletePartner(String matNr);
-	
+	public boolean createPartner(String matNr, String firstname,
+			String surname, String email, String handy,
+			Database dbSF);
+
+	/**
+	 * Praktikumspartner die Daten ändern/updaten
+	 * @param matNr
+	 * @param firstname
+	 * @param surname
+	 * @param email
+	 * @param handy
+	 * @param dbSF
+	 * @return
+	 */
+	public boolean updatePartner(String matNr, String firstname,
+			String surname, String email, String handy,
+			Database dbSF);
+
+	/**
+	 * Praktikumsparnter löschen
+	 * @param matNr Jede Student hat eine eindeutige Nummer
+	 * @param dbSF
+	 * @return
+	 */
+	public boolean deletePartner(String matNr, Database dbSF);
+
+	/**
+	 * Beim App ausführung müssen die Praktikas und die ensprechende
+	 * Praktikumspartner wieder neu eingetragen werden.
+	 * @param dbSF
+	 */
+	public void getPartnerAll(Database dbSF);
+
+	/**
+	 * Gibt die Partner zurück mit den er die Praktika macht
+	 * @param slecture
+	 * @return
+	 */
+	public List<IPartner> getPartner(String slecture);
+
 	/**
 	 * Gibt den Vorlesungzurück
+	 * 
 	 * @return firstname
 	 */
 	public String getLecture();
-	
-	/**
-	 * Vorlesung setzen
-	 * @param lecture
-	 * @return boolean Zeigt ob Vorlesung setzen funktioniert hat
-	 */
-	public boolean setLecture(String lecture);
-	
+
 	/**
 	 * Gibt den Namen des Professors zurück
+	 * 
 	 * @return profName
 	 */
 	public String getProfName();
-	
-	/**
-	 * Namen des Professors setzen
-	 * @param profName
-	 * @return boolean Zeigt ob Namen des Professors setzen funktioniert hat
-	 */
-	public boolean setProfName(String profName);
-	
+
 	/**
 	 * Gibt den Gruppen Nummer des Praktikas zurück
+	 * 
 	 * @return groupNr
 	 */
 	public String getGroupNr();
-	
-	/**
-	 * Gruppen Nummer des Praktikas setzen
-	 * @param groupNr
-	 * @return boolean Zeigt ob Gruppen Nummer des Praktikas setzen funktioniert hat
-	 */
-	public boolean setGroupNr(String groupNr);
-	
+
 	/**
 	 * Gibt den Status des Praktikas zurück
+	 * 
 	 * @return status
 	 */
-	public boolean getStatus();
-	
-	/**
-	 * Status des Praktikassetzen
-	 * @param status
-	 * @return boolean Zeigt ob Status des Praktikas setzen funktioniert hat
-	 */
-	public boolean setStatus(Boolean status);
+	public String getStatus();
 }

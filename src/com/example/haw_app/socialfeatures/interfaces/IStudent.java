@@ -1,9 +1,11 @@
 package com.example.haw_app.socialfeatures.interfaces;
 
+import java.util.Set;
+
 /**
  * Schnittstelle für das Social Features.
  * Ermöglicht Zugriff und updaten von Student Praktikas
- * @version 0.1
+ * @version 0.7
  * @author Aria Rafi Nazari
  */
 
@@ -16,7 +18,7 @@ public interface IStudent {
 	 * @param oldDelete
 	 * @return
 	 */
-	public boolean updatePraktikas(Boolean oldDelete);
+	public boolean updatePraktikas();
 	
 	/**
 	 * Einzelne Praktika löschen.
@@ -25,5 +27,18 @@ public interface IStudent {
 	 * @return
 	 */
 	public boolean deletePraktika(String lecture);
-
+	
+	/**
+	 * Gibt alle Praktia an die der Student besucht
+	 * @return
+	 */
+	public Set<String> getPraktikasLectureSet();
+	
+	/**
+	 * Gibt die Daten des entsprechenden Praktia zurück
+	 * @param slecture
+	 * @return
+	 */
+	public IPraktika getPraktika(String slecture);
+	
 }

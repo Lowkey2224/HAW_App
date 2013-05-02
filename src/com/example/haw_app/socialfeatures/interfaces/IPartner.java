@@ -4,24 +4,11 @@ package com.example.haw_app.socialfeatures.interfaces;
  * Schnittstelle für das Social Features. Ermöglicht Zugriff und eintragen von
  * Praktikumspartnern
  * 
- * @version 0.1
+ * @version 0.9
  * @author Aria Rafi Nazari
  */
 
 public interface IPartner {
-
-	/**
-	 * Aktualisiert die Daten des Partners.
-	 * Die unveränderte Daten werden auch mitgelesen.
-	 * 
-	 * @param firstname
-	 * @param surname
-	 * @param email
-	 * @param handy
-	 * @return
-	 */
-	public boolean updatePartner(String firstname, String surname,
-			String email, String handy);
 
 	/**
 	 * Gibt den Vorname zurück
@@ -97,4 +84,6 @@ public interface IPartner {
 	 * @return boolean Zeigt ob Handynummer setzen funktioniert hat
 	 */
 	public boolean setHandy(String handy);
+	
+	public String getLecture();
 }

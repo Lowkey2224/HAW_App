@@ -9,19 +9,17 @@ public class Partner implements IPartner {
 	private String matNr = "";
 	private String email = "";
 	private String handy = "";
+	private String lecture = "";
 	
-	public Partner(String matNr){
+	public Partner(String matNr,String firstname, String surname,
+			String email, String handy, String lecture){
 		this.matNr = matNr;
-	}
-	
-	@Override
-	public boolean updatePartner(String firstname, String surname,
-			String email, String handy) {
-		setFirstname(firstname);
-		setSurname(surname);
-		setEMail(email);
-		setHandy(handy);
-		return false;
+		this.firstname = firstname;
+		this.surname = surname;
+		this.matNr = matNr;
+		this.email = email;
+		this.handy = handy;
+		this.lecture = lecture;
 	}
 
 	@Override
@@ -77,5 +75,10 @@ public class Partner implements IPartner {
 	public boolean setHandy(String handy) {
 		this.handy = handy;
 		return true;
+	}
+	
+	@Override
+	public String getLecture() {
+		return lecture;
 	}
 }
