@@ -4,7 +4,7 @@ package com.example.haw_app.socialfeatures.interfaces;
  * Schnittstelle für das Social Features. Ermöglicht Zugriff und eintragen von
  * Praktikumspartnern
  * 
- * @version 0.9
+ * @version 1.0
  * @author Aria Rafi Nazari
  */
 
@@ -85,5 +85,9 @@ public interface IPartner {
 	 */
 	public boolean setHandy(String handy);
 	
+	/**
+	 * Praktika die der Partner besucht.
+	 * @return lecture
+	 */
 	public String getLecture();
 }

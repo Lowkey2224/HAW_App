@@ -2,13 +2,11 @@ package com.example.haw_app.socialfeatures.interfaces;
 
 import java.util.List;
 
-import com.example.haw_app.database.Database;
-
 /**
- * Schnittstelle für das Social Features. Ermöglicht Zugriff und eintragen von
- * Praktikas
+ * Schnittstelle für das Social Features. 
+ * Ermöglicht Zugriff und eintragen von Praktikas
  * 
- * @version 0.5
+ * @version 1.0
  * @author Aria Rafi Nazari
  */
 
@@ -16,18 +14,16 @@ public interface IPraktika {
 
 	/**
 	 * Erzeugen eines neuen Praktikumpartner
-	 * 
-	 * @param matNr  Wichtig um eindeutig die Partner unterscheiden zu können.
+	 * Durch DB hat bekommen die eine Eindeutige ID
+	 * @param matNr
 	 * @param firstname
 	 * @param surname
 	 * @param email
 	 * @param handy
-	 * @param dbSF
 	 * @return
 	 */
 	public boolean createPartner(String matNr, String firstname,
-			String surname, String email, String handy,
-			Database dbSF);
+			String surname, String email, String handy);
 
 	/**
 	 * Praktikumspartner die Daten ändern/updaten
@@ -36,34 +32,54 @@ public interface IPraktika {
 	 * @param surname
 	 * @param email
 	 * @param handy
-	 * @param dbSF
 	 * @return
 	 */
 	public boolean updatePartner(String matNr, String firstname,
-			String surname, String email, String handy,
-			Database dbSF);
+			String surname, String email, String handy);
 
 	/**
-	 * Praktikumsparnter löschen
-	 * @param matNr Jede Student hat eine eindeutige Nummer
-	 * @param dbSF
+	 * Partner mit den entsprechende Matrikelnummer aus 
+	 * jede Praktika gelöscht, wo er eingetragen ist.
+	 * @param matNr
 	 * @return
 	 */
-	public boolean deletePartner(String matNr, Database dbSF);
+	public boolean deletePartnerID(String matNr);
+	
+	/**
+	 * Jeder Partner der den entsprechenden Praktika besucht wird gelöscht.
+	 * Bleibt aber bei den anderen Praktika noch erhalten.
+	 * @param lecture
+	 * @return
+	 */
+	public boolean deletePartnerLecture(String lecture);
 
 	/**
 	 * Beim App ausführung müssen die Praktikas und die ensprechende
 	 * Praktikumspartner wieder neu eingetragen werden.
-	 * @param dbSF
+	 * Aufruf im Praktika
 	 */
-	public void getPartnerAll(Database dbSF);
+	public void getPartnerfromDB();
+	
+	/**
+	 * Holt die ID die im DB eingetragen ist 
+	 * @param matNr
+	 * @return
+	 */
+	public Integer getPartnerID(String matNr);
 
 	/**
-	 * Gibt die Partner zurück mit den er die Praktika macht
+	 * Gibt alle Partner an, mit der die Praktium bearbeitet
 	 * @param slecture
 	 * @return
 	 */
-	public List<IPartner> getPartner(String slecture);
+	public List<IPartner> getPartnerLecture(String slecture);
+	
+	/**
+	 * Gibt Partner mit dem entsprechenden Matrikelnummer zurück
+	 * @param matNr
+	 * @return
+	 */
+	public IPartner getPartner(String matNr);
 
 	/**
 	 * Gibt den Vorlesungzurück
@@ -92,4 +108,5 @@ public interface IPraktika {
 	 * @return status
 	 */
 	public String getStatus();
+
 }

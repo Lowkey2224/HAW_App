@@ -4,58 +4,66 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
+import android.annotation.SuppressLint;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.example.haw_app.database.Database;
+import com.example.haw_app.database.DatabaseSocialFeatures;
 import com.example.haw_app.socialfeatures.interfaces.IPartner;
 import com.example.haw_app.socialfeatures.interfaces.IPraktika;
 
+@SuppressLint("UseSparseArrays")
 public class Praktika implements IPraktika {
 
 	private String lecture = "";
 	private String profName = "";
 	private String groupNr = "";
 	private String status = "not ok";
+	private Map<Integer, IPartner> partners = new HashMap<Integer, IPartner>();
 
-	private static final String DB_TABLE_PARTNER = Database.DB_TABLE_PARTNER;
-
-	private Map<String, IPartner> partners = new HashMap<String, IPartner>();
+	private static final String DB_TABLE_PARTNER = DatabaseSocialFeatures.DB_TABLE_PARTNER;
+	DatabaseSocialFeatures dbSF;
 
 	public Praktika(String lecture, String profName, String groupNr,
-			String status) {
+			String status, DatabaseSocialFeatures dbSF) {
 		this.lecture = lecture;
 		this.profName = profName;
 		this.groupNr = groupNr;
 		this.status = status;
+		this.dbSF = dbSF;
 	}
 
 	@Override
 	public boolean createPartner(String matNr, String firstname,
-			String surname, String email, String handy,
-			Database dbSF) {
-		SQLiteDatabase db = dbSF.getWritableDatabase();
-		db.execSQL("INSERT INTO " + DB_TABLE_PARTNER
-				+ "(matNr,firstname, surname,email,handy,lecture) VALUES('"
-				+ matNr + "','" + firstname + "','" + surname + "','" + email
-				+ "','" + handy + "','" + lecture + "')");
-		db.close();
-		return partners.put(matNr, new Partner(matNr, firstname, surname,
-				email, handy, lecture)) != null;
+		String surname, String email, String handy) {
+		Integer pID = null;
+		if (getPartnerID(matNr) == null) {
+			SQLiteDatabase db = dbSF.getWritableDatabase();
+			db.execSQL("INSERT INTO "
+					+ DB_TABLE_PARTNER
+					+ " (matNr,firstname, surname,email,handy,lecture) VALUES ('"
+					+ matNr + "','" + firstname + "','" + surname + "','"
+					+ email + "','" + handy + "','" + lecture + "');");
+			pID = getPartnerID(matNr);
+			partners.put(pID, new Partner(matNr, firstname, surname, email,
+					handy, lecture));
+			db.close();
+			return true;
+		}else{
+			return false;
+		}
 	}
 
 	@Override
 	public boolean updatePartner(String matNr, String firstname,
-			String surname, String email, String handy,
-			Database dbSF) {
-
+			String surname, String email, String handy) {
 		SQLiteDatabase db = dbSF.getWritableDatabase();
+		Integer pID = null;
 		db.execSQL("UPDATE " + DB_TABLE_PARTNER + " SET firstname = '"
 				+ firstname + "', surname = '" + surname + "', matNr = '"
 				+ matNr + "'," + "email = '" + email + "', handy = '" + handy
-				+ "' " + "WHERE matNr = '" + matNr + "'");
+				+ "' " + "WHERE matNr = '" + matNr + "';");
 		db.close();
 
 		IPartner p = partners.get(matNr);
@@ -63,36 +71,51 @@ public class Praktika implements IPraktika {
 		p.setSurname(surname);
 		p.setEMail(email);
 		p.setHandy(handy);
-		partners.put(matNr, p);
+		pID = getPartnerID(matNr);
+		partners.put(pID, p);
 		return true;
 	}
 
 	@Override
-	public boolean deletePartner(String matNr, Database dbSF) {
+	public boolean deletePartnerID(String matNr) {
+		// Sollte der Partner noch in einem anderen Praktika sein, bleibt er
+		// noch erhalten
 		SQLiteDatabase db = dbSF.getWritableDatabase();
-		db.delete(DB_TABLE_PARTNER, "matNr" + " = '" + matNr+"'", null);
+		Integer pID = null;
+		pID = getPartnerID(matNr);
+		db.delete(DB_TABLE_PARTNER, "pID" + " = '" + pID + "'", null);
 		db.close();
 
-		return partners.remove(matNr) != null;
+		return partners.remove(pID) != null;
+	}
+	
+	@Override
+	public boolean deletePartnerLecture(String lecture) {
+		List<IPartner> pList = new ArrayList<IPartner>();
+		pList = getPartnerLecture(lecture);
+		for (IPartner p : pList){
+			deletePartnerID(p.getMatNr());
+		}
+		return true;
 	}
 
 	@Override
-	public void getPartnerAll(Database dbSF) {
+	public void getPartnerfromDB() {
 		SQLiteDatabase db = dbSF.getReadableDatabase();
 
-		Cursor c = db.rawQuery("SELECT * FROM " + DB_TABLE_PARTNER
-				+ " WHERE lecture = '" + lecture + "'", null);
+		Cursor c = db.rawQuery("SELECT * FROM " + DB_TABLE_PARTNER, null);
 
 		if (c != null) {
 			if (c.moveToFirst()) {
 				do {
+					Integer id = c.getInt(c.getColumnIndex("parID"));
 					String matNr = c.getString(c.getColumnIndex("matNr"));
 					String firstname = c.getString(c
 							.getColumnIndex("firstname"));
 					String surname = c.getString(c.getColumnIndex("surname"));
 					String email = c.getString(c.getColumnIndex("email"));
 					String handy = c.getString(c.getColumnIndex("handy"));
-					partners.put(matNr, new Partner(matNr, firstname, surname,
+					partners.put(id, new Partner(matNr, firstname, surname,
 							email, handy, lecture));
 				} while (c.moveToNext());
 			}
@@ -101,15 +124,44 @@ public class Praktika implements IPraktika {
 	}
 
 	@Override
-	public List<IPartner> getPartner(String slecture) {
-		Set<String> matNrSet = partners.keySet();
-		List<IPartner> pList = new ArrayList<IPartner>();
-		for (String matNr : matNrSet) {
-			IPartner p = partners.get(matNr);
-			if (p.getLecture().contains(slecture))
-				pList.add(p);
+	public Integer getPartnerID(String matNr) {
+		SQLiteDatabase db = dbSF.getReadableDatabase();
+		Integer id = null;
+
+		Cursor c = db.rawQuery("SELECT parID FROM " + DB_TABLE_PARTNER
+				+ " WHERE matNr = '" + matNr + "'", null);
+
+		if (c != null) {
+			if (c.moveToFirst()) {
+				id = c.getInt(c.getColumnIndex("parID"));
+			}
 		}
+		db.close();
+		return id;
+	}
+
+	@Override
+	public List<IPartner> getPartnerLecture(String slecture) {
+		List<IPartner> pList = new ArrayList<IPartner>();
+		SQLiteDatabase db = dbSF.getReadableDatabase();
+		Integer id = 0;
+
+		Cursor c = db.rawQuery("SELECT parID FROM " + DB_TABLE_PARTNER
+				+ " WHERE lecture = '" + slecture + "'", null);
+
+		if (c != null) {
+			if (c.moveToFirst()) {
+				id = c.getInt(c.getColumnIndex("parID"));
+				pList.add(partners.get(id));
+			}
+		}
+		db.close();
 		return pList;
+	}
+
+	@Override
+	public IPartner getPartner(String matNr) {
+		return partners.get(getPartnerID(matNr));
 	}
 
 	@Override
