@@ -107,7 +107,22 @@ public class Veranstaltungsplan implements com.example.haw_app.veranstaltungspla
 				List<String> splittedLine = Arrays.asList(line.split(","));
 				
 				for(String s : splittedLine) {
-					kws.add(Integer.parseInt(s));
+					s = s.replace(" ", "");
+					
+					if(s.contains("-")) {
+						
+						List<String> splittedKws = Arrays.asList(line.split("-"));
+						int start = Integer.parseInt(splittedKws.get(0));
+						int ende = Integer.parseInt(splittedKws.get(1));
+						
+						for(int i = start; i <= ende; i++) {
+							kws.add(i);
+						}
+						
+					} else {
+						kws.add(Integer.parseInt(s));
+					}
+					
 				}
 				
 				
@@ -126,19 +141,19 @@ public class Veranstaltungsplan implements com.example.haw_app.veranstaltungspla
 					throw new Exception("Fehlerhafte Datei");
 				}
 				
-				if(splittedLine.get(3) == "Mo"){
+				if(splittedLine.get(3).equals("Mo")){
 					wochentag = 1;
-				} else if(splittedLine.get(3) == "Di"){
+				} else if(splittedLine.get(3).equals("Di")){
 					wochentag = 2;
-				} else if(splittedLine.get(3) == "Mi"){
+				} else if(splittedLine.get(3).equals("Mi")){
 					wochentag = 3;
-				} else if(splittedLine.get(3) == "Do"){
+				} else if(splittedLine.get(3).equals("Do")){
 					wochentag = 4;
-				} else if(splittedLine.get(3) == "Fr"){
+				} else if(splittedLine.get(3).equals("Fr")){
 					wochentag = 5;
-				} else if(splittedLine.get(3) == "Sa"){
+				} else if(splittedLine.get(3).equals("Sa")){
 					wochentag = 6;
-				} else if(splittedLine.get(3) == "So"){
+				} else if(splittedLine.get(3).equals("So")){
 					wochentag = 7;
 				} else {
 					System.out.println(line);
@@ -164,7 +179,7 @@ public class Veranstaltungsplan implements com.example.haw_app.veranstaltungspla
 					DateTime von = now.withWeekOfWeekyear(kw).withDayOfWeek(wochentag).withHourOfDay(startHour).withMinuteOfHour(startMin).withSecondOfMinute(0).withMillisOfSecond(0);
 					DateTime bis = now.withWeekOfWeekyear(kw).withDayOfWeek(wochentag).withHourOfDay(endHour).withMinuteOfHour(endMin).withSecondOfMinute(0).withMillisOfSecond(0);
 					
-					termine.add(termin(semesterGruppe,splittedLine.get(0),von,bis,splittedLine.get(1),Integer.parseInt(splittedLine.get(2))));
+					termine.add(termin(semesterGruppe,splittedLine.get(0),von,bis,splittedLine.get(1),splittedLine.get(2)));
 					
 				}
 				

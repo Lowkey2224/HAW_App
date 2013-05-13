@@ -9,9 +9,9 @@ public class Termin implements com.example.haw_app.veranstaltungsplan.interfaces
 	private DateTime von;
 	private DateTime bis;
 	private String prof;
-	private int raum;
+	private String raum;
 	
-	private Termin(String semesterGruppe,String name, DateTime von,DateTime bis,String prof,int raum){
+	private Termin(String semesterGruppe,String name, DateTime von,DateTime bis,String prof,String raum){
 		this.semesterGruppe = semesterGruppe;
 		this.name = name;
 		this.von = von;
@@ -20,7 +20,7 @@ public class Termin implements com.example.haw_app.veranstaltungsplan.interfaces
 		this.raum = raum;
 	}
 	
-	public static Termin valueOf(String semesterGruppe,String name, DateTime von,DateTime bis,String prof,int raum) {
+	public static Termin valueOf(String semesterGruppe,String name, DateTime von,DateTime bis,String prof,String raum) {
         return new Termin(semesterGruppe,name,von,bis,prof,raum);
     }
 
@@ -50,7 +50,7 @@ public class Termin implements com.example.haw_app.veranstaltungsplan.interfaces
 	}
 	
 	@Override
-	public int raum(){
+	public String raum(){
 		return raum;
 	}
 	

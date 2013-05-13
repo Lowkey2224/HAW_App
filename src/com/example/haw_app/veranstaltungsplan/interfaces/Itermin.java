@@ -14,6 +14,6 @@ public interface Itermin {
 	
 	public String prof();
 	
-	public int raum();
+	public String raum();
 	
 }
