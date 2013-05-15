@@ -7,7 +7,7 @@ public interface Iveranstaltungsplan {
 	/**
 	 * Erstellt, mit Hilfe der Liste der belegten Faecher, eine .ics Datei lokal. 
 	 */
-	public void exportieren();
+	public void exportieren()throws Exception;
 	
 	/**
 	 * Downloaded die aktuelle Termin .txt Datei vom Server und parst diese.

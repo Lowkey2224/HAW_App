@@ -3,10 +3,13 @@ package com.example.haw_app.veranstaltungsplan.implementations;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.joda.time.DateTime;
 
@@ -48,8 +51,99 @@ public class Veranstaltungsplan implements com.example.haw_app.veranstaltungspla
     }
 	
 	@Override
-	public void exportieren() {
-		// TODO Exportieren der Termine in eine Kalender-Datei
+	public void exportieren() throws Exception {
+		
+		File file = new File("veranstaltungsplan.ics");
+		
+		FileWriter fw= new FileWriter(file);
+		
+		//Kalender
+		
+		fw.write("BEGIN:VCALENDAR");
+		fw.write(System.getProperty("line.separator"));
+		
+		fw.write("PRODID:HAW-APP");
+		fw.write(System.getProperty("line.separator"));
+		
+		fw.write("VERSION:1.0");
+		fw.write(System.getProperty("line.separator"));
+		
+		fw.write("CALSCALE:GREGORIAN");
+		fw.write(System.getProperty("line.separator"));
+		
+		fw.write("METHOD:PUBLISH");
+		fw.write(System.getProperty("line.separator"));
+		
+		fw.write("X-WR-CALNAME:HAW");
+		fw.write(System.getProperty("line.separator"));
+		
+		fw.write("X-WR-TIMEZONE:Europe/Berlin");
+		fw.write(System.getProperty("line.separator"));
+		
+		fw.write("X-WR-CALDESC:HAW-Veranstaltungen. Erstellt mit HAW-App");
+		fw.write(System.getProperty("line.separator"));
+		
+		//Termine
+		
+		Date jdkNow = new Date(System.currentTimeMillis());
+		DateTime now = new DateTime(jdkNow);
+		
+		for(Termin termin : termine) {
+			
+			if(belegteFaecher.contains(termin.name())) {
+				
+				UUID uid = UUID.randomUUID();
+				
+				fw.write("BEGIN:VEVENT");
+				fw.write(System.getProperty("line.separator"));
+				
+				fw.write("DTSTART:" + termin.von().toString("yyyyMMdd") + "T" + termin.von().toString("HHmmss") + "+01:00");
+				fw.write(System.getProperty("line.separator"));
+				
+				fw.write("DTEND:" + termin.bis().toString("yyyyMMdd") + "T" + termin.bis().toString("HHmmss") + "+01:00");
+				fw.write(System.getProperty("line.separator"));
+				
+				fw.write("DTSTAMP:" + now.toString("yyyyMMdd") + "T" + now.toString("HHmmss") + "+01:00");
+				fw.write(System.getProperty("line.separator"));
+				
+				fw.write("UID:" + uid + "@haw-app");
+				fw.write(System.getProperty("line.separator"));
+				
+				fw.write("CREATED:" + now.toString("yyyyMMdd") + "T" + now.toString("HHmmss") + "+01:00");
+				fw.write(System.getProperty("line.separator"));
+				
+				fw.write("DESCRIPTION:" + termin.prof());
+				fw.write(System.getProperty("line.separator"));
+				
+				fw.write("LAST-MODIFIED:" + now.toString("yyyyMMdd") + "T" + now.toString("HHmmss") + "+01:00");
+				fw.write(System.getProperty("line.separator"));
+				
+				fw.write("LOCATION:" + termin.raum());
+				fw.write(System.getProperty("line.separator"));
+				
+				fw.write("SEQUENCE:0");
+				fw.write(System.getProperty("line.separator"));
+				
+				fw.write("STATUS:CONFIRMED");
+				fw.write(System.getProperty("line.separator"));
+				
+				fw.write("SUMMARY:" + termin.name());
+				fw.write(System.getProperty("line.separator"));
+				
+				fw.write("TRANSP:OPAQUE");
+				fw.write(System.getProperty("line.separator"));
+				
+				fw.write("END:VEVENT");
+				fw.write(System.getProperty("line.separator"));
+				
+			}
+			
+		}
+		
+		fw.write("END:VCALENDAR");
+		
+		fw.flush();
+		fw.close();
 		
 	}
 
