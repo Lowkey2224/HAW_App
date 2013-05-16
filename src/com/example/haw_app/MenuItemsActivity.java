@@ -6,53 +6,36 @@ import java.util.List;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.example.haw_app.mensa.implementation.UpdateMenusTask;
+import com.example.haw_app.mensa.implementation.UpdateMenuItemsTask;
+import com.example.haw_app.mensa.interfaces.IMenuItem;
 
-public class MensaActivity extends Activity {
+public class MenuItemsActivity extends Activity {
 
-	ArrayAdapter<Date> adapter;
+	private ArrayAdapter<IMenuItem> adapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_mensa);
-		adapter = new ArrayAdapter<Date>(this,
-				android.R.layout.simple_list_item_1, new ArrayList<Date>());
-		final ListView listview = (ListView) findViewById(R.id.mensa_listview);
+		Bundle extras = getIntent().getExtras();
+		long dateMs = extras.getLong("date");
+		Date date = new Date(dateMs);
+		setContentView(R.layout.activity_menuitems);
+		adapter = new ArrayAdapter<IMenuItem>(this,
+				android.R.layout.simple_list_item_1, new ArrayList<IMenuItem>());
+		final ListView listview = (ListView) findViewById(R.id.menuitems_listview);
 		Log.w(this.getClass().getSimpleName(), "ListView: " + listview);
 		Log.w(this.getClass().getSimpleName(), "ListView: " + adapter);
 		listview.setAdapter(adapter);
-		final MensaActivity self = this;
-		listview.setOnItemClickListener(new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
-				Intent intent = new Intent(self, MenuItemsActivity.class);
-
-				Date date = (Date) listview.getItemAtPosition(position);
-				if (date != null) {
-					intent.putExtra("date", date.getTime());
-					startActivity(intent);
-				}
-			}
-
-		});
-		// Show the Up button in the action bar.
-		new UpdateMenusTask().execute(this);
+		new UpdateMenuItemsTask(date).execute(this);
 		setupActionBar();
 	}
 
@@ -90,11 +73,11 @@ public class MensaActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 
-	public void setDates(List<Date> dates) {
+	public void setMenuItems(List<IMenuItem> list) {
 		adapter.clear();
-		for (Date date : dates) {
-			Log.w(this.getClass().getSimpleName(), "Added item: " + date);
-			adapter.add(date);
+		for (IMenuItem item : list) {
+			Log.w(this.getClass().getSimpleName(), "Added item: " + item);
+			adapter.add(item);
 		}
 		adapter.notifyDataSetChanged();
 	}
