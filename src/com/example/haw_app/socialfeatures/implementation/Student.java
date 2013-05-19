@@ -21,7 +21,7 @@ public class Student implements IStudent {
 
 	private static Student instance = null;
 	private static IStiSysManager sm = null;
-	private int matNr = 0;
+	private String userName = "";
 	private Map<Integer, IPraktika> praktikas = new HashMap<Integer, IPraktika>();
 	private static final String DB_TABLE_PRAKTIKA = DatabaseSocialFeatures.DB_TABLE_PRAKTIKA;
 	DatabaseSocialFeatures dbSF;
@@ -31,7 +31,7 @@ public class Student implements IStudent {
 	
 	private Student(Context context) {
 		sm = StiSysManagerFactory.getInstance();
-		matNr = sm.getMatriculationNumber();
+		userName = sm.getUserName();
 		//Datenbankverbindung
 		dbSF = new DatabaseSocialFeatures(context);
 		//Daten vom DB holen
@@ -106,7 +106,6 @@ public class Student implements IStudent {
 		Cursor c = db.rawQuery(
 				"SELECT * FROM "
 						+ DB_TABLE_PRAKTIKA, null);
-		System.out.println("getpraktika");
 		if (c != null) {
 			if (c.moveToFirst()) {
 				do {
@@ -170,8 +169,8 @@ public class Student implements IStudent {
 	}
 	
 	@Override
-	public int getmatNr(){
-		return matNr;
+	public String getuserName(){
+		return userName;
 	}
 	
 	/**
