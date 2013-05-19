@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>    
+    <string name="login_send_chat">Login</string>
+    <string name="login_registration_chat">Registrieren</string>
+    <string name="account_password_reg">Password</string>
+    <string name="registration_send_chat">Send</string>
+    <string name="login_chat">Benutzername</string>
+    <string name="account_password">Passwort</string>
+	<string name="account_username">Username</string>
+	<string name="title_activity_login">Login Chat</string>
+	<string name="title_activity_chat">Chat</string>
+
+</resources>

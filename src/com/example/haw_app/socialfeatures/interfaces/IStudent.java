@@ -50,9 +50,9 @@ public interface IStudent {
 	public IPraktika getPraktika(String lecture);
 	
 	/**
-	 * Matrikelnummer des Studenten holen
-	 * @return matNr
+	 * Username des Studenten holen
+	 * @return userName
 	 */
-	public int getmatNr();
+	public String getuserName();
 	
 }
