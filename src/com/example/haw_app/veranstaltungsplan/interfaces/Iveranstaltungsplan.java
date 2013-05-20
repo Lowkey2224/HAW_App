@@ -25,5 +25,11 @@ public interface Iveranstaltungsplan {
 	 * @param file Datei die geparst wird.
 	 */
 	public void setzeDatei(String file);
+	
+	/**
+	 * Methode zum aendern der Url von der die Datei gedownloaded wird.
+	 * @param url Url von der die Datei gedownloaded wird.
+	 */
+	public void setzeUrl(String url);
 
 }

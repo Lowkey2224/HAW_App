@@ -5,13 +5,21 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.joda.time.DateTime;
+
+import android.util.Log;
 
 import static com.example.haw_app.veranstaltungsplan.implementations.Utility.*;
 
@@ -19,7 +27,9 @@ public class Veranstaltungsplan implements com.example.haw_app.veranstaltungspla
 	
 	private static Veranstaltungsplan instance = null;
 	
-	private File datei = null;
+	private File datei = new File("veranstaltungsplan.txt");
+	
+	private String url = "http://ec2-176-34-76-54.eu-west-1.compute.amazonaws.com:8080/HawServer/files/Sem_I.txt";
 	
 	private List<String> belegteFaecher = new ArrayList<String>();
 	
@@ -146,10 +156,62 @@ public class Veranstaltungsplan implements com.example.haw_app.veranstaltungspla
 		fw.close();
 		
 	}
+	
+	private static InputStreamReader retrieveReader(String url) {
+
+		DefaultHttpClient client = new DefaultHttpClient();
+
+		HttpGet getRequest = new HttpGet(url);
+
+		try {
+
+			HttpResponse getResponse = client.execute(getRequest);
+			final int statusCode = getResponse.getStatusLine().getStatusCode();
+
+			if (statusCode != HttpStatus.SC_OK) {
+				Log.w(Veranstaltungsplan.class.getSimpleName(), "Error " + statusCode
+						+ " for URL " + url);
+				return null;
+			}
+
+			HttpEntity getResponseEntity = getResponse.getEntity();
+			return new InputStreamReader(getResponseEntity.getContent());
+
+		} catch (IOException e) {
+			getRequest.abort();
+			Log.w(Veranstaltungsplan.class.getSimpleName(), "Error for URL " + url, e);
+		}
+
+		return null;
+
+	}
+	
+	private static void saveFile(File file, InputStreamReader is) throws IOException{
+					
+			BufferedReader br = new BufferedReader(is);
+			
+			FileWriter fw = new FileWriter(file);
+			
+			String line = br.readLine();
+			
+			while (line != null) {
+				fw.write(line);
+				br.readLine();
+			}
+			
+			fw.flush();
+			fw.close();
+			
+			br.close();
+			
+	}
 
 	@Override
 	public void aktualisieren() throws Exception {
-		// TODO Download der .txt Datei vom Server
+		
+		InputStreamReader is = retrieveReader(url);
+		
+		saveFile(datei,is);
 		
 		this.parsen();
 		
@@ -165,6 +227,11 @@ public class Veranstaltungsplan implements com.example.haw_app.veranstaltungspla
 	public void setzeDatei(String file) {
 		File f = new File(file);
 		datei = f;
+	}
+	
+	@Override
+	public void setzeUrl(String url) {
+		this.url = url;
 	}
 	
 	private void parsen() throws Exception {
