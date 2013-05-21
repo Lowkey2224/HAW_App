@@ -1,22 +1,34 @@
 package com.example.haw_app;
-
-import android.os.Bundle;
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Intent;
+import android.os.Build;
+import android.os.Bundle;
+import android.support.v4.app.NavUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.support.v4.app.NavUtils;
-import android.annotation.TargetApi;
-import android.os.Build;
+import android.widget.Button;
+import android.widget.TextView;
+
+import com.example.haw_app.schnitzeljagd.SchnitzelJagdManager;
 
 public class SchnitzeljagdActivity extends Activity {
-
+	private SchnitzelJagdManager sm;
+	private String qrCode = null;
+	private boolean codeScanned = false, coordinatesScanned = false;
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState) {		
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_schnitzeljagd);
+        setContentView(R.layout.activity_schnitzeljagd);
 		// Show the Up button in the action bar.
 		setupActionBar();
+		Button b = (Button)findViewById(R.id.btn_acc);
+        b.setVisibility(View.INVISIBLE);
+        b.setClickable(false);
+		sm = new SchnitzelJagdManager(this);
+		
 	}
 
 	/**
@@ -53,8 +65,61 @@ public class SchnitzeljagdActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 	
-    public void platzhalterClick(View view){
-    	setContentView(R.layout.test);
+    public void scanClick(View view){
+    	sm.scanQRCode();
+    	
+    }
+    
+    public void getCoordinatesClick(View view){
+    	double[] dary = sm.getGPSPosition();
+    	if (dary[0] != 0 && dary[1] != 0){
+    		coordinatesScanned = true;
+    		TextView stat = (TextView)findViewById(R.id.tvStatus);
+    		stat.setText("Position erfasst");
+    		if (codeScanned){
+	            Button b = (Button)findViewById(R.id.btn_acc);
+	            b.setVisibility(View.VISIBLE);
+	            b.setClickable(true);
+	            }
+    	}    	    	    	
     }
 
+    public void accClick(View view){
+    	if(coordinatesScanned && codeScanned)
+    	{
+    		boolean b = sm.accomplishGoal(qrCode);
+    		Button btn = (Button)findViewById(R.id.btn_acc);
+    		btn.setVisibility(View.INVISIBLE);
+    		btn.setClickable(false);
+    		Log.w("acc","Ziel erfuellt: "+b);
+    		TextView stat = (TextView)findViewById(R.id.tvStatus);
+    		stat.setText((b)?"Ziel Erfuellt":"Ziel nicht erfuellt");
+    	}
+    }
+    
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) 
+	{
+		Log.d("onActivityResult", intent.getClass().toString());
+		if (requestCode == 0) 
+	    {
+	        if (resultCode == RESULT_OK)
+	        {
+	            String contents = intent.getStringExtra("SCAN_RESULT");	            
+	            String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
+	            Log.i("xZing", "contents: "+contents+" format: "+format);
+	            qrCode = contents;
+	            codeScanned = true;
+	            if (coordinatesScanned){
+	            Button b = (Button)findViewById(R.id.btn_acc);
+	            b.setVisibility(View.VISIBLE);
+	            b.setClickable(true);
+	            }
+	        } 
+	        else if (resultCode == RESULT_CANCELED)
+	        {
+	            // Handle cancel
+	            Log.i("xZing", "Cancelled");
+	        }
+	    }
+	}
 }

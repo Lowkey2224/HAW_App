@@ -14,7 +14,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.example.haw_app.stisysManager.Util;
+import com.example.haw_app.Util;
 
 public class SQLiteConnector extends SQLiteOpenHelper {
 //TODO NextApplicationDates, RegisteredTrainigs, SolvedTrainings,SolvedTests,Mailinglists
