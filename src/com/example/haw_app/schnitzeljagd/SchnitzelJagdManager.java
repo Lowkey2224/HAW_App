@@ -16,8 +16,7 @@ public class SchnitzelJagdManager implements ISchnitzelJagdManager  {
 	Context mParent;
 	double lat=0, lon=0;
 	String code=null;
-	ICallback cb;
-
+	ICallback cb;	
 	public SchnitzelJagdManager(Context parent) {
 		mParent = parent;
 	}
@@ -68,21 +67,40 @@ public class SchnitzelJagdManager implements ISchnitzelJagdManager  {
 	@Override
 	public boolean accomplishGoal(String code) {
 		if (code != null && lat != 0 && lon != 0) {
-			GetRequest gt = new GetRequest(mParent);
-			AsyncTask<String, Void, String> at = gt.execute("");
-			try {
-				String str3 = at.get();
-				return SchnitzelJagdGoalTools.checkIfGoalExists(str3, code, lat, lon);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (ExecutionException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			return false;
+			String str3 = getGsonString();
+			if(str3.equals(""))
+				return false;
+			return SchnitzelJagdGoalTools.checkIfGoalExists(str3, code, lat, lon);			
 		}
 		return false;
 	}
 
+	@Override
+	public int getNumberOfGoals() {
+		return SchnitzelJagdGoalTools.getNumberOfGoals(getGsonString());		
+	}
+
+	@Override
+	public int getNumberOfAccomplishedGoals() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	private String getGsonString()
+	{
+		GetRequest gt = new GetRequest(mParent);
+		AsyncTask<String, Void, String> at = gt.execute("");
+		try {
+			String str3 = at.get();
+			return str3;
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return "";
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return "";
+		}
+	}
 }

@@ -8,10 +8,9 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 public class SchnitzelJagdGoalTools {
+	 
 	public static boolean checkIfGoalExists(String json,String code, double lat, double lon){
-		Gson gson = new Gson();
-		Type collectionType = new TypeToken<Collection<Ziel>>(){}.getType();
-		Collection<Ziel> ints2 = gson.fromJson(json, collectionType);
+		Collection<Ziel> ints2 = getGoalsFromJsonString(json);
 		for(Ziel z : ints2)
 		{
 			String oCode = z.getCode();
@@ -30,6 +29,20 @@ public class SchnitzelJagdGoalTools {
 		return false;
 	}
 
+	static Collection<Ziel> getGoalsFromJsonString(String jsonString)
+	{
+		Gson gson = new Gson();
+		Type collectionType = new TypeToken<Collection<Ziel>>(){}.getType();
+		Collection<Ziel> ints2 = gson.fromJson(jsonString, collectionType);			
+		return ints2;
+	}
+	
+	static int getNumberOfGoals(String jsonString)
+	{
+		Collection<Ziel> c = getGoalsFromJsonString(jsonString);		
+		return c.size();
+	}
+	
 	private static boolean checkCoordinates(double lat, double lon,
 			double oLat, double oLon, double orad) {
 		//Mit Pythagoras die Distanz zwischen Quellpunkt und gescanntem Punkt ermitteln

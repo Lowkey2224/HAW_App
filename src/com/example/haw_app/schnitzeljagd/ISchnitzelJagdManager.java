@@ -21,5 +21,6 @@ public interface ISchnitzelJagdManager {
 	 */
 	public boolean accomplishGoal(String barcode) /*throws CouldNotConnectToServerException*/;
 	
-	
+	public int getNumberOfGoals();
+	int getNumberOfAccomplishedGoals();
 }
