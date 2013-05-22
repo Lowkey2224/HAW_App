@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.joda.time.DateTime;
+
 public class StiSysManager implements IStiSysManager{
 
 	private static StiSysManager sm = null;
@@ -18,11 +20,11 @@ public class StiSysManager implements IStiSysManager{
 	}
 
 	@Override
-	public Map<String, Date[]> getNextApplicationDates() {
-		Map<String, Date[]> ret = new HashMap<String, Date[]>();
-		Date[] ary  = new Date[2];
-		ary[0] = new Date(2013, 06, 10, 10, 0);
-		ary[1] = new Date(2013, 06, 16, 10, 0);
+	public Map<String, DateTime[]> getNextApplicationDates() {
+		Map<String, DateTime[]> ret = new HashMap<String, DateTime[]>();
+		DateTime[] ary  = new DateTime[2];
+		ary[0] = new DateTime(2013, 06, 10, 10, 0);
+		ary[1] = new DateTime(2013, 06, 16, 10, 0);
 		ret.put("Projekte", ary);
 		return ret;
 	}
@@ -38,8 +40,8 @@ public class StiSysManager implements IStiSysManager{
 	}
 
 	@Override
-	public Date getPasswordExpirationDate() {
-		return new Date(2013, 11, 11);
+	public DateTime getPasswordExpirationDate() {
+		return new DateTime(2013, 11, 11,0,0);
 	}
 
 	@Override
@@ -48,8 +50,8 @@ public class StiSysManager implements IStiSysManager{
 	}
 
 	@Override
-	public Date getBirthday() {
-		return new Date(1937, 03, 15);
+	public DateTime getBirthday() {
+		return new DateTime(1937, 03, 15,0,0);
 	}
 
 	@Override

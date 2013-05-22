@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources><string name="meine_noten">Meine Noten</string><string name="meine_anmeldungen">Meine Anmeldungen</string><string name="kommende_anmeldungen">Kommene Anmeldungen</string><string name="printquote">Druck-Guthaben:</string><string name="einstellungen_stisys">Einstellungen</string><string name="abmelden">Abmelden</string><string name="hintPassword"/><string name="textPassword">Passwort</string><string name="hintLogin"/><string name="textLogin">Kennung</string>
+<string name="anmelden">Anmelden</string>
+<string name="buttonLogin">Login</string>
+<string name="gw_kurse">GW-Kurse</string>
+<string name="klausuren">Klausuren</string>
+<string name="wp_kurse">WP-Kurse</string>
+<string name="praktika">Praktika</string>
+<string name="projekte">Projekte</string>
+<string name="seminare">Seminare</string>
+    
+</resources>

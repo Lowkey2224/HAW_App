@@ -8,38 +8,130 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".StisysActivity" >
-    
-        <Button
-            android:id="@+id/button1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_marginTop="5dp"
-            android:background="@color/black"
-            android:drawableLeft="@drawable/platzhalter"
-            android:drawablePadding="@dimen/activity_horizontal_margin"
-            android:gravity="center_vertical"
-            android:onClick="notenClick"
-            android:text="@string/meine_noten"
-            android:textColor="@color/white"
-            android:textColorHint="@color/black" />
 
-        <Button
-            android:id="@+id/button2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/button1"
-            android:layout_alignRight="@+id/button1"
-            android:layout_below="@+id/button1"
-            android:text="@string/platzhalter" 
-            
-            android:onClick="platzhalterClick"
-            android:layout_marginTop="10dp"
-            android:background="@color/black"
-            android:drawableLeft="@drawable/platzhalter"
-            android:drawablePadding="@dimen/activity_horizontal_margin"
-            android:gravity="center_vertical"
-            android:textColor="@color/white"
-            android:textColorHint="@color/black"/>
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="5dp"
+        android:background="@color/black"
+        android:drawableLeft="@drawable/clock"
+        android:drawablePadding="@dimen/activity_horizontal_margin"
+        android:gravity="center_vertical"
+        android:onClick="kommendeAnmeldungenClick"
+        android:text="@string/kommende_anmeldungen"
+        android:textColor="@color/white"
+        android:textColorHint="@color/black" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/button1"
+        android:layout_alignRight="@+id/button1"
+        android:layout_below="@+id/button1"
+        android:layout_marginTop="10dp"
+        android:background="@color/black"
+        android:drawableLeft="@drawable/accept"
+        android:drawablePadding="@dimen/activity_horizontal_margin"
+        android:gravity="center_vertical"
+        android:onClick="meineAnmeldungenClick"
+        android:text="@string/meine_anmeldungen"
+        android:textColor="@color/white"
+        android:textColorHint="@color/black" />
+
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/button2"
+        android:layout_alignRight="@+id/button2"
+        android:layout_below="@+id/button2"
+        android:layout_marginTop="10dp"
+        android:background="@color/black"
+        android:drawableLeft="@drawable/add"
+        android:drawablePadding="@dimen/activity_horizontal_margin"
+        android:gravity="center_vertical"
+        android:onClick="anmeldenClick"
+        android:text="@string/anmelden"
+        android:textColor="@color/white"
+        android:textColorHint="@color/black" />
+
+    <Button
+        android:id="@+id/button4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/button3"
+        android:layout_alignRight="@+id/button3"
+        android:layout_below="@+id/button3"
+        android:layout_marginTop="10dp"
+        android:background="@color/black"
+        android:drawableLeft="@drawable/remove"
+        android:drawablePadding="@dimen/activity_horizontal_margin"
+        android:gravity="center_vertical"
+        android:onClick="abmeldenClick"
+        android:text="@string/abmelden"
+        android:textColor="@color/white"
+        android:textColorHint="@color/black" />
+
+    <Button
+        android:id="@+id/button5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/button4"
+        android:layout_alignRight="@+id/button4"
+        android:layout_below="@+id/button4"
+        android:layout_marginTop="10dp"
+        android:background="@color/black"
+        android:drawableLeft="@drawable/chart"
+        android:drawablePadding="@dimen/activity_horizontal_margin"
+        android:gravity="center_vertical"
+        android:onClick="meineNotenClick"
+        android:text="@string/meine_noten"
+        android:textColor="@color/white"
+        android:textColorHint="@color/black" />
+
+    <Button
+        android:id="@+id/button6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/button5"
+        android:layout_alignRight="@+id/button5"
+        android:layout_below="@+id/button5"
+        android:layout_marginTop="10dp"
+        android:background="@color/black"
+        android:drawableLeft="@drawable/process"
+        android:drawablePadding="@dimen/activity_horizontal_margin"
+        android:gravity="center_vertical"
+        android:onClick="einstellungenStisysClick"
+        android:text="@string/einstellungen_stisys"
+        android:textColor="@color/white"
+        android:textColorHint="@color/black" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/button6"
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/button6"
+        android:layout_marginBottom="33dp"
+        android:layout_marginRight="242dp"
+        android:drawableLeft="@drawable/printer"
+        android:drawablePadding="@dimen/activity_vertical_margin"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/printNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/textView1"
+        android:textColor="@color/white"
+        android:layout_alignLeft="@+id/textView1"
+        android:layout_marginLeft="64dp"
+        android:ems="10" >
+    </TextView>
 
 </RelativeLayout>

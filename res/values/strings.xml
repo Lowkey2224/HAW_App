@@ -9,12 +9,9 @@
     <string name="social_features">Social Features</string>
     <string name="stisys">StISys</string>
     <string name="schnitzeljagd">Schnitzeljagd</string>
-    <string name="optionen">Optionen</string>
-    <string name="meine_noten">Meine Noten</string>
-
+    <string name="optionen">Optionen</string>    
     <color name="black">#000000</color>
     <color name="white">#ffffff</color>
-
     <string name="title_activity_stisys">MainActivity</string>
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_mensa">MensaActivity</string>
@@ -24,11 +21,6 @@
     <string name="title_activity_veranstaltungsplan">VeranstaltungsplanActivity</string>
     <string name="title_activity_optionen">OptionenActivity</string>
     <string name="webtest">webtest</string>
-    <string name="buttonLogin">Login</string>
-    <string name="textLogin">Kennung</string>
-    <string name="hintLogin"/>
-    <string name="textPassword">Passwort</string>
-    <string name="hintPassword"/>
     <string name="sj_scan">Barcode scannen</string>
     <string name="sj_orten">GPS Koordinaten bestimmen</string>
     <string name="sj_acc">Ziel Erfüllen</string>
