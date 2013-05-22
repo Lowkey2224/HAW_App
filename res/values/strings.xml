@@ -29,5 +29,8 @@
     <string name="hintLogin"/>
     <string name="textPassword">Passwort</string>
     <string name="hintPassword"/>
+    <string name="sj_scan">Barcode scannen</string>
+    <string name="sj_orten">GPS Koordinaten bestimmen</string>
+    <string name="sj_acc">Ziel Erfüllen</string>
 
 </resources>
