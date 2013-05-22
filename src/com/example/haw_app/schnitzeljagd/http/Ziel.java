@@ -12,14 +12,27 @@ public class Ziel implements Serializable {
     private String code;
     private Double radius;
     private Schnitzeljagd schnitzeljagdId;
-
+    private boolean erfuellt;
+    
     public Ziel() {
+    	erfuellt=false;
     }
 
     public Ziel(Integer id) {
         this.id = id;
+        erfuellt=false;
     }
 
+    public boolean getErfuellt()
+    {
+    	return erfuellt;
+    }
+    
+    public void setErfuellt(boolean b)
+    {
+    	this.erfuellt = b;
+    }
+    
     public Integer getId() {
         return id;
     }

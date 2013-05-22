@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.haw_app.schnitzeljagd.SchnitzelJagdManager;
@@ -28,7 +29,7 @@ public class SchnitzeljagdActivity extends Activity {
         b.setVisibility(View.INVISIBLE);
         b.setClickable(false);
 		sm = new SchnitzelJagdManager(this);
-		
+		setAdvancement();
 	}
 
 	/**
@@ -65,27 +66,46 @@ public class SchnitzeljagdActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 	
-    public void scanClick(View view){
+    public void scanClick(View view){    	
+    	setAdvancement();
+		TextView stat = (TextView)findViewById(R.id.tvStatus);		
+		stat.setVisibility(View.INVISIBLE);
     	sm.scanQRCode();
     	
     }
     
-    public void getCoordinatesClick(View view){
+    private void setAdvancement()
+    {
+    	try{
+    	TextView tv = (TextView)this.findViewById(R.id.tv_numberOfGoals);
+		int acc= sm.getNumberOfAccomplishedGoals(), ii = sm.getNumberOfGoals();
+		tv.setText(acc+" von "+ii+" Zielen erfuellt");
+		ProgressBar pb = (ProgressBar)findViewById(R.id.progressBar1);
+		double d = ((double)acc/ii)*100;
+		int progress = (int)(d);
+		pb.setProgress(progress);
+    	}catch(Exception e){
+    		e.printStackTrace();
+    	}
+    }
+    public void getCoordinatesClick(View view){   
+    	setAdvancement();
+		TextView stat = (TextView)findViewById(R.id.tvStatus);		
+		stat.setVisibility(View.INVISIBLE);
     	double[] dary = sm.getGPSPosition();
     	if (dary[0] != 0 && dary[1] != 0){
     		coordinatesScanned = true;
-    		TextView stat = (TextView)findViewById(R.id.tvStatus);
     		stat.setText("Position erfasst");
     		if (codeScanned){
 	            Button b = (Button)findViewById(R.id.btn_acc);
 	            b.setVisibility(View.VISIBLE);
 	            b.setClickable(true);
+	            stat.setText("Position erfasst");
 	            }
     	}    	    	    	
     }
 
     public void accClick(View view){
-    	if(coordinatesScanned && codeScanned)
     	{
     		boolean b = sm.accomplishGoal(qrCode);
     		Button btn = (Button)findViewById(R.id.btn_acc);
@@ -94,6 +114,8 @@ public class SchnitzeljagdActivity extends Activity {
     		Log.w("acc","Ziel erfuellt: "+b);
     		TextView stat = (TextView)findViewById(R.id.tvStatus);
     		stat.setText((b)?"Ziel Erfuellt":"Ziel nicht erfuellt");
+    		stat.setVisibility(View.VISIBLE);
+    		setAdvancement();
     	}
     }
     

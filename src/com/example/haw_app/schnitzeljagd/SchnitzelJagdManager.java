@@ -13,12 +13,14 @@ import com.example.haw_app.schnitzeljagd.http.GetRequest;
 
 public class SchnitzelJagdManager implements ISchnitzelJagdManager  {
 
+	private SchnitzelJagdGoalTools goal;
 	Context mParent;
 	double lat=0, lon=0;
 	String code=null;
 	ICallback cb;	
 	public SchnitzelJagdManager(Context parent) {
 		mParent = parent;
+		goal = new SchnitzelJagdGoalTools(parent, this.getGsonString());
 	}
 
 	@Override
@@ -67,23 +69,19 @@ public class SchnitzelJagdManager implements ISchnitzelJagdManager  {
 	@Override
 	public boolean accomplishGoal(String code) {
 		if (code != null && lat != 0 && lon != 0) {
-			String str3 = getGsonString();
-			if(str3.equals(""))
-				return false;
-			return SchnitzelJagdGoalTools.checkIfGoalExists(str3, code, lat, lon);			
+			return goal.checkIfGoalExists( code, lat, lon);			
 		}
 		return false;
 	}
 
 	@Override
 	public int getNumberOfGoals() {
-		return SchnitzelJagdGoalTools.getNumberOfGoals(getGsonString());		
+		return goal.getNumberOfGoals();		
 	}
 
 	@Override
 	public int getNumberOfAccomplishedGoals() {
-		// TODO Auto-generated method stub
-		return 0;
+		return goal.getNumberOfAccomplishedGoals();
 	}
 
 	private String getGsonString()
