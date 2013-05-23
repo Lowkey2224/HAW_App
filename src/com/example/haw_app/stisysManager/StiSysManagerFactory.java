@@ -7,7 +7,7 @@ public class StiSysManagerFactory {
 
 	public static IStiSysManager getInstance()
 	{
-		sm = new StiSysManager2("username","passwort");
+		sm = new StiSysManager2("abe180","1Oliv3r1");
 		return sm;
 		//return StiSysManager.getInstance();
 	}

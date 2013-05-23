@@ -208,10 +208,11 @@ public class Veranstaltungsplan implements com.example.haw_app.veranstaltungspla
 
 	@Override
 	public void aktualisieren() throws Exception {
-		
-		InputStreamReader is = retrieveReader(url);
-		
-		saveFile(datei,is);
+		DownloadThread dlt = new DownloadThread();
+		datei = dlt.doInBackground(datei);
+//		InputStreamReader is = retrieveReader(url);
+//		
+//		saveFile(datei,is);
 		
 		this.parsen();
 		

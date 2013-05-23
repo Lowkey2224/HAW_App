@@ -1,5 +1,10 @@
 package com.example.haw_app;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.example.haw_app.veranstaltungsplan.implementations.Veranstaltungsplan;
+
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
@@ -52,10 +57,19 @@ public class VeranstaltungsplanActivity extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
-	
-    public void platzhalterClick(View view){
-    	setContentView(R.layout.test);
-    }
+
+	public void platzhalterClick(View view) {
+		Veranstaltungsplan vp = Veranstaltungsplan.getInstance();
+
+		try {
+			vp.aktualisieren();
+			List<String> faecher = new ArrayList<String>();
+			faecher.add("BAI3-GKA");
+			vp.setzeBelegteFaecher(faecher);
+			vp.exportieren();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 }
