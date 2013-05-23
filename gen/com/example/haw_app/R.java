@@ -98,9 +98,10 @@ public final class R {
         public static final int activity_social_features=0x7f030008;
         public static final int activity_stisys=0x7f030009;
         public static final int activity_veranstaltungsplan=0x7f03000a;
-        public static final int listitem=0x7f03000b;
-        public static final int stisys_meine_anmeldungen=0x7f03000c;
-        public static final int test=0x7f03000d;
+        public static final int dgdfbdf=0x7f03000b;
+        public static final int listitem=0x7f03000c;
+        public static final int stisys_meine_anmeldungen=0x7f03000d;
+        public static final int test=0x7f03000e;
     }
     public static final class menu {
         public static final int main=0x7f080000;
