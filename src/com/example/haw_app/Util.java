@@ -1,6 +1,8 @@
 package com.example.haw_app;
 
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import android.app.Activity;
 import android.content.Context;
@@ -39,5 +41,12 @@ public class Util {
 		return new DateTime(year,month,day,hours,minutes);
 	}
 	
+	public static String getStringFromDateTime(DateTime date)
+	{
+		String str = "";
+		 DateTimeFormatter fmt = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm");
+		 str = fmt.print(date);
+		 return str;
+	}
 	
 }

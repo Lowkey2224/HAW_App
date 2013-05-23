@@ -32,9 +32,9 @@ public class SQLiteConnector extends SQLiteOpenHelper {
 		"(name VARCHAR, avgGrade REAL, userName VARCHAR, matNr INT, pwExpDate VARCHAR, birthday VARCHAR, printCredit INT)",
 		"(type VARCHAR, fromDate VARCHAR, toDate VARCHAR)",//NextApplicationDates
 		"(name VARCHAR, type INT, prof VARCHAR, status VARCHAR)",//Courses
-		"(name VARCHAR, prof VARCHAR, status VARCHAR, group INT)", //trainings		
+		"(name VARCHAR, prof VARCHAR, status VARCHAR, group INT)", //registeredTrainings		
 		"(name VARCHAR, grade INT)",//solvedTests
-		"(name VARCHAR, status VARCHAR)", //solvedTrainings
+		"(name VARCHAR, status INT)", //solvedTrainings
 		"(name VARCHAR, adress VARCHAR)"//mailinglists
 		}; 
 	
@@ -52,6 +52,221 @@ public class SQLiteConnector extends SQLiteOpenHelper {
 	public void onUpgrade(SQLiteDatabase arg0, int oldVersion, int newVersion) {
 		// TODO Auto-generated method stub
 	}
+	
+	public boolean saveNextApplicationDates(Map<String,DateTime[]> map)
+	{
+		boolean ret = true;
+		SQLiteDatabase db = this.getWritableDatabase();
+		for (Map.Entry<String, DateTime[]> e : map.entrySet())
+		{
+			ContentValues values = new ContentValues();
+			values.put("name", e.getKey());
+			values.put("fromDate", Util.getStringFromDateTime(e.getValue()[0]));
+			values.put("toDate",Util.getStringFromDateTime(e.getValue()[1]));
+			if (db.insert("NextApplicationDates", null, values)==-1)
+				ret = false;
+		}
+		return ret;
+	}
+
+	public boolean saveRegisteredTrainings(Map<String,String[]> map)
+	{
+		boolean ret = true;
+		SQLiteDatabase db = this.getWritableDatabase();
+		for (Map.Entry<String, String[]> e : map.entrySet())
+		{
+			ContentValues values = new ContentValues();
+			values.put("name", e.getKey());
+			values.put("prof", e.getValue()[0]);
+			values.put("group",Integer.parseInt(e.getValue()[1]));
+			values.put("status",e.getValue()[2]);
+			if (db.insert("Trainings", null, values)==-1)
+				ret = false;
+		}
+		return ret;
+	}
+
+
+	public boolean saveSolvedTrainings(Map<String,Boolean> map)
+	{
+		boolean ret = true;
+		SQLiteDatabase db = this.getWritableDatabase();
+		for (Map.Entry<String, Boolean> e : map.entrySet())
+		{
+			ContentValues values = new ContentValues();
+			values.put("name", e.getKey());
+			values.put("status", (e.getValue())?1:0);			
+			if (db.insert("SolvedTrainings", null, values)==-1)
+				ret = false;
+		}
+		return ret;
+	}
+
+
+	public boolean saveSolvedTests(Map<String,Integer> map)
+	{
+		boolean ret = true;
+		SQLiteDatabase db = this.getWritableDatabase();
+		for (Map.Entry<String, Integer> e : map.entrySet())
+		{
+			ContentValues values = new ContentValues();
+			values.put("name", e.getKey());
+			values.put("grade", e.getValue());			
+			if (db.insert("SolvedTests", null, values)==-1)
+				ret = false;
+		}
+		return ret;
+	}
+
+
+	public boolean saveMailinglists(Map<String,String> map)
+	{
+		boolean ret = true;
+		SQLiteDatabase db = this.getWritableDatabase();
+		for (Map.Entry<String, String> e : map.entrySet())
+		{
+			ContentValues values = new ContentValues();
+			values.put("name", e.getKey());
+			values.put("adress", e.getValue());			
+			if (db.insert("Mailinglists", null, values)==-1)
+				ret = false;
+		}
+		return ret;
+	}
+	
+	
+	
+	
+	
+	public Map<String,DateTime[]> getNextApplicationDates()
+	{
+		Map<String,DateTime[]> ret = null;
+		SQLiteDatabase db = this.getReadableDatabase();				
+		Cursor cursor = db.rawQuery("SELECT type, fromDate, toDate FROM `NextApplicationDates`", null);		
+		if (cursor.getCount()!=0)
+		{			
+			ret = new HashMap<String, DateTime[]>();
+			while (cursor.moveToNext()){
+				String name;
+				name = cursor.getString(cursor.getColumnIndex("name"));
+				DateTime[] ary = new DateTime[]{Util.createDateTimeFromString(cursor.getString(cursor.getColumnIndex("fromDate"))),Util.createDateTimeFromString(cursor.getString(cursor.getColumnIndex("toDate")))};
+				ret.put(name, ary);
+			}
+			
+		}
+		return ret;
+	}
+
+	public Map<String,String[]> getRegisteredTrainings()
+	{
+		//prof status group
+		SQLiteDatabase db = this.getReadableDatabase();
+		Map<String,String[]> ret = null;		
+		// name VARCHAR, type INT, prof VARCHAR, status VARCHAR)
+		Cursor cursor = db.rawQuery("SELECT name, prof, group, statusFROM `Trainings`", null);		
+		if (cursor.getCount()!=0)
+		{
+			ret = new HashMap<String, String[]>();
+			while (cursor.moveToNext()){
+				String name;
+				name = cursor.getString(cursor.getColumnIndex("name"));
+				String[] ary = new String[]{cursor.getString(cursor.getColumnIndex("prof")),Integer.toString(cursor.getInt(cursor.getColumnIndex("group"))),cursor.getString(cursor.getColumnIndex("status"))};
+				ret.put(name, ary);
+			}
+		}
+		return ret;
+	}
+	
+	public Map<String,Boolean> getSolvedTrainings()
+	{
+		SQLiteDatabase db = this.getReadableDatabase();
+		Map<String,Boolean> ret = null;		
+		// name VARCHAR, type INT, prof VARCHAR, status VARCHAR)
+		Cursor cursor = db.rawQuery("SELECT name, status FROM `SolvedTrainings`", null);		
+		if (cursor.getCount()!=0)
+		{
+			ret = new HashMap<String, Boolean>();
+			while (cursor.moveToNext()){
+				String name;
+				name = cursor.getString(cursor.getColumnIndex("name"));
+				Boolean ary = (cursor.getInt(cursor.getColumnIndex("status"))==0)?false:true;
+				ret.put(name, ary);
+			}
+		}
+		return ret;
+	}
+	
+	public Map<String,Integer> getSolvedTests()
+	{
+		SQLiteDatabase db = this.getReadableDatabase();
+		Map<String,Integer> ret = null;		
+		// name VARCHAR, type INT, prof VARCHAR, status VARCHAR)
+		Cursor cursor = db.rawQuery("SELECT name, grade statusFROM `SolvedTests`", null);		
+		if (cursor.getCount()!=0)
+		{
+			ret = new HashMap<String, Integer>();
+			while (cursor.moveToNext()){
+				String name;
+				name = cursor.getString(cursor.getColumnIndex("name"));
+				Integer ary = cursor.getInt(cursor.getColumnIndex("grade"));
+				ret.put(name, ary);
+			}
+		}
+		return ret;
+	}
+	
+	public Map<String,String>getMailinglists()
+	{
+		SQLiteDatabase db = this.getReadableDatabase();
+		Map<String,String> ret = null;		
+		// name VARCHAR, type INT, prof VARCHAR, status VARCHAR)
+		Cursor cursor = db.rawQuery("SELECT name, adress FROM `Mailinglists`", null);		
+		if (cursor.getCount()!=0)
+		{
+			ret = new HashMap<String, String>();
+			while (cursor.moveToNext()){
+				String name;
+				name = cursor.getString(cursor.getColumnIndex("name"));
+				String ary = cursor.getString(cursor.getColumnIndex("adress"));
+				ret.put(name, ary);
+			}
+		}
+		return ret;
+	}
+	
+	public boolean clearNextApplicationDates()
+	{
+		SQLiteDatabase db = this.getWritableDatabase();		
+		return (db.delete("NextApplicationDates", null, null)==0)?false:true;		
+	}
+	
+
+	public boolean clearRegisteredTrainings()
+	{
+		SQLiteDatabase db = this.getWritableDatabase();		
+		return (db.delete("Trainings", null, null)==0)?false:true;		
+	}
+	
+
+	public boolean clearSolvedTrainings()
+	{
+		SQLiteDatabase db = this.getWritableDatabase();		
+		return (db.delete("SolvedTrainings", null, null)==0)?false:true;		
+	}
+	
+
+	public boolean clearSolvedTests()
+	{
+		SQLiteDatabase db = this.getWritableDatabase();		
+		return (db.delete("SolvedTests", null, null)==0)?false:true;		
+	}
+	
+	public boolean clearMailinglists()
+	{
+		SQLiteDatabase db = this.getWritableDatabase();		
+		return (db.delete("Mailinglists", null, null)==0)?false:true;		
+	}
+	
 	
 	
 	public Map<String, String[]> getSocialSciencesCourses()
@@ -121,8 +336,7 @@ public class SQLiteConnector extends SQLiteOpenHelper {
 	private boolean clearCourses(int type)
 	{
 		SQLiteDatabase db = this.getWritableDatabase();
-		db.delete("TABLE_COURSES", "type = ?", new String[]{""+type});
-		return false;
+		return (db.delete(TABLE_COURSES, "type = ?", new String[]{""+type})==0)?false:true;		
 	}
 	
 	private boolean saveCourses(Map<String,String[]> courses,int type)
@@ -277,6 +491,7 @@ public class SQLiteConnector extends SQLiteOpenHelper {
 }
 
 class Student{
+	
 	static final String NAME = "name", USERNAME = "userName", AVERAGEGRADE ="avgGrade", MATRIKELNUMMER = "matNr", 
 			PASSWORD_EXP_DATE = "pwExpDate", BIRTHDAY = "birthday", PRINTCREDIT = "printCredit";
 	static final String TABLENAME ="Student";
