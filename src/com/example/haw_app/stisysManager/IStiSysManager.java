@@ -1,5 +1,6 @@
 package com.example.haw_app.stisysManager;
 
+import java.util.List;
 import java.util.Map;
 
 import org.joda.time.DateTime;
@@ -18,12 +19,12 @@ import org.joda.time.DateTime;
 		* Berechnet die Durchschnittsnote 
 		* @return Liefert die Durchschnittsnote um Faktor 10 erhoeht zurueck. Bsp.: 2,7 wird als 27 zurueckgegeben.
 		*/
-		public int getAverageGrade();
+		public double getAverageGrade();
 		/**
 		* Gibt die Anzahl der Credits die man zur naechst Besseren Note braucht zurueck.
 		* @return Die Anzahl der Credits.
 		*/
-		public int getDifferenceToBetterGrade();
+		public double getDifferenceToBetterGrade();
 	    
 	    /** 
 	     * Gibt eine Map mit Typ und Datum/Zeit der naechsten Anmeldetermine zurueck
@@ -114,6 +115,41 @@ import org.joda.time.DateTime;
 	    public Map<String,String> getMailingLists();
 
 	    
-	    
+        /**
+         * Liefert die bereits erreichten CP des Studenten
+         * @return int - erreichte CP
+         */
+        public int getSolvedCP();
+        
+        
+        /**
+         * Beschafft Seiteninformationen neu
+         */
+        public void syncData();
 
-	}
+        
+        /**
+         * Meldet Studenten bei Uebergebenem Kurs an
+         * @param name - Uebergebener Kurs
+         */
+        public void subscribeCourse(String name);
+        
+         /**
+         * Meldet Studenten bei Uebergebenem Kurs ab
+         * @param name - Uebergebener Kurs
+         */
+        public void unsubscribeCourse(String name);
+        
+        /**
+        * Zeigt anmeldbare Kurse
+        * @param name - Uebergebener Kurs
+        */
+       public List<String> getUnsubscribeableCourses();       
+       
+       /**
+        * Zeigt anmeldbare Kurse
+        * @param name - Uebergebener Kurs
+        */
+       public List<String> getSubscribeableCourses();
+
+}

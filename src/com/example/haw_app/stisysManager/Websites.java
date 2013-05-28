@@ -4,7 +4,7 @@ public class Websites {
 
  private Websites(){}
  
- public static String STISYS_FIRSTSITE = "https://stisys.informatik.haw-hamburg.de/stisys/";
+ 	public static String STISYS_FIRSTSITE = "https://stisys.informatik.haw-hamburg.de/login.do";
  	
  	public static String STISYS_LOGIN = "https://stisys.informatik.haw-hamburg.de/login.jsp";
 	public static String STISYS_PROFIL = "https://stisys.informatik.haw-hamburg.de/user.do";

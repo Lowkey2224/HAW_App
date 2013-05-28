@@ -1,6 +1,8 @@
 package com.example.haw_app.stisysManager;
 
+
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.joda.time.DateTime;
@@ -9,12 +11,12 @@ public class StiSysManager implements IStiSysManager{
 
 	private static StiSysManager sm = null;
 	@Override
-	public int getAverageGrade() {
+	public double getAverageGrade() {
 		return 22;
 	}
 
 	@Override
-	public int getDifferenceToBetterGrade() {
+	public double getDifferenceToBetterGrade() {
 		return 125;
 	}
 
@@ -133,5 +135,43 @@ public class StiSysManager implements IStiSysManager{
 			sm = new StiSysManager();
 		return sm;
 	}
+
+	@Override
+	public int getSolvedCP() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void syncData() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void subscribeCourse(String name) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void unsubscribeCourse(String name) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<String> getUnsubscribeableCourses() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<String> getSubscribeableCourses() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
 
 }
