@@ -1,12 +1,18 @@
 package com.example.haw_app;
 
 import java.text.DecimalFormat;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
+
+import org.joda.time.DateTime;
+
 import com.example.haw_app.stisysManager.IStiSysManager;
 import com.example.haw_app.stisysManager.StiSysManagerFactory;
+import com.example.haw_app.stisysManager.StisysUtil;
+
 import android.os.Bundle;
 import android.app.Activity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,14 +25,21 @@ import android.annotation.TargetApi;
 import android.os.Build;
 
 public class StisysActivity extends Activity {
+	static boolean isLogged = false;
 	EditText editLogin;
 	EditText editPassword;
+	String loginName; 
+	String loginPassword;
 	Button buttonLogin;
 	IStiSysManager sm;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		
+		if(!isLogged){
+		isLogged= true;
 		setContentView(R.layout.act_stisys_login);
 		editLogin = (EditText) findViewById(R.id.editLogin);
 		editPassword = (EditText) findViewById(R.id.editPassword);
@@ -34,35 +47,37 @@ public class StisysActivity extends Activity {
 				new OnClickListener() {
 					@Override
 					public void onClick(View v) {
-						final String loginName = editLogin.getText().toString();
-						final String loginPassword = editPassword.getText()
+						
+						loginName = editLogin.getText().toString();
+						loginPassword = editPassword.getText()
 								.toString();
-						Thread stisysThread = new Thread() {
-							public void run() {
-
-								sm = StiSysManagerFactory.getInstance(
-										loginName, loginPassword);
-
-								// sm = StiSysManagerFactory.getInstance();
-							}
-						};
-						stisysThread.start();
-						try {
-							stisysThread.join();
-						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-
-						//
+						createInstance(loginName, loginPassword);
 						setContentView(R.layout.activity_stisys);
-						// Show the Up button in the action bar.
 
 						setupActionBar();
 						createPrintquote();
-						//
 					}
 				});
+		} else {
+			createInstance(loginName, loginPassword);
+			setContentView(R.layout.activity_stisys);
+			createPrintquote();	
+		}
+	}
+	
+	
+	private void createInstance(final String username,final String passwrd){
+		Thread stisysThread = new Thread() {
+			public void run() {
+				sm = StiSysManagerFactory.getInstance(username, passwrd);
+			}
+		};
+		stisysThread.start();
+		try {
+			stisysThread.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -105,16 +120,31 @@ public class StisysActivity extends Activity {
 		printsm.setText(new DecimalFormat("#0.00").format(print) + " Euro");
 	}
 
+	// TODO -> dateTime auch einbinden
 	public void kommendeAnmeldungenClick(View view) {
-		setContentView(R.layout.test);
+		setContentView(R.layout.stisys_kommende_anmeldungen);
+		TextView appsm = (TextView) findViewById(R.id.applicateList);
+		
+		Set<String> apps = new HashSet<String>(); 
+		  for (Map.Entry<String, DateTime[]> entry : sm.getNextApplicationDates().entrySet()) {
+		  for(int i = 0; i < entry.getValue().length; i+=2){
+		  apps.add(entry.getKey() + ": von " + entry.getValue()[i] + " bis " + entry.getValue()[i+1]);
+		  }
+		  }
+		 
+		  appsm.setText(apps.toString());
+		
+
 	}
 
 	public void meineAnmeldungenClick(View view) {
 		setContentView(R.layout.stisys_meine_anmeldungen);
+
 		// Praktika Anzeige
 		TextView praktikasm = (TextView) findViewById(R.id.praktikaList);
 		Set<String> praktika = sm.getRegisteredTrainings().keySet();
 		praktikasm.setText(praktika.toString());
+
 		// Klausuren Anzeige
 		TextView klausurensm = (TextView) findViewById(R.id.klausurenList);
 		Set<String> klausuren = sm.getRegisteredTests().keySet();
@@ -139,18 +169,40 @@ public class StisysActivity extends Activity {
 	}
 
 	public void anmeldenClick(View view) {
-		setContentView(R.layout.test);
+		setContentView(R.layout.stisys_anmelden);
+		TextView subscribe = (TextView) findViewById(R.id.Anmelde);
+		subscribe.setText(sm.getSubscribeableCourses().toString());
 	}
 
 	public void abmeldenClick(View view) {
-		setContentView(R.layout.test);
+		setContentView(R.layout.stisys_abmelden);
+		TextView unsubscribe = (TextView) findViewById(R.id.Abmelde);
+		unsubscribe.setText(sm.getUnsubscribeableCourses().toString());
 	}
 
 	public void meineNotenClick(View view) {
-		setContentView(R.layout.test);
+		setContentView(R.layout.stisys_meine_noten);
+		
+		TextView notensm = (TextView) findViewById(R.id.Noten);
+		double average = sm.getAverageGrade();
+		notensm.setText("" + average);
+		
+		TextView cpsm = (TextView) findViewById(R.id.CP);
+		double cp = sm.getSolvedCP();
+		cpsm.setText((int)cp + "/180 CP, " + Math.round(StisysUtil.getPerCent(cp, 180d)) + "% des Studiums");
+		
 	}
-
-	public void einstellungenStisysClick(View view) {
+	
+	public void einstellungenStisysClick(View view){
+		setContentView(R.layout.stisys_einstellungen);
+	}
+	
+	public void resyncClick(View view){
+		sm.syncData();
+	}
+	
+	public void passwordClick(View view){
 		setContentView(R.layout.test);
+		//TODO LOKI: Dauerhafte Speicherung Username/Passwort - Kombi
 	}
 }

@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources><string name="meine_noten">Meine Noten</string><string name="meine_anmeldungen">Meine Anmeldungen</string><string name="kommende_anmeldungen">Kommene Anmeldungen</string><string name="printquote">Druck-Guthaben:</string><string name="einstellungen_stisys">Einstellungen</string><string name="abmelden">Abmelden</string><string name="hintPassword"/><string name="textPassword">Passwort</string><string name="hintLogin"/><string name="textLogin">Kennung</string>
+<resources>
+    
+<string name="meine_noten">Meine Noten</string>
+<string name="meine_anmeldungen">Meine Anmeldungen</string>
+<string name="kommende_anmeldungen">Kommene Anmeldungen</string>
+<string name="printquote">Druck-Guthaben:</string>
+<string name="einstellungen_stisys">Einstellungen</string>
+<string name="abmelden">Abmelden</string>
+<string name="hintPassword"/>
+<string name="textPassword">Passwort</string>
+<string name="hintLogin"/>
+<string name="textLogin">Kennung</string>
 <string name="anmelden">Anmelden</string>
 <string name="buttonLogin">Login</string>
 <string name="gw_kurse">GW-Kurse</string>
@@ -8,5 +19,12 @@
 <string name="praktika">Praktika</string>
 <string name="projekte">Projekte</string>
 <string name="seminare">Seminare</string>
+<string name="app">Kommende Anmeldungen:</string>
+<string name="durchschnitt">Durchschnitt</string>
+<string name="cp">Erreichte CP</string>
+<string name="resync">Informationen neu laden</string>
+<string name="pw_save">Passwort speichern</string>
+<string name="anmeldebar">Anmeldbare Kurse:</string>
+<string name="abmeldebar">Abmeldbare Kurse:</string>
     
 </resources>
