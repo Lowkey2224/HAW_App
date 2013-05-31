@@ -17,38 +17,57 @@ public class LoginActivity extends Activity{
 	public final static String PASSWORD = "";
 	private IStiSysManager sm = null;
 	private String userName;
+	private String showErrorText = "";
 	//private Student si = null;
 	private Chat ci;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
-	    setContentView(R.layout.activity_login);
+	    setContentView(R.layout.activity_sf_login);
 	    //si = Student.getInstance(this.getApplicationContext());
 		sm = StiSysManagerFactory.getInstance();
 		userName = sm.getUserName();
 	    //ci = Chat.getInstance();
 	    TextView account_username = (TextView) findViewById(R.id.account_username);
 	    account_username.setText(userName);
+	    ci = Chat.getInstance();
+		ci.setLoginActivity(this);
 	}
 	
 	public void sendLogin(View view) {
-	    Intent intent = new Intent(this.getApplicationContext(), ChatActivity.class);
 	    EditText account_password = (EditText) findViewById(R.id.account_password);
 	    String a_password = account_password.getText().toString();
-	    intent.putExtra("Loginname", userName);
-	    intent.putExtra("Password", a_password);
-	    startActivity(intent);
+
+	    ci.startConnect(userName, a_password);
 	}
 	
 	public void sendRegistration(View view) {
-		Intent intent = new Intent(this.getApplicationContext(), ChatActivity.class);
 		EditText account_password = (EditText) findViewById(R.id.account_password);
 	    String a_password = account_password.getText().toString();
-	    ci = Chat.getInstance();
+
 		ci.registerUser(userName, a_password);
-	    intent.putExtra("Loginname", userName);
-	    intent.putExtra("Password", a_password);
-	    startActivity(intent);
 	}
+	
+	
+	public void setError(String text) {
+		showErrorText = text;
+		
+	}
+	
+	public void errorText(){
+		TextView textLoginFailure = (TextView) findViewById(R.id.login_failure);
+		textLoginFailure.setText(showErrorText);
+	}
+	
+	public void changeActivity(){
+		Intent intent = new Intent(this.getApplicationContext(), ChatActivity.class);
+		startActivity(intent);
+	}
+	
+	//@Override
+	//protected void onDestroy() {
+	//	super.onDestroy();
+	//	ci.chatDisconnect();
+	//}
 }
