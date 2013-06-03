@@ -14,89 +14,113 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 
+/**
+ * Chat Fenster
+ * 
+ * @author Aria
+ * 
+ */
 public class ChatActivity extends Activity implements OnItemSelectedListener {
 
 	private Spinner recipient;
 	private EditText textMessage;
 	private ListView listview;
-	private String selectTo ="";
+	private String selectTo = "";
 	private Chat ci;
 	private ArrayList<String> messages = new ArrayList<String>();
 	private ArrayList<String> contactList = new ArrayList<String>();
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_sf_chat);
-		contactList.add(" ");
+		contactList.add(" "); // Damit man auch keinen Nutzer wählen kann.
 		ci = Chat.getInstance();
 		ci.setChatActivity(this);
-	    
+
 		recipient = (Spinner) this.findViewById(R.id.toET);
 		recipient.setOnItemSelectedListener(this);
 		textMessage = (EditText) this.findViewById(R.id.chatET);
 		listview = (ListView) this.findViewById(R.id.listMessages);
-		ci.startContact();
-		setContactAdapter();
-		
-		// Set a listener to send a chat text message
+
+		ci.startContact(); // Kontaktdaten holen + aktualisierung
+		ci.showOfflineMessages(); // Offlinemessage holen
+		setContactAdapter(); // Kontaktfenster initialisieren
+
 		Button send = (Button) this.findViewById(R.id.sendBtn);
 		send.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
-				//String to = recipient.getText().toString();
-				String to = selectTo;
-				String text = textMessage.getText().toString();
-				ci.sendMessage(to, text);
+				if (!selectTo.equals(" ")) { // PRÜFEN OB ES GEHT
+					// String to = recipient.getText().toString();
+					String to = selectTo;
+					String text = textMessage.getText().toString();
+					ci.sendMessage(to, text);
+					setMessage("to " + selectTo + " :");
+					setMessage(text);
+					setListAdapter();
+					textMessage.setText("");//Textfeld wieder leeren
+				}
 			}
 		});
 	}
 
+	/**
+	 * Nachrichtenliste aktualisiern/setzen
+	 */
 	public void setListAdapter() {
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
 				R.layout.sf_listitem, messages);
 		listview.setAdapter(adapter);
 	}
 
+	/**
+	 * Text die auf der Nachrichtenliste angezeigt werden sollen
+	 * @param text Nachrichtentext
+	 */
 	public void setMessage(String text) {
 		messages.add(text);
 	}
-	
+
+	/**
+	 * Kontaktliste aktualisiern/setzen
+	 */
 	public void setContactAdapter() {
-		//ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-		//		R.layout.sf_listitem, messages);
-		//listview.setAdapter(adapter);
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-				android.R.layout.simple_spinner_item,contactList);
+				android.R.layout.simple_spinner_item, contactList);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		recipient.setAdapter(adapter);
 
-		//adapter.notifyDataSetChanged();
+		// adapter.notifyDataSetChanged();
 	}
 
-//	public void setContact(ArrayList<String> contactList) {
-//		this.contactList.clear();
-//		this.contactList=contactList;
-//	}
-	
+	/**
+	 * Beim start erstmal alle Kontakte adden die der Nutzer
+	 * in seine Freundesliste hat
+	 * @param text Kontaktname
+	 */
 	public void addContact(String text) {
 		contactList.add(text);
 	}
-	
-	public void removeContact(String text) {
-		contactList.remove(contactList.indexOf(text));
-		if (selectTo.equals(text))
-			recipient.setSelection(0);
-	}
-	
+
+	/**
+	 * Nutzer geht von Offline zu Online.
+	 * Im text steht Nutzer + Status (z.b. ABC-(Offline))
+	 * @param text Nutzer + Status(Offline)
+	 */
 	public void changeContactOnline(String text) {
-		String textChange = (text+"-(Online)");
-		text = (text+"-(Offline)");
+		String textChange = (text + "-(Online)");
+		text = (text + "-(Offline)");
 		contactList.set(contactList.indexOf(text), textChange);
 	}
-	
+
+	/**
+	 * Nutzer geht von Online zu Offline.
+	 * Im text steht Nutzer + Status (z.b. ABC-(Online))
+	 * @param text Nutzer + Status(Online)
+	 */
 	public void changeContactOffline(String text) {
-		String textChange = (text+"-(Offline)");
-		text = (text+"-(Online)");
+		String textChange = (text + "-(Offline)");
+		text = (text + "-(Online)");
 		contactList.set(contactList.indexOf(text), textChange);
 	}
 
@@ -109,19 +133,15 @@ public class ChatActivity extends Activity implements OnItemSelectedListener {
 	@Override
 	public void onItemSelected(AdapterView<?> parent, View view, int pos,
 			long id) {
+		//Name muss zurechtgeschnitten werden, da beim senden nicht
+		//zusätzlich Offline/Online stehen darf.
 		String temp = parent.getItemAtPosition(pos).toString();
 		String[] tempcon = temp.split("-");
 		selectTo = tempcon[0];
-		//System.out.println("AUSWAHL");
-		//System.out.println("selectTo : " + selectTo);
-		
 	}
 
 	@Override
 	public void onNothingSelected(AdapterView<?> arg0) {
-		//System.out.println("NICHTS AUSWAHL");
-		// TODO Auto-generated method stub
-		
 	}
 
 }

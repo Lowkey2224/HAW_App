@@ -1,6 +1,7 @@
 package com.example.haw_app.socialfeatures.implementation;
 
 //import java.util.ArrayList;
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.jivesoftware.smack.AccountManager;
@@ -9,8 +10,6 @@ import org.jivesoftware.smack.PacketListener;
 import org.jivesoftware.smack.Roster;
 import org.jivesoftware.smack.RosterEntry;
 import org.jivesoftware.smack.RosterListener;
-//import org.jivesoftware.smack.Roster;
-//import org.jivesoftware.smack.RosterEntry;
 //import org.jivesoftware.smack.SASLAuthentication;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
@@ -19,18 +18,15 @@ import org.jivesoftware.smack.filter.PacketFilter;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Packet;
 import org.jivesoftware.smack.packet.Presence;
-import org.jivesoftware.smack.util.StringUtils;
 
 import com.example.haw_app.ChatActivity;
 import com.example.haw_app.LoginActivity;
-//import com.example.haw_app.socialfeatures.interfaces.IChat;
+import com.example.haw_app.socialfeatures.interfaces.IChat;
 
 import android.os.AsyncTask;
 import android.os.Handler;
 
-//import android.util.Log;
-
-public class Chat {// implements IChat {
+public class Chat implements IChat {
 	private static Chat instance = null;
 	public static final String HOST = "ec2-176-34-76-54.eu-west-1.compute.amazonaws.com";
 	public static final int PORT = 5222;
@@ -39,38 +35,41 @@ public class Chat {// implements IChat {
 	LoginActivity loginActivity = null;
 	private XMPPConnection connection;
 	private Handler mHandler = new Handler();
-
-	// private ArrayList<String> contactList = new ArrayList<String>();
+	private ArrayList<String> offlineMessages = new ArrayList<String>();
+	private PacketListener packetListenerOffline;
 
 	// private Handler eHandler = new Handler();
+	// private ArrayList<String> contactList = new ArrayList<String>();
 
 	private Chat() {
-
 	}
 
+	@Override
 	public void setChatActivity(ChatActivity chatActivity) {
 		this.chatActivity = chatActivity;
 	}
 
+	@Override
 	public void setLoginActivity(LoginActivity loginActivity) {
 		this.loginActivity = loginActivity;
 	}
 
+	@Override
 	public void sendMessage(String to, String text) {
-		to = to + "@" + SERVICE;
-		Message msg = new Message(to, Message.Type.chat);
-		msg.setBody(text);
 		if (connection != null) {
+			to = to + "@" + SERVICE; // komplette adresse muss angegeben werden
+			Message msg = new Message(to, Message.Type.chat);
+			msg.setBody(text);
 			// Log.i("HAW_App Chat ", "Text SEND ");
 			connection.sendPacket(msg);
-			chatActivity.setMessage(StringUtils.parseBareAddress(connection
-					.getUser()) + ":");
-			chatActivity.setMessage(text);
-			chatActivity.setListAdapter();
 		}
 	}
 
-	public void sendError(int errorNr) {
+	/**
+	 * Errortext wird an der LoginActivity gesendet.
+	 * @param errorNr
+	 */
+	private void sendError(int errorNr) {
 		switch (errorNr) {
 		case 0:
 			loginActivity.setError("Connect fehlgeschlagen");
@@ -90,46 +89,87 @@ public class Chat {// implements IChat {
 		});
 	}
 
-	public void setConnection(XMPPConnection connection) {
-		this.connection = connection;
+	/**
+	 * Holt erstmal die Offlinenachrichten.
+	 * Ausgabe kann nicht sofort stattfinden,
+	 * da es sein kann das die ChatActivity noch nicht aktiv ist.
+	 */
+	private void setConnectionOffline() {
+		if (connection != null) {
+			PacketFilter filter = new MessageTypeFilter(Message.Type.chat);
+			packetListenerOffline = new PacketListener() {
+				@Override
+				public void processPacket(Packet packet) {
+					Message message = (Message) packet;
+					if (message.getBody() != null) {
+						String fromName[] = message.getFrom().split("@");
+						// Log.i("HAW_App Chat mOffline", "Text Recieved "
+						// + message.getBody() + " from " + fromName[0]);
+						offlineMessages.add("from " + fromName[0]
+								+ " Offline Message:");
+						offlineMessages.add(message.getBody());
+					}
+				}
+			};
+			connection.addPacketListener(packetListenerOffline, filter);
+		}
+	}
+
+	@Override
+	public void showOfflineMessages() {
+		if ((chatActivity != null) && (!offlineMessages.isEmpty())) {
+			for (String message : offlineMessages) {
+				chatActivity.setMessage(message);
+			}
+		}
+		//beendet den packetListenerOffline, da sonst alles doppelt gelesen wird.
+		connection.removePacketListener(packetListenerOffline);
+		chatActivity.setListAdapter();
+		setConnectionOnline();
+	}
+
+	/**
+	 * Nachrichten werden ans Chatactivity sofort gesendet.
+	 */
+	private void setConnectionOnline() {
 		if (connection != null) {
 			PacketFilter filter = new MessageTypeFilter(Message.Type.chat);
 			connection.addPacketListener(new PacketListener() {
 				@Override
 				public void processPacket(Packet packet) {
-					// if (chatActivity != null) {
 					Message message = (Message) packet;
 					if (message.getBody() != null) {
-						String fromName = StringUtils.parseBareAddress(message
-								.getFrom());
-						// Log.i("HAW_App Chat ",
-						// "Text Recieved " + message.getBody()
-						// + " from " + fromName);
-						chatActivity.setMessage(fromName + ":");
+						String fromName[] = message.getFrom().split("@");
+						// Log.i("HAW_App Chat mOnline ", "Text Recieved "
+						// + message.getBody() + " from " + fromName[0]);
+						chatActivity.setMessage("from " + fromName[0] + ":");
 						chatActivity.setMessage(message.getBody());
-						// Add the incoming message to the list view
+						
 						mHandler.post(new Runnable() {
 							public void run() {
 								chatActivity.setListAdapter();
 							}
 						});
 					}
-					// }
 				}
 			}, filter);
 		}
 	}
 
+	@Override
 	public void chatDisconnect() {
 		try {
-			if (connection != null)
+			if (connection != null) {
 				// Log.i("HAW_App Chat ", "DISCONNECT");
 				connection.disconnect();
+				connection = null;
+			}
 		} catch (Exception e) {
 
 		}
 	}
 
+	@Override
 	public void prepareConnection() {
 		if (connection == null) {
 			ConnectionConfiguration connConfig = new ConnectionConfiguration(
@@ -139,11 +179,16 @@ public class Chat {// implements IChat {
 
 	}
 
+	@Override
 	public boolean isConnect() {
 		return connection != null;
 
 	}
 
+	/**
+	 * Im Hintergrund wird eine Verbindung und login durchgeführt.
+	 *
+	 */
 	private class startConnectBackground extends AsyncTask<String, Void, Void> {
 		@Override
 		protected Void doInBackground(String... params) {
@@ -152,41 +197,37 @@ public class Chat {// implements IChat {
 			prepareConnection();
 			try {
 				connection.connect();
-				// Log.i("HAW_App Chat connect ",
-				// "Connected to " + connection.getHost());
+				setConnectionOffline();
 			} catch (XMPPException ex) {
-				// Log.e("HAW_App Chat connect ", "Failed to connect to "
-				// + connection.getHost());
-				// Log.e("HAW_App Chat connect", ex.toString());
 				sendError(0);
 			}
 			try {
 				// SASLAuthentication.supportSASLMechanism("PLAIN", 0);
 				connection.login(userName, password);
 				loginActivity.changeActivity();
-				// Log.i("HAW_App Chat connect",
-				// "Logged in as " + connection.getUser());
-				// Set the status to available
+				
+				// Setzt Status auf Online
 				Presence presence = new Presence(Presence.Type.available);
 				connection.sendPacket(presence);
-				setConnection(connection);
 
 			} catch (XMPPException ex) {
-				// Log.e("HAW_App Chat connect", "Failed to log in as " +
-				// userName);
-				// Log.e("HAW_App Chat connect", ex.toString());
 				sendError(1);
-				setConnection(null);
+				chatDisconnect();
 			}
 			return null;
 		}
 	}
 
+	@Override
 	public void startConnect(String userName, String password) {
 		startConnectBackground connectTask = new startConnectBackground();
 		connectTask.execute(new String[] { userName, password });
 	}
 
+	/**
+	 * Im Hintergrund wird eine Verbindung, Registierung und login durchgeführt.
+	 *
+	 */
 	private class registerUserBackground extends AsyncTask<String, Void, Void> {
 
 		@Override
@@ -197,39 +238,36 @@ public class Chat {// implements IChat {
 
 			try {
 				connection.connect();
-				// Log.i("HAW_App Chat register",
-				// "Connected to " + connection.getHost());
 			} catch (XMPPException ex) {
-				// Log.e("HAW_App Chat register", "Failed to connect to "
-				// + connection.getHost());
-				// Log.e("HAW_App Chat register", ex.toString());
 				sendError(0);
-				setConnection(null);
+				chatDisconnect();
 			}
 
 			try {
 				AccountManager manager = new AccountManager(connection);
 				manager.createAccount(userName, password);
-				// Log.i("HAW App Chat register", "Account " + userName
-				// + " registriert");
-				connection.disconnect();
+				// connection.disconnect();
 				startConnect(userName, password);
 			} catch (XMPPException ex) {
-				// Log.e("HAW_App Chat register", "Failed to register to "
-				// + connection.getHost());
-				// Log.e("HAW_App Chat register", ex.toString());
 				sendError(2);
-				setConnection(null);
+				chatDisconnect();
 			}
 			return null;
 		}
 	}
 
+	@Override
 	public void registerUser(String userName, String password) {
 		registerUserBackground registerTask = new registerUserBackground();
 		registerTask.execute(new String[] { userName, password });
 	}
 
+	/**
+	 * Kontaktliste erstellen.
+	 * Zuerst werden alle Kontakte geholt und dann eine Funktion aufgerufen
+	 * die für die Aktualisierung zuständig ist.
+	 *
+	 */
 	private class ContactFetcher extends AsyncTask<String, Void, Void> {
 
 		@Override
@@ -237,80 +275,52 @@ public class Chat {// implements IChat {
 
 			Roster roster = connection.getRoster();
 			for (RosterEntry entry : roster.getEntries()) {
-				// if (roster.getPresence(entry.getUser()).isAvailable()) {
-				// String[] fromUser = entry.getUser().split("@");
-				// //contactList.add(fromUser[0]);
-				// chatActivity.addContact(fromUser[0]);
-				// }
 				String[] fromUser = entry.getUser().split("@");
 				if (roster.getPresence(entry.getUser()).isAvailable()) {
-					chatActivity.addContact(fromUser[0]+"-(Online)");
+					chatActivity.addContact(fromUser[0] + "-(Online)");
 				} else {
-					chatActivity.addContact(fromUser[0]+"-(Offline)");
+					chatActivity.addContact(fromUser[0] + "-(Offline)");
 				}
 			}
-			// chatActivity.setContact(contactList);
 			chatActivity.setContactAdapter();
+			ContactPush();
 
-			roster.addRosterListener(new RosterListener() {
-				public void entriesAdded(Collection<String> addresses) {
-					System.out.println("entriesAdded");
-				}
-
-				public void entriesDeleted(Collection<String> addresses) {
-					System.out.println("entriesDeleted");
-				}
-
-				public void entriesUpdated(Collection<String> addresses) {
-					System.out.println("entriesUpdated");
-				}
-
-				public void presenceChanged(Presence presence) {
-					//System.out.println("Presence changed: "
-					//		+ presence.getFrom() + " " + presence);
-					String[] fromUser = presence.getFrom().split("@");
-					if (presence.isAvailable()) {
-						// chatActivity.addContact(fromUser[0]);
-						chatActivity.changeContactOnline(fromUser[0]);
-						chatActivity.setContactAdapter();
-					} else {
-						// chatActivity.removeContact(fromUser[0]);
-						chatActivity.changeContactOffline(fromUser[0]);
-						chatActivity.setContactAdapter();
-					}
-
-				}
-			});
-
-			// contactList.clear();
-			//
-			// Roster people = connection.getRoster();
-			//
-			// for (RosterEntry entry : people.getEntries()) {
-			// //System.out.println("entry.getUser : " + entry.getUser());
-			// //System.out.println("entry.getName() : " + entry.getName());
-			// //System.out.println("people.getPresence(entry.getUser()) : " +
-			// people.getPresence(entry.getUser()));
-			// //System.out.println("people.getPresence(entry.getUser()).isAvailable() : "
-			// + people.getPresence(entry.getUser()).isAvailable());
-			// if (people.getPresence(entry.getUser()).isAvailable()){
-			// String[] fromUser = entry.getUser().split("@");
-			// contactList.add(fromUser[0]);
-			// }
-			// //String fromName =
-			// StringUtils.parseBareAddress(entry.getUser());
-			// //contactList.add(entry.getName());
-			// //contactList.add(people.getPresence(entry.getUser()));
-			//
-			//
-			// }
-			// //System.out.println("contactList : " + contactList.toString());
-			// chatActivity.setContact(contactList);
-			// chatActivity.setContactAdapter();
 			return null;
 		}
 	}
 
+	/**
+	 * Aktualisierung der Kontaktliste,
+	 * falls ein Nutzer Online/Offline gehen sollte.
+	 */
+	private void ContactPush() {
+		Roster roster = connection.getRoster();
+		roster.addRosterListener(new RosterListener() {
+			public void entriesAdded(Collection<String> addresses) {
+			}
+
+			public void entriesDeleted(Collection<String> addresses) {
+			}
+
+			public void entriesUpdated(Collection<String> addresses) {
+			}
+
+			public void presenceChanged(Presence presence) {
+				String[] fromUser = presence.getFrom().split("@");
+				if (presence.isAvailable()) {
+					chatActivity.changeContactOnline(fromUser[0]);
+					chatActivity.setContactAdapter();
+				} else {
+					chatActivity.changeContactOffline(fromUser[0]);
+					chatActivity.setContactAdapter();
+				}
+
+			}
+		});
+
+	}
+
+	@Override
 	public void startContact() {
 		ContactFetcher contactTask = new ContactFetcher();
 		contactTask.execute();

@@ -12,25 +12,28 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+/**
+ * Login Fenster
+ * @author Aria
+ *
+ */
 public class LoginActivity extends Activity{
-	public final static String LOGINNAME = "";
-	public final static String PASSWORD = "";
 	private IStiSysManager sm = null;
 	private String userName;
 	private String showErrorText = "";
-	//private Student si = null;
 	private Chat ci;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
 	    setContentView(R.layout.activity_sf_login);
-	    //si = Student.getInstance(this.getApplicationContext());
+	    
 		sm = StiSysManagerFactory.getInstance();
 		userName = sm.getUserName();
-	    //ci = Chat.getInstance();
+		
 	    TextView account_username = (TextView) findViewById(R.id.account_username);
 	    account_username.setText(userName);
+	    
 	    ci = Chat.getInstance();
 		ci.setLoginActivity(this);
 	}
@@ -49,25 +52,36 @@ public class LoginActivity extends Activity{
 		ci.registerUser(userName, a_password);
 	}
 	
-	
+	/**
+	 * Falls ein Fehler passiert, wird der dynamische Errortext gegeben.
+	 * @param text ErrorText
+	 */
 	public void setError(String text) {
 		showErrorText = text;
 		
 	}
 	
+	/**
+	 * Zeigt den Errortext auf der UI.
+	 */
 	public void errorText(){
 		TextView textLoginFailure = (TextView) findViewById(R.id.login_failure);
 		textLoginFailure.setText(showErrorText);
 	}
 	
+	/**
+	 * Sobald Login erfolgreich war,
+	 * wird die Activity auf ChatActivity gewechselt.
+	 * Aufruf beim Chat.java
+	 */
 	public void changeActivity(){
 		Intent intent = new Intent(this.getApplicationContext(), ChatActivity.class);
 		startActivity(intent);
 	}
 	
-	//@Override
-	//protected void onDestroy() {
-	//	super.onDestroy();
-	//	ci.chatDisconnect();
-	//}
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		ci.chatDisconnect();
+	}
 }
