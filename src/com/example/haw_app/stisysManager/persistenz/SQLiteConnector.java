@@ -20,16 +20,16 @@ public class SQLiteConnector extends SQLiteOpenHelper {
 //TODO NextApplicationDates, RegisteredTrainigs, SolvedTrainings,SolvedTests,Mailinglists
 	public SQLiteConnector(Context context) {
 		super(context, dbName, null, dbversion);
-		// TODO Auto-generated constructor stub
+		
 	}
 	private static final String TABLE_COURSES = "Courses";
 	private static final int GWS = 0, REGISTERED_TESTS = 1, WPS = 2;
 	private static final String dbName = "StiSysManagerDB";
-	private static final int dbversion = 1;
+	private static final int dbversion = 2;
 	private static final String[] tableName = new String[] {"Student","NextApplicationDates",TABLE_COURSES,
 		"Trainings","SolvedTests","SolvedTrainings","Mailinglists"};
 	private static final String[] columns = new String[] {
-		"(name VARCHAR, avgGrade REAL, userName VARCHAR, matNr INT, pwExpDate VARCHAR, birthday VARCHAR, printCredit INT)",
+		"(name VARCHAR, avgGrade REAL, userName VARCHAR, password VARCHAR, matNr INT, pwExpDate VARCHAR, birthday VARCHAR, printCredit INT)",
 		"(type VARCHAR, fromDate VARCHAR, toDate VARCHAR)",//NextApplicationDates
 		"(name VARCHAR, type INT, prof VARCHAR, status VARCHAR)",//Courses
 		"(name VARCHAR, prof VARCHAR, status VARCHAR, group INT)", //registeredTrainings		
@@ -43,18 +43,24 @@ public class SQLiteConnector extends SQLiteOpenHelper {
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i<tableName.length;i++)
 		{		
-			sb.append("CREATE TABLE ").append(tableName[i]).append(" ").append(columns[i]);
+			sb.append("CREATE TABLE IF NOT EXISTS ").append(tableName[i]).append(" ").append(columns[i]).append(";");
 			db.execSQL(sb.toString());
 		}		
 	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase arg0, int oldVersion, int newVersion) {
-		// TODO Auto-generated method stub
+		if (oldVersion == 1 && newVersion >= 2)
+		{
+			arg0.execSQL("alter table Student add column password VARCHAR default ''");			
+
+		}
 	}
 	
 	public boolean saveNextApplicationDates(Map<String,DateTime[]> map)
 	{
+		if(map== null)
+			return false;
 		boolean ret = true;
 		SQLiteDatabase db = this.getWritableDatabase();
 		for (Map.Entry<String, DateTime[]> e : map.entrySet())
@@ -71,6 +77,8 @@ public class SQLiteConnector extends SQLiteOpenHelper {
 
 	public boolean saveRegisteredTrainings(Map<String,String[]> map)
 	{
+		if(map== null)
+			return false;
 		boolean ret = true;
 		SQLiteDatabase db = this.getWritableDatabase();
 		for (Map.Entry<String, String[]> e : map.entrySet())
@@ -89,6 +97,8 @@ public class SQLiteConnector extends SQLiteOpenHelper {
 
 	public boolean saveSolvedTrainings(Map<String,Boolean> map)
 	{
+		if(map== null)
+			return false;
 		boolean ret = true;
 		SQLiteDatabase db = this.getWritableDatabase();
 		for (Map.Entry<String, Boolean> e : map.entrySet())
@@ -105,6 +115,8 @@ public class SQLiteConnector extends SQLiteOpenHelper {
 
 	public boolean saveSolvedTests(Map<String,Integer> map)
 	{
+		if(map== null)
+			return false;
 		boolean ret = true;
 		SQLiteDatabase db = this.getWritableDatabase();
 		for (Map.Entry<String, Integer> e : map.entrySet())
@@ -121,6 +133,8 @@ public class SQLiteConnector extends SQLiteOpenHelper {
 
 	public boolean saveMailinglists(Map<String,String> map)
 	{
+		if(map== null)
+			return false;
 		boolean ret = true;
 		SQLiteDatabase db = this.getWritableDatabase();
 		for (Map.Entry<String, String> e : map.entrySet())
@@ -341,6 +355,8 @@ public class SQLiteConnector extends SQLiteOpenHelper {
 	
 	private boolean saveCourses(Map<String,String[]> courses,int type)
 	{
+		if(courses== null)
+			return false;
 		boolean ret = true;
 		SQLiteDatabase db = this.getWritableDatabase();
 		for (Map.Entry<String, String[]> e : courses.entrySet())
@@ -390,6 +406,18 @@ public class SQLiteConnector extends SQLiteOpenHelper {
 	public int getPrintCredit()
 	{
 		return this.getStudent().printCredit;
+	}
+	
+	public String getPassword()
+	{
+		return this.getStudent().pw; 
+	}
+	
+	public boolean setPassword(String password)
+	{
+		Student std = this.getStudent();
+		std.pw = password;
+		return (saveStudent(std)>0)?true:false;
 	}
 	
 	public boolean setName(String name)
@@ -452,7 +480,9 @@ public class SQLiteConnector extends SQLiteOpenHelper {
 		 DateTimeFormatter fmt = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm");
 		 val.put(Student.PASSWORD_EXP_DATE, fmt.print(std.pwExpDate));
 		 val.put(Student.BIRTHDAY, fmt.print(std.birthdate));
-		 val.put(Student.PRINTCREDIT, std.printCredit);		 
+		 val.put(Student.PRINTCREDIT, std.printCredit);
+		 val.put(Student.PASSWORD, std.pw);
+		 db.delete(Student.TABLENAME, null, null);
 		 return db.update(Student.TABLENAME, val, null,null);		
 	}
 	
@@ -460,7 +490,7 @@ public class SQLiteConnector extends SQLiteOpenHelper {
 	{
 		SQLiteDatabase db = this.getReadableDatabase();
 		Student std = new Student();		
-		Cursor cursor = db.rawQuery("SELECT name, avgGrade, userName,matNr,pwExpDate,birthday,printCredit  FROM Student", null);		
+		Cursor cursor = db.rawQuery("SELECT "+Student.columnList()+" FROM Student", null);		
 		if (cursor.getCount()!=0)
 		{
 			cursor.moveToNext();							
@@ -472,7 +502,9 @@ public class SQLiteConnector extends SQLiteOpenHelper {
 			std.pwExpDate= Util.createDateTimeFromString(pwExpDate);
 			String birthday = cursor.getString(cursor.getColumnIndex(Student.BIRTHDAY));
 			std.birthdate= Util.createDateTimeFromString(birthday);
-			std.printCredit = cursor.getInt(cursor.getColumnIndex(Student.PRINTCREDIT));											
+			std.printCredit = cursor.getInt(cursor.getColumnIndex(Student.PRINTCREDIT));
+			std.pw = cursor.getString(cursor.getColumnIndex(Student.PASSWORD));
+			
 		}else{
 			
 			ContentValues val = new ContentValues();
@@ -484,6 +516,7 @@ public class SQLiteConnector extends SQLiteOpenHelper {
 			val.put(Student.PASSWORD_EXP_DATE, fmt.print(std.pwExpDate));
 			val.put(Student.BIRTHDAY, fmt.print(std.birthdate));
 			val.put(Student.PRINTCREDIT, std.printCredit);	
+			val.put(Student.PASSWORD, std.pw);
 			db.insert(Student.TABLENAME, null, val);
 		}
 		return std;
@@ -493,9 +526,9 @@ public class SQLiteConnector extends SQLiteOpenHelper {
 class Student{
 	
 	static final String NAME = "name", USERNAME = "userName", AVERAGEGRADE ="avgGrade", MATRIKELNUMMER = "matNr", 
-			PASSWORD_EXP_DATE = "pwExpDate", BIRTHDAY = "birthday", PRINTCREDIT = "printCredit";
+			PASSWORD_EXP_DATE = "pwExpDate", BIRTHDAY = "birthday", PRINTCREDIT = "printCredit", PASSWORD  = "password";
 	static final String TABLENAME ="Student";
-	String name,userName;
+	String name,userName,pw;
 	double avgGrade;
 	int matNr, printCredit;
 	DateTime birthdate, pwExpDate;
@@ -504,7 +537,7 @@ class Student{
 	{
 		StringBuilder sb = new StringBuilder();
 		sb.append(NAME).append(", ").append(USERNAME).append(", ").append(AVERAGEGRADE).append(", ").append(MATRIKELNUMMER)
-		.append(", ").append(PASSWORD_EXP_DATE).append(", ").append(BIRTHDAY).append(", ").append(PRINTCREDIT);
+		.append(", ").append(PASSWORD_EXP_DATE).append(", ").append(BIRTHDAY).append(", ").append(PRINTCREDIT).append(", ").append(PASSWORD);
 		return sb.toString();
 	}
 	
@@ -517,5 +550,6 @@ class Student{
 		printCredit = 0;
 		birthdate = null;
 		pwExpDate = null;
+		pw = null;
 	}
 }
