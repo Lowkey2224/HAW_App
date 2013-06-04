@@ -15,6 +15,11 @@ public interface Iveranstaltungsplan {
 	public void aktualisieren()throws Exception;
 	
 	/**
+	 * Parst die aktuelle .txt Datei.
+	 */
+	public void aktualisierenOhneDownload()throws Exception;
+	
+	/**
 	 * Methode zum aendern der belegten Faecher.(Nur belegte Faecher werden auch exportiert.) 
 	 * @param faecher Liste der Namen der belgeten Faecher z.B. "BAI4-SE2".
 	 */

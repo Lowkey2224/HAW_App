@@ -217,6 +217,11 @@ public class Veranstaltungsplan implements com.example.haw_app.veranstaltungspla
 		this.parsen();
 		
 	}
+	
+	@Override
+	public void aktualisierenOhneDownload() throws Exception {
+		this.parsen();
+	}
 
 	@Override
 	public void setzeBelegteFaecher(List<String> faecher) {
