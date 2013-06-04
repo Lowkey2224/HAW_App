@@ -42,7 +42,7 @@ public class Veranstaltungsplan implements com.example.haw_app.veranstaltungspla
 	private int wochentag = 0;
 	 
     /**
-     * Default-Konstruktor, der nicht außerhalb dieser Klasse
+     * Default-Konstruktor, der nicht auï¿½erhalb dieser Klasse
      * aufgerufen werden kann
      */
     private Veranstaltungsplan() {
@@ -51,7 +51,7 @@ public class Veranstaltungsplan implements com.example.haw_app.veranstaltungspla
  
     /**
      * Statische Methode, liefert die einzige Instanz dieser
-     * Klasse zurück
+     * Klasse zurï¿½ck
      */
     public static Veranstaltungsplan getInstance() {
         if (instance == null) {
@@ -208,11 +208,11 @@ public class Veranstaltungsplan implements com.example.haw_app.veranstaltungspla
 
 	@Override
 	public void aktualisieren() throws Exception {
-		DownloadThread dlt = new DownloadThread();
-		datei = dlt.doInBackground(datei);
-//		InputStreamReader is = retrieveReader(url);
-//		
-//		saveFile(datei,is);
+//		DownloadThread dlt = new DownloadThread();
+//		datei = dlt.doInBackground(datei);
+		InputStreamReader is = retrieveReader(url);
+		
+		saveFile(datei,is);
 		
 		this.parsen();
 		

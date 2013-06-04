@@ -9,5 +9,6 @@
 	<string name="account_username">Username</string>
 	<string name="title_activity_login">Login Chat</string>
 	<string name="title_activity_chat">Chat</string>
+	<string name="login_failure"></string>
 
 </resources>

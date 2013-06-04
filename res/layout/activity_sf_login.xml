@@ -32,4 +32,11 @@
         android:onClick="sendRegistration"
         android:text="@string/login_registration_chat" />
 
+        <TextView
+            android:id="@+id/login_failure"
+            android:layout_width="257dp"
+            android:layout_height="wrap_content"
+            android:text="@string/login_failure"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
 </LinearLayout>

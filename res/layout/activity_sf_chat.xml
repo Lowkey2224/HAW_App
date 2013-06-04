@@ -16,15 +16,10 @@
             android:text="Chat With"
             android:textStyle="bold" />
 
-        <EditText
+        <Spinner
             android:id="@+id/toET"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="Add Recipient"
-            android:minWidth="250dp"
-            android:scrollHorizontally="true"
-            android:singleLine="true"
-            android:textSize="16sp" />
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
     <ListView
