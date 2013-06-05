@@ -14,7 +14,8 @@ public interface IPraktika {
 
 	/**
 	 * Erzeugen eines neuen Praktikumpartner
-	 * Durch DB hat bekommen die eine Eindeutige ID
+	 * Durch DB bekommt jede Partner eine Eindeutige ID
+	 * 
 	 * @param matNr
 	 * @param firstname
 	 * @param surname

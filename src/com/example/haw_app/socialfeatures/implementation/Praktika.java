@@ -23,6 +23,7 @@ public class Praktika implements IPraktika {
 	private Map<Integer, IPartner> partners = new HashMap<Integer, IPartner>();
 
 	private static final String DB_TABLE_PARTNER = DatabaseSocialFeatures.DB_TABLE_PARTNER;
+	private static final String DB_TABLE_CHAT = DatabaseSocialFeatures.DB_TABLE_CHAT;
 	DatabaseSocialFeatures dbSF;
 
 	public Praktika(String lecture, String profName, String groupNr,
@@ -36,7 +37,7 @@ public class Praktika implements IPraktika {
 
 	@Override
 	public boolean createPartner(String matNr, String firstname,
-		String surname, String email, String handy) {
+			String surname, String email, String handy) {
 		Integer pID = null;
 		if (getPartnerID(matNr) == null) {
 			SQLiteDatabase db = dbSF.getWritableDatabase();
@@ -46,11 +47,15 @@ public class Praktika implements IPraktika {
 					+ matNr + "','" + firstname + "','" + surname + "','"
 					+ email + "','" + handy + "','" + lecture + "');");
 			pID = getPartnerID(matNr);
+			// Zusätzliche DB um zu merken welche Partner in die im Chat eingetragen werden müssen.
+			String userName = firstname + " " + surname;
+			db.execSQL("INSERT INTO " + DB_TABLE_CHAT + " (matNr, userName) VALUES ('"
+					+ matNr + "','" + userName + "');");
 			partners.put(pID, new Partner(matNr, firstname, surname, email,
 					handy, lecture));
 			db.close();
 			return true;
-		}else{
+		} else {
 			return false;
 		}
 	}
@@ -88,12 +93,12 @@ public class Praktika implements IPraktika {
 
 		return partners.remove(pID) != null;
 	}
-	
+
 	@Override
 	public boolean deletePartnerLecture(String lecture) {
 		List<IPartner> pList = new ArrayList<IPartner>();
 		pList = getPartnerLecture(lecture);
-		for (IPartner p : pList){
+		for (IPartner p : pList) {
 			deletePartnerID(p.getMatNr());
 		}
 		return true;

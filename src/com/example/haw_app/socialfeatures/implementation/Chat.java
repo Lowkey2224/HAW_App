@@ -1,6 +1,5 @@
 package com.example.haw_app.socialfeatures.implementation;
 
-//import java.util.ArrayList;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -21,8 +20,11 @@ import org.jivesoftware.smack.packet.Presence;
 
 import com.example.haw_app.ChatActivity;
 import com.example.haw_app.LoginActivity;
+import com.example.haw_app.database.DatabaseSocialFeatures;
 import com.example.haw_app.socialfeatures.interfaces.IChat;
 
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Handler;
 
@@ -67,6 +69,7 @@ public class Chat implements IChat {
 
 	/**
 	 * Errortext wird an der LoginActivity gesendet.
+	 * 
 	 * @param errorNr
 	 */
 	private void sendError(int errorNr) {
@@ -90,9 +93,8 @@ public class Chat implements IChat {
 	}
 
 	/**
-	 * Holt erstmal die Offlinenachrichten.
-	 * Ausgabe kann nicht sofort stattfinden,
-	 * da es sein kann das die ChatActivity noch nicht aktiv ist.
+	 * Holt erstmal die Offlinenachrichten. Ausgabe kann nicht sofort
+	 * stattfinden, da es sein kann das die ChatActivity noch nicht aktiv ist.
 	 */
 	private void setConnectionOffline() {
 		if (connection != null) {
@@ -122,7 +124,8 @@ public class Chat implements IChat {
 				chatActivity.setMessage(message);
 			}
 		}
-		//beendet den packetListenerOffline, da sonst alles doppelt gelesen wird.
+		// beendet den packetListenerOffline, da sonst alles doppelt gelesen
+		// wird.
 		connection.removePacketListener(packetListenerOffline);
 		chatActivity.setListAdapter();
 		setConnectionOnline();
@@ -144,7 +147,7 @@ public class Chat implements IChat {
 						// + message.getBody() + " from " + fromName[0]);
 						chatActivity.setMessage("from " + fromName[0] + ":");
 						chatActivity.setMessage(message.getBody());
-						
+
 						mHandler.post(new Runnable() {
 							public void run() {
 								chatActivity.setListAdapter();
@@ -187,7 +190,7 @@ public class Chat implements IChat {
 
 	/**
 	 * Im Hintergrund wird eine Verbindung und login durchgeführt.
-	 *
+	 * 
 	 */
 	private class startConnectBackground extends AsyncTask<String, Void, Void> {
 		@Override
@@ -205,7 +208,7 @@ public class Chat implements IChat {
 				// SASLAuthentication.supportSASLMechanism("PLAIN", 0);
 				connection.login(userName, password);
 				loginActivity.changeActivity();
-				
+
 				// Setzt Status auf Online
 				Presence presence = new Presence(Presence.Type.available);
 				connection.sendPacket(presence);
@@ -226,7 +229,7 @@ public class Chat implements IChat {
 
 	/**
 	 * Im Hintergrund wird eine Verbindung, Registierung und login durchgeführt.
-	 *
+	 * 
 	 */
 	private class registerUserBackground extends AsyncTask<String, Void, Void> {
 
@@ -263,10 +266,9 @@ public class Chat implements IChat {
 	}
 
 	/**
-	 * Kontaktliste erstellen.
-	 * Zuerst werden alle Kontakte geholt und dann eine Funktion aufgerufen
-	 * die für die Aktualisierung zuständig ist.
-	 *
+	 * Kontaktliste erstellen. Zuerst werden alle Kontakte geholt und dann eine
+	 * Funktion aufgerufen die für die Aktualisierung zuständig ist.
+	 * 
 	 */
 	private class ContactFetcher extends AsyncTask<String, Void, Void> {
 
@@ -290,8 +292,8 @@ public class Chat implements IChat {
 	}
 
 	/**
-	 * Aktualisierung der Kontaktliste,
-	 * falls ein Nutzer Online/Offline gehen sollte.
+	 * Aktualisierung der Kontaktliste, falls ein Nutzer Online/Offline gehen
+	 * sollte.
 	 */
 	private void ContactPush() {
 		Roster roster = connection.getRoster();
@@ -324,6 +326,39 @@ public class Chat implements IChat {
 	public void startContact() {
 		ContactFetcher contactTask = new ContactFetcher();
 		contactTask.execute();
+	}
+
+	@Override
+	public boolean addUser(String matNr, String userName) {
+		try {
+			Roster roster = connection.getRoster();
+			roster.createEntry(matNr, userName, null);
+		} catch (XMPPException e) {
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public void addUserAutomatic() {
+		DatabaseSocialFeatures dbSF = new DatabaseSocialFeatures(
+				chatActivity.getApplicationContext());
+		SQLiteDatabase db = dbSF.getReadableDatabase();
+
+		Cursor c = db.rawQuery("SELECT * FROM "
+				+ DatabaseSocialFeatures.DB_TABLE_CHAT, null);
+		if (c != null) {
+			if (c.moveToFirst()) {
+				do {
+					String matNr = c.getString(c.getColumnIndex("matNr"));
+					String userName = c.getString(c.getColumnIndex("userName"));
+					if(addUser(matNr, userName))
+						db.delete(DatabaseSocialFeatures.DB_TABLE_CHAT, "matNr" + " = '" + matNr + "'", null);
+				} while (c.moveToNext());
+			}
+		}
+		db.close();
+
 	}
 
 	public static Chat getInstance() {

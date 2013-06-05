@@ -8,13 +8,14 @@ public class DatabaseSocialFeatures extends SQLiteOpenHelper {
 
 	// All Static variables
 	// Database Version
-	private static final int DATABASE_VERSION = 7;
+	private static final int DATABASE_VERSION = 8;
 	// Database Name
 	public static final String DATABASE_NAME = "haw_app";
 
 	// Contacts table name
 	public static final String DB_TABLE_PRAKTIKA = "praktika";
 	public static final String DB_TABLE_PARTNER = "partner";
+	public static final String DB_TABLE_CHAT = "chat";
 
 	private static final String CREATE_TABLE_PRAKTIKA = "create table praktika (praID integer primary key autoincrement, "
 			+ "lecture"	+ " TEXT,"
@@ -29,6 +30,8 @@ public class DatabaseSocialFeatures extends SQLiteOpenHelper {
 			+ "email" + " TEXT," 
 			+ "handy" + " TEXT,"
 			+ "lecture" + " TEXT" + ");";
+	
+	private static final String CREATE_TABLE_CHAT = "create table chat (matNr TEXT primary key, userName TEXT );";
 
 	public DatabaseSocialFeatures(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -39,6 +42,7 @@ public class DatabaseSocialFeatures extends SQLiteOpenHelper {
 	public void onCreate(SQLiteDatabase db) {
 		db.execSQL(CREATE_TABLE_PRAKTIKA);
 		db.execSQL(CREATE_TABLE_PARTNER);
+		db.execSQL(CREATE_TABLE_CHAT);
 	}
 
 	@Override
