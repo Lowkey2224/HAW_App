@@ -41,14 +41,16 @@ public class LoginActivity extends Activity{
 	public void sendLogin(View view) {
 	    EditText account_password = (EditText) findViewById(R.id.account_password);
 	    String a_password = account_password.getText().toString();
-
+	    setError("..Login..bitte warten..");//kein fehler aber textausgabe für warten
+	    errorText();
 	    ci.startConnect(userName, a_password);
 	}
 	
 	public void sendRegistration(View view) {
 		EditText account_password = (EditText) findViewById(R.id.account_password);
 	    String a_password = account_password.getText().toString();
-
+	    setError("..Registration..bitte warten..");//kein fehler aber textausgabe für warten
+	    errorText();
 		ci.registerUser(userName, a_password);
 	}
 	

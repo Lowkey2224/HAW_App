@@ -3,6 +3,8 @@ package com.example.haw_app;
 import java.util.ArrayList;
 
 import com.example.haw_app.socialfeatures.implementation.Chat;
+import com.example.haw_app.socialfeatures.interfaces.IChat;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
@@ -26,7 +28,8 @@ public class ChatActivity extends Activity implements OnItemSelectedListener {
 	private EditText textMessage;
 	private ListView listview;
 	private String selectTo = "";
-	private Chat ci;
+	private IChat ci;
+	//private Chat ci;
 	private ArrayList<String> messages = new ArrayList<String>();
 	private ArrayList<String> contactList = new ArrayList<String>();
 
@@ -47,6 +50,7 @@ public class ChatActivity extends Activity implements OnItemSelectedListener {
 		ci.showOfflineMessages(); // Offlinemessage holen
 		setContactAdapter(); // Kontaktfenster initialisieren
 
+		ci.addUserAutomatic(); // User automatisch adden die in Praktika eingetragen worden sind
 		Button send = (Button) this.findViewById(R.id.sendBtn);
 		send.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {

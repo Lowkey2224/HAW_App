@@ -75,5 +75,21 @@ public interface IChat {
 	 * Start der Kontakt liste und der aktualisierung.
 	 */
 	public void startContact();
+	
+	/**
+	 * Nutzer adden 
+	 *
+	 * @param matNr Eindeutige Nutzername der geaddet werden soll.
+	 * @param userName Name der in der Kontaktliste steht.
+	 * @return true wenn User geaddet werden konnte
+	 */
+	public boolean addUser(String matNr, String userName);
+	
+	/**
+	 * Prüft welche Nutzer noch geaddet werden müssen.
+	 * Die geaddet wurden sind, werden aus der Liste gelöscht
+	 * und die restlichen beim nächsten Start geprüft.
+	 */
+	public void addUserAutomatic();
 
 }
