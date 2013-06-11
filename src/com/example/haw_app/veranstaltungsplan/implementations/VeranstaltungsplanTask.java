@@ -17,7 +17,12 @@ public class VeranstaltungsplanTask extends AsyncTask<VeranstaltungsplanAnzeigen
 		this.activity = arg0[0];
 		Veranstaltungsplan vp = activity.vp;
 		
-		vp.aktualisieren();
+		try {
+			vp.aktualisieren();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		return vp;
 		
@@ -27,9 +32,4 @@ public class VeranstaltungsplanTask extends AsyncTask<VeranstaltungsplanAnzeigen
 	protected void onPostExecute(Veranstaltungsplan result) {
 		activity.vp = result;
 	}
-	
-	public Veranstaltungsplan getVP() {
-		return vp;
-	}
-
 }
