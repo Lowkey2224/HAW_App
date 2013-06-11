@@ -1,8 +1,8 @@
 package com.example.haw_app;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -19,11 +19,9 @@ import com.example.haw_app.veranstaltungsplan.implementations.Veranstaltungsplan
 import com.example.haw_app.veranstaltungsplan.implementations.VeranstaltungsplanTask;
 
 public class VeranstaltungsplanAnzeigenActivity extends
-		Activity {
-	
+		VeranstaltungsplanActivity {
+
 	public Veranstaltungsplan vp = Veranstaltungsplan.getInstance();
-	
-	
 
 	/** Called when the activity is first created. */
 	@Override
@@ -36,9 +34,9 @@ public class VeranstaltungsplanAnzeigenActivity extends
 	private void vpAnzeigenLayout() {
 
 		setContentView(R.layout.vp_anzeigen);
-		
+
 	}
-	
+
 	public void vpAktualisieren(View view) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
@@ -82,23 +80,12 @@ public class VeranstaltungsplanAnzeigenActivity extends
 		}
 
 	}
-	
+
 	public List<Termin> getTermineList() throws Exception {
-		
+
 		new VeranstaltungsplanTask().execute(this);
 
-		
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-		builder.setMessage(vp.termine.size())
-				.setNeutralButton("OK", new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
-					}
-				});
-		AlertDialog alertDialog = builder.create();
-		alertDialog.show();
 		return vp.termine;
 	}
-	
-	
+
 }
