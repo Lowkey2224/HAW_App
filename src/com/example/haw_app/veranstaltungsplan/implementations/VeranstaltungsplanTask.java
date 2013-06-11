@@ -6,6 +6,8 @@ public class VeranstaltungsplanTask extends AsyncTask<Veranstaltungsplan, Void, 
 
 	private Veranstaltungsplan vp;
 	
+	public VeranstaltungsplanTask() {};
+	
 	@Override
 	protected Veranstaltungsplan doInBackground(Veranstaltungsplan... arg0) {
 		
