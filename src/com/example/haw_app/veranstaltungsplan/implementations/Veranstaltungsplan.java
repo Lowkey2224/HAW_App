@@ -1,5 +1,7 @@
 package com.example.haw_app.veranstaltungsplan.implementations;
 
+import static com.example.haw_app.veranstaltungsplan.implementations.Utility.termin;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -21,13 +23,11 @@ import org.joda.time.DateTime;
 
 import android.util.Log;
 
-import static com.example.haw_app.veranstaltungsplan.implementations.Utility.*;
-
 public class Veranstaltungsplan implements com.example.haw_app.veranstaltungsplan.interfaces.Iveranstaltungsplan{
 	
 	private static Veranstaltungsplan instance = null;
-	
-	private File datei = new File("veranstaltungsplan.txt");
+		
+	private File datei = new File("/assets/veranstaltungsplan.txt");
 	
 	private String url = "http://ec2-176-34-76-54.eu-west-1.compute.amazonaws.com:8080/HawServer/files/Sem_I.txt";
 	

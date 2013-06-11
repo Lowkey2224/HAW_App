@@ -21,5 +21,9 @@ public class VeranstaltungsplanTask extends AsyncTask<Veranstaltungsplan, Void, 
 		
 		return vp;
 	}
+	
+	public Veranstaltungsplan getVP() {
+		return vp;
+	}
 
 }
