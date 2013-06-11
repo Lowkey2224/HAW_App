@@ -101,6 +101,27 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.haw_app.LoginActivity" />
         </activity>
+        <activity 
+            android:name="VeranstaltungsplanTerminActivity"
+            android:label="@string/title_activity_chat"
+            android:parentActivityName="com.example.haw_app.VeranstaltungsplanAnzeigenActivity">
+                        <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.haw_app.VeranstaltungsplanAnzeigenActivity" /></activity>
+        <activity 
+            android:name="VeranstaltungsplanAnzeigenActivity"
+            android:label="@string/title_activity_chat"
+            android:parentActivityName="com.example.haw_app.VeranstaltungsplanActivity">
+                        <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.haw_app.VeranstaltungsplanActivity" /></activity>
+        <activity 
+            android:name="VeranstaltungsplanExportierenActivity"
+            android:label="@string/title_activity_chat"
+            android:parentActivityName="com.example.haw_app.VeranstaltungsplanActivity">
+                        <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.haw_app.VeranstaltungsplanActivity" /></activity>
     </application>
 
 </manifest>

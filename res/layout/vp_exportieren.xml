@@ -1,0 +1,53 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin" >
+
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="5dp"
+        android:background="@color/black"
+        android:drawableLeft="@drawable/platzhalter"
+        android:drawablePadding="@dimen/activity_horizontal_margin"
+        android:gravity="center_vertical"
+        android:onClick="vpAktualisieren"
+        android:text="@string/vp_aktualisieren"
+        android:textColor="@color/white"
+        android:textColorHint="@color/black" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:background="@color/black"
+        android:drawableLeft="@drawable/platzhalter"
+        android:drawablePadding="@dimen/activity_horizontal_margin"
+        android:gravity="center_vertical"
+        android:onClick="vpExportieren"
+        android:text="@string/vp_exportieren"
+        android:textColor="@color/white"
+        android:textColorHint="@color/black" />
+
+    <ListView
+        android:id="@+id/veranstaltungsplan_listview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/button2"
+        android:layout_alignLeft="@+id/button1"
+        android:layout_below="@+id/button1"
+        android:background="#FFFFFF"
+        tools:context=".VeranstaltungsplanActivity" >
+
+    </ListView>
+
+</RelativeLayout>

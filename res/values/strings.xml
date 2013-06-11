@@ -24,5 +24,9 @@
     <string name="sj_scan">Barcode scannen</string>
     <string name="sj_orten">GPS Koordinaten bestimmen</string>
     <string name="sj_acc">Ziel Erfüllen</string>
+    <string name="vp_aktualisieren">Aktualisieren</string>
+    <string name="vp_exportieren">Exportieren</string>
+    <string name="vp_anzeigen">Anzeigen</string>
+    <string name="vp_exportieren_menu">Individueller Veranstaltungsplan</string>
 
 </resources>

@@ -18,8 +18,8 @@
         android:drawableLeft="@drawable/platzhalter"
         android:drawablePadding="@dimen/activity_horizontal_margin"
         android:gravity="center_vertical"
-        android:onClick="platzhalterClick"
-        android:text="@string/platzhalter"
+        android:onClick="vpAktualisieren"
+        android:text="@string/vp_aktualisieren"
         android:textColor="@color/white"
         android:textColorHint="@color/black" />
 
@@ -33,8 +33,8 @@
         android:drawableLeft="@drawable/platzhalter"
         android:drawablePadding="@dimen/activity_horizontal_margin"
         android:gravity="center_vertical"
-        android:onClick="platzhalterClick"
-        android:text="@string/platzhalter"
+        android:onClick="vpExportieren"
+        android:text="@string/vp_exportieren"
         android:textColor="@color/white"
         android:textColorHint="@color/black" />
 
