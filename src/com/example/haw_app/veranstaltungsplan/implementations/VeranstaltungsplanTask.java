@@ -1,8 +1,5 @@
 package com.example.haw_app.veranstaltungsplan.implementations;
 
-import java.util.Date;
-import java.util.List;
-
 import com.example.haw_app.VeranstaltungsplanAnzeigenActivity;
 
 import android.os.AsyncTask;
@@ -17,7 +14,11 @@ public class VeranstaltungsplanTask extends AsyncTask<VeranstaltungsplanAnzeigen
 		this.activity = arg0[0];
 		Veranstaltungsplan vp = activity.vp;
 		
-		vp.aktualisieren();
+		try {
+			vp.aktualisieren();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 		return vp;
 		

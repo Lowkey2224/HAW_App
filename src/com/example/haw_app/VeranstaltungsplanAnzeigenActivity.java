@@ -16,11 +16,12 @@ import android.widget.ListView;
 
 import com.example.haw_app.veranstaltungsplan.implementations.Termin;
 import com.example.haw_app.veranstaltungsplan.implementations.Veranstaltungsplan;
+import com.example.haw_app.veranstaltungsplan.implementations.VeranstaltungsplanTask;
 
 public class VeranstaltungsplanAnzeigenActivity extends
 		VeranstaltungsplanActivity {
 	
-	
+	public Veranstaltungsplan vp = Veranstaltungsplan.getInstance();
 
 	/** Called when the activity is first created. */
 	@Override
@@ -81,8 +82,9 @@ public class VeranstaltungsplanAnzeigenActivity extends
 	}
 	
 	public List<Termin> getTermineList() throws Exception {
-		Veranstaltungsplan vp = Veranstaltungsplan.getInstance();
-		vp.aktualisieren();
+		
+		new VeranstaltungsplanTask().execute(this);
+		
 		return vp.termine;
 	}
 	
