@@ -38,54 +38,47 @@ public class VeranstaltungsplanAnzeigenActivity extends
 	}
 
 	public void vpAktualisieren(View view) {
+		new VeranstaltungsplanTask().execute(this);
+
+	}
+
+	public void vpAktualisieren(Veranstaltungsplan vp){
+		List<Termin> termineList = vp.termine;
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-		builder.setMessage("Veranstaltungsplan konnte nicht angezeigt werden!")
+		builder.setMessage(termineList.toString() + "test")
 				.setNeutralButton("OK", new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
 					}
 				});
+		AlertDialog alertDialog = builder.create();
+		alertDialog.show();
+		
+		String[] termineArray = new String[termineList.size()];
 
-		try {
-			List<Termin> termineList = getTermineList();
-			String[] termineArray = new String[termineList.size()];
-
-			for (int i = 0; i < termineList.size(); i++) {
-				termineArray[i] = termineList.get(i).name();
-			}
-			ListAdapter adapter = new ArrayAdapter<String>(
-					getApplicationContext(),
-					android.R.layout.simple_list_item_1, termineArray);
-
-			final ListView lv = (ListView) findViewById(R.id.veranstaltungsplan_listview);
-
-			lv.setAdapter(adapter);
-			lv.setOnItemClickListener(new OnItemClickListener() {
-
-				@Override
-				public void onItemClick(AdapterView<?> arg0, View arg1,
-						int arg2, long arg3) {
-					Intent intent = new Intent();
-					intent.setClassName(getPackageName(), getPackageName()
-							+ ".VeranstaltungsplanTerminActivity");
-					intent.putExtra("selected", lv.getAdapter().getItem(arg2)
-							.toString());
-					startActivity(intent);
-				}
-			});
-
-		} catch (Exception e) {
-			AlertDialog alertDialog = builder.create();
-			alertDialog.show();
+		for (int i = 0; i < termineList.size(); i++) {
+			termineArray[i] = termineList.get(i).name();
 		}
+		ListAdapter adapter = new ArrayAdapter<String>(
+				getApplicationContext(),
+				android.R.layout.simple_list_item_1, termineArray);
 
-	}
+		final ListView lv = (ListView) findViewById(R.id.veranstaltungsplan_listview);
 
-	public List<Termin> getTermineList() throws Exception {
+		lv.setAdapter(adapter);
+		lv.setOnItemClickListener(new OnItemClickListener() {
 
-		new VeranstaltungsplanTask().execute(this);
-
-		return vp.termine;
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1,
+					int arg2, long arg3) {
+				Intent intent = new Intent();
+				intent.setClassName(getPackageName(), getPackageName()
+						+ ".VeranstaltungsplanTerminActivity");
+				intent.putExtra("selected", lv.getAdapter().getItem(arg2)
+						.toString());
+				startActivity(intent);
+			}
+		});
 	}
 
 }

@@ -28,5 +28,7 @@
     <string name="vp_exportieren">Exportieren</string>
     <string name="vp_anzeigen">Anzeigen</string>
     <string name="vp_exportieren_menu">Individueller Veranstaltungsplan</string>
+    <string name="sf_praktika">Praktika</string>
+    <string name="sf_chat">Chat</string>
 
 </resources>

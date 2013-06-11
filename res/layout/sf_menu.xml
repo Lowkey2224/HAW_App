@@ -18,13 +18,13 @@
         android:drawableLeft="@drawable/platzhalter"
         android:drawablePadding="@dimen/activity_horizontal_margin"
         android:gravity="center_vertical"
-        android:onClick="vpAktualisieren"
+        android:onClick="sfAktualisieren"
         android:text="@string/vp_aktualisieren"
         android:textColor="@color/white"
         android:textColorHint="@color/black" />
     
     <ListView
-        android:id="@+id/veranstaltungsplan_listview"
+        android:id="@+id/sf_listview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/sf_praktika_updaten"

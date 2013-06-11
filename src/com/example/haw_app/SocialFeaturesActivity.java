@@ -54,9 +54,14 @@ public class SocialFeaturesActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 	
-    public void platzhalterClick(View view){
+    public void sfChatClick(View view){
     	
-    	startActivity(new Intent(this,LoginActivity.class));
+    	startActivity(new Intent(SocialFeaturesActivity.this,LoginActivity.class));
+    }
+    
+    public void sfPraktikaClick(View view){
+    	
+    	startActivity(new Intent(SocialFeaturesActivity.this,SocialFeaturesPraktikaActivity.class));
     }
 
 }

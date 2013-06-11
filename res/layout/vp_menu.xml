@@ -10,7 +10,7 @@
     tools:context=".OptionenActivity" >
 
         <Button
-            android:id="@+id/vp_anzeigen_btn"
+            android:id="@+id/sf_chat"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/vp_exportieren_btn"
@@ -29,7 +29,7 @@
             android:id="@+id/vp_exportieren_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/vp_anzeigen_btn"
+            android:layout_below="@+id/sf_chat"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="15dp"
             android:background="@color/black"

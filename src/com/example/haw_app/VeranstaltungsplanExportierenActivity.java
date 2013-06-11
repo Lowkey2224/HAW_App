@@ -1,7 +1,6 @@
 package com.example.haw_app;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import android.annotation.TargetApi;
@@ -9,7 +8,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -19,10 +17,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -276,6 +272,7 @@ public class VeranstaltungsplanExportierenActivity extends Activity {
 
 	public void getTermineList() throws Exception {
 		List<TerminForView> termine = new ArrayList<TerminForView>();
+		
 		vp.aktualisieren();
 		for (int i = 0; i < vp.termine.size(); i++) {
 			termine.add(new TerminForView(vp.termine.get(i)));

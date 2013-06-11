@@ -1,11 +1,14 @@
 package com.example.haw_app;
 
+
 import com.example.haw_app.socialfeatures.implementation.Chat;
 //import com.example.haw_app.socialfeatures.implementation.Student;
 import com.example.haw_app.stisysManager.IStiSysManager;
 import com.example.haw_app.stisysManager.StiSysManagerFactory;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -28,14 +31,17 @@ public class LoginActivity extends Activity{
 	    super.onCreate(savedInstanceState);
 	    setContentView(R.layout.activity_sf_login);
 	    
-		sm = StiSysManagerFactory.getInstance();
-		userName = sm.getUserName();
-		
-	    TextView account_username = (TextView) findViewById(R.id.account_username);
+		// sm = StiSysManagerFactory.getInstance();
+		// userName = sm.getUserName();
+	    
+	    userName = "ace111";
+	    
+		TextView account_username = (TextView) findViewById(R.id.account_username);
 	    account_username.setText(userName);
 	    
 	    ci = Chat.getInstance();
 		ci.setLoginActivity(this);
+		    
 	}
 	
 	public void sendLogin(View view) {
