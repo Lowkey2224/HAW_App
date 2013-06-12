@@ -216,6 +216,7 @@ public class Veranstaltungsplan implements com.example.haw_app.veranstaltungspla
 			while (line != null) {
 				//fos.write(line.getBytes());
 				fw.write(line);
+				fw.write(System.getProperty("line.separator"));
 				line = br.readLine();
 			}
 			
