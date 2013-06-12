@@ -9,7 +9,7 @@
     android:paddingTop="@dimen/activity_vertical_margin" >
 
     <Button
-        android:id="@+id/sf_praktika_updaten"
+        android:id="@+id/vp_updaten"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -25,11 +25,11 @@
     
     <ListView
         android:id="@+id/veranstaltungsplan_listview"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/sf_praktika_updaten"
-        android:background="#FFFFFF"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/black"
         tools:context=".VeranstaltungsplanActivity" >
+    
 
     </ListView>
 

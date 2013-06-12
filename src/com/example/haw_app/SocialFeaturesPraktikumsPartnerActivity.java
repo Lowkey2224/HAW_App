@@ -7,7 +7,6 @@ import java.util.Set;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -22,62 +21,56 @@ import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
 
 import com.example.haw_app.socialfeatures.implementation.Student;
+import com.example.haw_app.socialfeatures.interfaces.IPartner;
+import com.example.haw_app.socialfeatures.interfaces.IPraktika;
 import com.example.haw_app.socialfeatures.interfaces.IStudent;
-import com.example.haw_app.veranstaltungsplan.implementations.Termin;
 
-public class SocialFeaturesPraktikaActivity extends Activity {
+public class SocialFeaturesPraktikumsPartnerActivity extends Activity {
 	IStudent student;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.sf_menu);
+		setContentView(R.layout.sf_praktikumspartner);
 		// Show the Up button in the action bar.
 		setupActionBar();
 		student = Student.getInstance(this.getApplicationContext());
-		student.updatePraktikas();
-    	AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-		builder.setNeutralButton("OK", new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
-					}
-				});
-
+		Intent intent = getIntent();
+		IPraktika praktikum = student.getPraktika(intent.getStringExtra("selected").toString());
+		praktikum.createPartner("1234", "test", "surname", "email", "handy");
+		List<IPartner> partner = praktikum.getPartnerLecture(intent.getStringExtra("selected").toString());
+		
 		try {
-			Set<String> pratikaSet = student.getPraktikasLectureSet();
 			
-			String[] pratikaArray = new String[pratikaSet.size()];
-			int i = 0;
-			for ( Iterator<String> it = pratikaSet.iterator(); it.hasNext(); )
-			{
-				pratikaArray[i] = (String)it.next();
-			    i++;
+			String[] partnerArray = new String[partner.size()];
+			for (int i = 0; i < partner.size(); i++) {
+				partnerArray[i] = partner.get(i).getFirstname() + " " + partner.get(i).getSurname();
 			}
 			ListAdapter adapter = new ArrayAdapter<String>(
 					getApplicationContext(),
-					android.R.layout.simple_list_item_1, pratikaArray);
+					android.R.layout.simple_list_item_1, partnerArray);
 
-			final ListView lv = (ListView) findViewById(R.id.sf_listview);
+			final ListView lv = (ListView) findViewById(R.id.sf_praktikumspartner_listview);
 
 			lv.setAdapter(adapter);
-			lv.setOnItemClickListener(new OnItemClickListener() {
-
-				@Override
-				public void onItemClick(AdapterView<?> arg0, View arg1,
-						int arg2, long arg3) {
-					Intent intent = new Intent();
-					intent.setClassName(getPackageName(), getPackageName()
-							+ ".SocialFeaturesPraktikumsPartnerActivity");
-					intent.putExtra("selected", lv.getAdapter().getItem(arg2)
-							.toString());
-					startActivity(intent);
-				}
-			});
+//			lv.setOnItemClickListener(new OnItemClickListener() {
+//
+//				@Override
+//				public void onItemClick(AdapterView<?> arg0, View arg1,
+//						int arg2, long arg3) {
+//					Intent intent = new Intent();
+//					intent.setClassName(getPackageName(), getPackageName()
+//							+ ".SocialFeaturesPraktikumsPartnerActivity");
+//					intent.putExtra("selected", lv.getAdapter().getItem(arg2)
+//							.toString());
+//					startActivity(intent);
+//				}
+//			});
 
 		} catch (Exception e) {
-			builder.setMessage(e.toString());
-			AlertDialog alertDialog = builder.create();
-			alertDialog.show();
+//			builder.setMessage(e.toString());
+//			AlertDialog alertDialog = builder.create();
+//			alertDialog.show();
 		}
 	}
 

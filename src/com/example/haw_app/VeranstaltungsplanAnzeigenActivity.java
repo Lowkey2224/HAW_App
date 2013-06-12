@@ -2,8 +2,7 @@ package com.example.haw_app;
 
 import java.util.List;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -18,7 +17,7 @@ import com.example.haw_app.veranstaltungsplan.implementations.Veranstaltungsplan
 import com.example.haw_app.veranstaltungsplan.implementations.VeranstaltungsplanTask;
 
 public class VeranstaltungsplanAnzeigenActivity extends
-		VeranstaltungsplanActivity {
+		Activity {
 
 	public Veranstaltungsplan vp = Veranstaltungsplan.getInstance();
 
@@ -43,20 +42,11 @@ public class VeranstaltungsplanAnzeigenActivity extends
 
 	public void vpAktualisieren(Veranstaltungsplan vp){
 		List<Termin> termineList = vp.termine;
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-		builder.setMessage(termineList.toString() + "test")
-				.setNeutralButton("OK", new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
-					}
-				});
-		AlertDialog alertDialog = builder.create();
-		alertDialog.show();
 		
 		String[] termineArray = new String[termineList.size()];
 
 		for (int i = 0; i < termineList.size(); i++) {
-			termineArray[i] = termineList.get(i).name();
+			termineArray[i] = termineList.get(i).name() + "\n" + termineList.get(i).prof() + "\n" + termineList.get(i).raum() + "\n" + termineList.get(i).von() + "-" + termineList.get(i).bis();
 		}
 		ListAdapter adapter = new ArrayAdapter<String>(
 				getApplicationContext(),

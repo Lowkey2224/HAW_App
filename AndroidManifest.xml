@@ -70,6 +70,38 @@
                 android:value="com.example.haw_app.MainActivity" />
         </activity>
         <activity
+            android:name="com.example.haw_app.ChatActivity"
+            android:label="@string/title_activity_social_features"
+            android:parentActivityName="com.example.haw_app.LoginActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.haw_app.LoginActivity" />
+        </activity>
+        <activity
+            android:name="com.example.haw_app.LoginActivity"
+            android:label="@string/title_activity_social_features"
+            android:parentActivityName="com.example.haw_app.SocialFeaturesActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.haw_app.SocialFeaturesActivity" />
+        </activity>
+        <activity
+            android:name="com.example.haw_app.SocialFeaturesPraktikaActivity"
+            android:label="@string/title_activity_social_features"
+            android:parentActivityName="com.example.haw_app.SocialFeaturesActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.haw_app.SocialFeaturesActivity" />
+        </activity>
+        <activity
+            android:name="com.example.haw_app.SocialFeaturesPraktikumsPartnerActivity"
+            android:label="@string/title_activity_social_features"
+            android:parentActivityName="com.example.haw_app.SocialFeaturesPraktikaActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.haw_app.SocialFeaturesPraktikaActivity" />
+        </activity>
+        <activity
             android:name="com.example.haw_app.VeranstaltungsplanActivity"
             android:label="@string/title_activity_veranstaltungsplan"
             android:parentActivityName="com.example.haw_app.MainActivity" >
@@ -86,38 +118,22 @@
                 android:value="com.example.haw_app.MainActivity" />
         </activity>
         <activity 
-            android:name="com.example.haw_app.LoginActivity"
-            android:label="@string/title_activity_chat"
-            android:parentActivityName="com.example.haw_app.MainActivity">
-                        <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.haw_app.MainActivity" />
-        </activity>
-        <activity 
-            android:name="com.example.haw_app.ChatActivity"
-            android:label="@string/title_activity_chat"
-            android:parentActivityName="com.example.haw_app.LoginActivity">
-                        <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.haw_app.LoginActivity" />
-        </activity>
-        <activity 
             android:name="VeranstaltungsplanTerminActivity"
-            android:label="@string/title_activity_chat"
+            android:label="@string/veranstaltungsplan"
             android:parentActivityName="com.example.haw_app.VeranstaltungsplanAnzeigenActivity">
                         <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.haw_app.VeranstaltungsplanAnzeigenActivity" /></activity>
         <activity 
             android:name="VeranstaltungsplanAnzeigenActivity"
-            android:label="@string/title_activity_chat"
+            android:label="@string/veranstaltungsplan"
             android:parentActivityName="com.example.haw_app.VeranstaltungsplanActivity">
                         <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.haw_app.VeranstaltungsplanActivity" /></activity>
         <activity 
             android:name="VeranstaltungsplanExportierenActivity"
-            android:label="@string/title_activity_chat"
+            android:label="@string/veranstaltungsplan"
             android:parentActivityName="com.example.haw_app.VeranstaltungsplanActivity">
                         <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

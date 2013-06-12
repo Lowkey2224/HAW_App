@@ -22,13 +22,12 @@
         android:text="@string/vp_aktualisieren"
         android:textColor="@color/white"
         android:textColorHint="@color/black" />
-    
     <ListView
         android:id="@+id/sf_listview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/sf_praktika_updaten"
-        android:background="#FFFFFF"
+        android:background="@color/black"
         tools:context=".VeranstaltungsplanActivity" >
 
     </ListView>

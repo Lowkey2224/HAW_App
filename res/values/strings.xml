@@ -5,7 +5,6 @@
     <string name="action_settings">Settings</string>
     <string name="essensplan">Essensplan</string>
     <string name="pc_pool">PC Pool</string>
-    <string name="veranstaltungsplan">Veranstaltungsplan</string>
     <string name="social_features">Social Features</string>
     <string name="stisys">StISys</string>
     <string name="schnitzeljagd">Schnitzeljagd</string>
@@ -30,5 +29,6 @@
     <string name="vp_exportieren_menu">Individueller Veranstaltungsplan</string>
     <string name="sf_praktika">Praktika</string>
     <string name="sf_chat">Chat</string>
+    <string name="veranstaltungsplan">Veranstaltungsplan</string>
 
 </resources>
