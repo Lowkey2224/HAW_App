@@ -44,9 +44,12 @@ public class StiSysManager2 implements IStiSysManager {
 	private List<String> unsubscribleOnes;
 	private Context parent;
 	private SQLiteConnector db;
+	private String userName;
+	private String password;
 	public StiSysManager2(String userName, String password, Context mParent) {
 		
-		session = new Session(userName, password);
+		this.userName = userName;
+		this.password = password;
 		parent = mParent;
 		db = new SQLiteConnector(parent);
 		//syncData();
@@ -55,6 +58,7 @@ public class StiSysManager2 implements IStiSysManager {
 	
 	@Override
 	public void syncData() {
+		session = new Session(userName, password);
 		if(session.userName.equals("") || session.password.equals(""))
 		{
 			return;

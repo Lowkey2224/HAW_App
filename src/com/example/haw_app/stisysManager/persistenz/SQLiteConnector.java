@@ -95,6 +95,7 @@ public class SQLiteConnector extends SQLiteOpenHelper {
 			ContentValues values = new ContentValues();
 			values.put("name", e.getKey());
 			values.put("prof", e.getValue()[0]);
+			String _tmp = e.getValue()[1];
 			values.put(KEY_GROUP,Integer.parseInt(e.getValue()[1]));
 			values.put("status",e.getValue()[2]);
 			if (db.insert("Trainings", null, values)==-1)
