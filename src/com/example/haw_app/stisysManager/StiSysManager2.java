@@ -424,6 +424,11 @@ public class StiSysManager2 implements IStiSysManager {
 		for (int i = 0; i < table3.size(); i++) {
 			profile.put(table3.get(i).text(), table4.get(i).text());
 		}
+		getUserNameIntern();
+		getBirthdayIntern();
+		getMatriculationNumberIntern();
+		getPasswordExpirationDateIntern();
+		getStudentNameIntern();		
 	}
 
 	private void getCourses() {
@@ -444,6 +449,10 @@ public class StiSysManager2 implements IStiSysManager {
 					table2.get(i + 1).text(), table2.get(i + 2).text(),
 					table2.get(i + 3).text(), table2.get(i + 4).text() });
 		}
+		getRegisteredChosenCoursesIntern();
+		getRegisteredSocialSciencesCoursesIntern();
+		getRegisteredTestsIntern();
+		getRegisteredTrainingsIntern();
 	}
 
 	private void getSolvedOnes() {
