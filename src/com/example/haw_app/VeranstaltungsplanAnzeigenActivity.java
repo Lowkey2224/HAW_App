@@ -1,6 +1,5 @@
 package com.example.haw_app;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.app.AlertDialog;
@@ -27,7 +26,7 @@ public class VeranstaltungsplanAnzeigenActivity extends
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		vp.setvpAnzeigeActivity(this);
 		vpAnzeigenLayout();
 	}
 
