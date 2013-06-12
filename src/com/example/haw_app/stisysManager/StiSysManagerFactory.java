@@ -9,7 +9,7 @@ public class StiSysManagerFactory {
 
 	public static IStiSysManager getInstance(Context mParent)
 	{
-		sm = new StiSysManager2("abe180","1Oliv3r1",mParent);
+		sm = new StiSysManager2("","",mParent);
 		return sm;
 	}
 	

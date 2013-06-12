@@ -55,6 +55,10 @@ public class StiSysManager2 implements IStiSysManager {
 	
 	@Override
 	public void syncData() {
+		if(session.userName.equals("") || session.password.equals(""))
+		{
+			return;
+		}
         Thread stisysThread = new Thread() {
             public void run()
             {
