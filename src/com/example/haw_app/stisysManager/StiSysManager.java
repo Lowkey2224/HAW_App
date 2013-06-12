@@ -86,7 +86,7 @@ public class StiSysManager implements IStiSysManager{
 		String[] ary = new String[2];
 		ary[0]="Morgan";
 		ary[1]="OK";
-		ret.put("Künstliche Intelligenzen", ary);
+		ret.put("Kï¿½nstliche Intelligenzen", ary);
 		return ret;
 	}
 
@@ -122,7 +122,7 @@ public class StiSysManager implements IStiSysManager{
 	public Map<String,String> getMailingLists() {
 		return new HashMap<String,String>(){{
 			put("Compiler und Interpreter","bai4cip@haw-hamburg.de");
-			put("Projekt Künstliche Intelligenzen","po_mgn@haw-hamburg.de");
+			put("Projekt Kï¿½nstliche Intelligenzen","po_mgn@haw-hamburg.de");
 			put("Semestergruppe bai4","bai4@haw-hamburg.de");
 		}};		
 	}
@@ -139,7 +139,7 @@ public class StiSysManager implements IStiSysManager{
 	@Override
 	public int getSolvedCP() {
 		// TODO Auto-generated method stub
-		return 0;
+		return 30;
 	}
 
 	@Override
