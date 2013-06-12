@@ -6,6 +6,7 @@ import org.joda.time.format.DateTimeFormatter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.widget.PopupWindow;
 
 public class Util {

@@ -22,6 +22,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.support.v4.app.NavUtils;
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.os.Build;
 
 public class StisysActivity extends Activity {
@@ -67,9 +68,10 @@ public class StisysActivity extends Activity {
 	
 	
 	private void createInstance(final String username,final String passwrd){
+		final Context p = this;
 		Thread stisysThread = new Thread() {
 			public void run() {
-				sm = StiSysManagerFactory.getInstance(username, passwrd);
+				sm = StiSysManagerFactory.getInstance(username, passwrd,p);
 			}
 		};
 		stisysThread.start();

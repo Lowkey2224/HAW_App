@@ -12,7 +12,9 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.example.haw_app.Util;
 
@@ -22,6 +24,7 @@ public class SQLiteConnector extends SQLiteOpenHelper {
 		super(context, dbName, null, dbversion);
 		
 	}
+	private static final String KEY_GROUP = "gruppe";
 	private static final String TABLE_COURSES = "Courses";
 	private static final int GWS = 0, REGISTERED_TESTS = 1, WPS = 2;
 	private static final String dbName = "StiSysManagerDB";
@@ -29,13 +32,13 @@ public class SQLiteConnector extends SQLiteOpenHelper {
 	private static final String[] tableName = new String[] {"Student","NextApplicationDates",TABLE_COURSES,
 		"Trainings","SolvedTests","SolvedTrainings","Mailinglists"};
 	private static final String[] columns = new String[] {
-		"(name VARCHAR, avgGrade REAL, userName VARCHAR, password VARCHAR, matNr INT, pwExpDate VARCHAR, birthday VARCHAR, printCredit INT)",
-		"(type VARCHAR, fromDate VARCHAR, toDate VARCHAR)",//NextApplicationDates
-		"(name VARCHAR, type INT, prof VARCHAR, status VARCHAR)",//Courses
-		"(name VARCHAR, prof VARCHAR, status VARCHAR, group INT)", //registeredTrainings		
-		"(name VARCHAR, grade INT)",//solvedTests
-		"(name VARCHAR, status INT)", //solvedTrainings
-		"(name VARCHAR, adress VARCHAR)"//mailinglists
+		"( name VARCHAR , avgGrade REAL , userName VARCHAR , password VARCHAR , matNr INT , pwExpDate VARCHAR , birthday VARCHAR , printCredit INT )",
+		"( type VARCHAR , fromDate VARCHAR , toDate VARCHAR )",//NextApplicationDates
+		"( name VARCHAR , type INT , prof VARCHAR , status VARCHAR )",//Courses
+		"( name VARCHAR , prof VARCHAR , status VARCHAR , "+KEY_GROUP+" INT )", //registeredTrainings		
+		"( name VARCHAR , grade INT )",//solvedTests
+		"( name VARCHAR , status INT )", //solvedTrainings
+		"( name VARCHAR , adress VARCHAR )"//mailinglists
 		}; 
 	
 	@Override
@@ -43,9 +46,15 @@ public class SQLiteConnector extends SQLiteOpenHelper {
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i<tableName.length;i++)
 		{		
+			sb.delete(0, sb.length());
 			sb.append("CREATE TABLE IF NOT EXISTS ").append(tableName[i]).append(" ").append(columns[i]).append(";");
 			db.execSQL(sb.toString());
-		}		
+		}	
+//		String[] sary = this.getDBNames();
+//		for (String s : sary)
+//		{
+//			Log.d("DBNames", "s");
+//		}
 	}
 
 	@Override
@@ -66,7 +75,7 @@ public class SQLiteConnector extends SQLiteOpenHelper {
 		for (Map.Entry<String, DateTime[]> e : map.entrySet())
 		{
 			ContentValues values = new ContentValues();
-			values.put("name", e.getKey());
+			values.put("type", e.getKey());
 			values.put("fromDate", Util.getStringFromDateTime(e.getValue()[0]));
 			values.put("toDate",Util.getStringFromDateTime(e.getValue()[1]));
 			if (db.insert("NextApplicationDates", null, values)==-1)
@@ -86,7 +95,7 @@ public class SQLiteConnector extends SQLiteOpenHelper {
 			ContentValues values = new ContentValues();
 			values.put("name", e.getKey());
 			values.put("prof", e.getValue()[0]);
-			values.put("group",Integer.parseInt(e.getValue()[1]));
+			values.put(KEY_GROUP,Integer.parseInt(e.getValue()[1]));
 			values.put("status",e.getValue()[2]);
 			if (db.insert("Trainings", null, values)==-1)
 				ret = false;
@@ -162,7 +171,7 @@ public class SQLiteConnector extends SQLiteOpenHelper {
 			ret = new HashMap<String, DateTime[]>();
 			while (cursor.moveToNext()){
 				String name;
-				name = cursor.getString(cursor.getColumnIndex("name"));
+				name = cursor.getString(cursor.getColumnIndex("type"));
 				DateTime[] ary = new DateTime[]{Util.createDateTimeFromString(cursor.getString(cursor.getColumnIndex("fromDate"))),Util.createDateTimeFromString(cursor.getString(cursor.getColumnIndex("toDate")))};
 				ret.put(name, ary);
 			}
@@ -176,19 +185,34 @@ public class SQLiteConnector extends SQLiteOpenHelper {
 		//prof status group
 		SQLiteDatabase db = this.getReadableDatabase();
 		Map<String,String[]> ret = null;		
-		// name VARCHAR, type INT, prof VARCHAR, status VARCHAR)
-		Cursor cursor = db.rawQuery("SELECT name, prof, group, statusFROM `Trainings`", null);		
+		// ( name VARCHAR , prof VARCHAR , status VARCHAR , "+KEY_GROUP+" INT )
+		Cursor cursor = db.rawQuery("SELECT name , prof , "+KEY_GROUP+" , status FROM `Trainings`", null);		
 		if (cursor.getCount()!=0)
 		{
 			ret = new HashMap<String, String[]>();
 			while (cursor.moveToNext()){
 				String name;
 				name = cursor.getString(cursor.getColumnIndex("name"));
-				String[] ary = new String[]{cursor.getString(cursor.getColumnIndex("prof")),Integer.toString(cursor.getInt(cursor.getColumnIndex("group"))),cursor.getString(cursor.getColumnIndex("status"))};
+				String[] ary = new String[]{cursor.getString(cursor.getColumnIndex("prof")),Integer.toString(cursor.getInt(cursor.getColumnIndex(KEY_GROUP))),cursor.getString(cursor.getColumnIndex("status"))};
 				ret.put(name, ary);
 			}
 		}
 		return ret;
+	}
+	//TODO rausschmeiﬂen
+	public String[] getColumnNames()
+	{
+		String[] ary = null;
+		SQLiteDatabase db = this.getReadableDatabase();
+		Cursor ti = db.rawQuery("PRAGMA table_info(Trainings)", null);
+		ary = new String[ti.getColumnCount()];
+		int i = 0;
+		if ( ti.moveToFirst() ) {
+		    do {
+		        ary[i++] = "col: " + ti.getString(1);
+		    } while (ti.moveToNext());
+		}
+		return ary;
 	}
 	
 	public Map<String,Boolean> getSolvedTrainings()
@@ -215,7 +239,7 @@ public class SQLiteConnector extends SQLiteOpenHelper {
 		SQLiteDatabase db = this.getReadableDatabase();
 		Map<String,Integer> ret = null;		
 		// name VARCHAR, type INT, prof VARCHAR, status VARCHAR)
-		Cursor cursor = db.rawQuery("SELECT name, grade statusFROM `SolvedTests`", null);		
+		Cursor cursor = db.rawQuery("SELECT name, grade FROM `SolvedTests`", null);		
 		if (cursor.getCount()!=0)
 		{
 			ret = new HashMap<String, Integer>();
@@ -233,7 +257,6 @@ public class SQLiteConnector extends SQLiteOpenHelper {
 	{
 		SQLiteDatabase db = this.getReadableDatabase();
 		Map<String,String> ret = null;		
-		// name VARCHAR, type INT, prof VARCHAR, status VARCHAR)
 		Cursor cursor = db.rawQuery("SELECT name, adress FROM `Mailinglists`", null);		
 		if (cursor.getCount()!=0)
 		{
@@ -333,7 +356,7 @@ public class SQLiteConnector extends SQLiteOpenHelper {
 		SQLiteDatabase db = this.getReadableDatabase();
 		Map<String,String[]> ret = null;		
 		// name VARCHAR, type INT, prof VARCHAR, status VARCHAR)
-		Cursor cursor = db.rawQuery("SELECT name, prof, status FROM `+TABLE_COURSES+` where type = "+ type, null);		
+		Cursor cursor = db.rawQuery("SELECT name, prof, status FROM `"+TABLE_COURSES+"` where type = "+ type, null);		
 		if (cursor.getCount()!=0)
 		{
 			ret = new HashMap<String, String[]>();
@@ -470,8 +493,7 @@ public class SQLiteConnector extends SQLiteOpenHelper {
 	}
 	
 	private int saveStudent(Student std)
-	{
-		 SQLiteDatabase db = this.getWritableDatabase();
+	{		
 		 ContentValues val = new ContentValues();
 		 val.put(Student.NAME, std.name);
 		 val.put(Student.AVERAGEGRADE, std.avgGrade);
@@ -482,15 +504,20 @@ public class SQLiteConnector extends SQLiteOpenHelper {
 		 val.put(Student.BIRTHDAY, fmt.print(std.birthdate));
 		 val.put(Student.PRINTCREDIT, std.printCredit);
 		 val.put(Student.PASSWORD, std.pw);
+		 SQLiteDatabase db = this.getWritableDatabase();
 		 db.delete(Student.TABLENAME, null, null);
-		 return db.update(Student.TABLENAME, val, null,null);		
+		 int i = (int)(db.insert(Student.TABLENAME, null, val));
+		 db =  null;
+		 return i;
+		 		
 	}
 	
 	private Student getStudent()
 	{
 		SQLiteDatabase db = this.getReadableDatabase();
 		Student std = new Student();		
-		Cursor cursor = db.rawQuery("SELECT "+Student.columnList()+" FROM Student", null);		
+		Cursor cursor = db.rawQuery("SELECT "+Student.columnList()+" FROM Student", null);
+		db = null;
 		if (cursor.getCount()!=0)
 		{
 			cursor.moveToNext();							
@@ -503,23 +530,40 @@ public class SQLiteConnector extends SQLiteOpenHelper {
 			String birthday = cursor.getString(cursor.getColumnIndex(Student.BIRTHDAY));
 			std.birthdate= Util.createDateTimeFromString(birthday);
 			std.printCredit = cursor.getInt(cursor.getColumnIndex(Student.PRINTCREDIT));
-			std.pw = cursor.getString(cursor.getColumnIndex(Student.PASSWORD));
-			
+			std.pw = cursor.getString(cursor.getColumnIndex(Student.PASSWORD));		
 		}else{
-			
-			ContentValues val = new ContentValues();
-			val.put(Student.NAME, std.name);
-			val.put(Student.AVERAGEGRADE, std.avgGrade);
-			val.put(Student.USERNAME, std.userName);
-			val.put(Student.MATRIKELNUMMER, std.matNr);
-			DateTimeFormatter fmt = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm");
-			val.put(Student.PASSWORD_EXP_DATE, fmt.print(std.pwExpDate));
-			val.put(Student.BIRTHDAY, fmt.print(std.birthdate));
-			val.put(Student.PRINTCREDIT, std.printCredit);	
-			val.put(Student.PASSWORD, std.pw);
-			db.insert(Student.TABLENAME, null, val);
-		}
+			saveStudent(std);
+		}		
 		return std;
+	}
+	
+	public String[] getDBNames(){
+	    String[] result = null;
+	    try {
+	    	SQLiteDatabase _db = this.getReadableDatabase();
+	        StringBuilder sb = new StringBuilder();
+	        sb.append("SELECT name FROM sqlite_master "); 
+	        sb.append("WHERE type IN ('table','view') AND name NOT LIKE 'sqlite_%' ");
+	        sb.append("UNION ALL ");
+	        sb.append("SELECT name FROM sqlite_temp_master "); 
+	        sb.append("WHERE type IN ('table','view') ");
+	        sb.append("ORDER BY 1");
+
+	        Cursor c = _db.rawQuery(sb.toString(), null);
+	        c.moveToFirst();
+
+	        result = new String[c.getCount()];
+	        int i = 0;
+	        while (c.moveToNext()) {
+	            result[i]= c.getString(c.getColumnIndex("name"));
+	            i++;
+	        }
+	        c.close();
+	    }
+	    catch(SQLiteException e){
+	        Log.e("OOPS", e.getMessage());
+	    }
+	    return result;
 	}
 }
 
@@ -552,4 +596,6 @@ class Student{
 		pwExpDate = null;
 		pw = null;
 	}
+	
+	
 }

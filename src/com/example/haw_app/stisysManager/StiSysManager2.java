@@ -15,6 +15,9 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import com.example.haw_app.stisysManager.persistenz.SQLiteConnector;
+
+import android.content.Context;
 import android.util.Log;
 
 public class StiSysManager2 implements IStiSysManager {
@@ -39,10 +42,13 @@ public class StiSysManager2 implements IStiSysManager {
 	private Document mailListDocPRO;
 	private List<String> subscribleOnes;
 	private List<String> unsubscribleOnes;
-
-	public StiSysManager2(String userName, String password) {
+	private Context parent;
+	private SQLiteConnector db;
+	public StiSysManager2(String userName, String password, Context mParent) {
 		
 		session = new Session(userName, password);
+		parent = mParent;
+		db = new SQLiteConnector(parent);
 		syncData();
 	}
 	
@@ -145,6 +151,7 @@ public class StiSysManager2 implements IStiSysManager {
                 sum += entry.getValue();
             }
         }
+        db.setAverageGrade(sum / (double) solvedTests.size());
         return sum / (double) solvedTests.size();
 	}
 	
@@ -179,6 +186,7 @@ public class StiSysManager2 implements IStiSysManager {
                     sum += 3;
                 }    
         }
+        
         return sum;
     }
 
@@ -190,44 +198,49 @@ public class StiSysManager2 implements IStiSysManager {
 
 	@Override
 	public Map<String, DateTime[]> getNextApplicationDates() {
-		return nextApps;
+		return db.getNextApplicationDates();
 	}
 
-	@Override
-	public String getStudentName() {
+	
+	public String getStudentNameIntern() {
+		db.setName(profile.get("Name"));
 		return profile.get("Name");
 
 	}
 
-	@Override
-	public String getUserName() {
+	
+	public String getUserNameIntern() {
+		db.setUserName(profile.get("HAW-Kennung"));
 		return profile.get("HAW-Kennung");
 	}
 
-	@Override
-	public DateTime getPasswordExpirationDate() {
+	public DateTime getPasswordExpirationDateIntern() {
+		db.setPasswordExpirationDate(StisysUtil.getDateNoTime(profile
+				.get("Ablaufdatum des Passwortes")));
 		return StisysUtil.getDateNoTime(profile
 				.get("Ablaufdatum des Passwortes"));
 	}
 
-	@Override
-	public int getMatriculationNumber() {
+	
+	public int getMatriculationNumberIntern() {
+		db.setMatriculationNumber(Integer.parseInt(profile.get("Martrikelnummer")));
 		return Integer.parseInt(profile.get("Martrikelnummer"));
 	}
 
-	@Override
-	public DateTime getBirthday() {
+	
+	public DateTime getBirthdayIntern() {
+		db.setBirthday(StisysUtil.getDateNoTime(profile.get("Geburtstag").split(", ")[1]));
 		return StisysUtil
 				.getDateNoTime(profile.get("Geburtstag").split(", ")[1]);
 	}
 
 	@Override
 	public int getPrintCredit() {
-		return printQuote;
+		return db.getPrintCredit();
 	}
 
-	@Override
-	public Map<String, String[]> getRegisteredSocialSciencesCourses() {
+	
+	public Map<String, String[]> getRegisteredSocialSciencesCoursesIntern() {
 		Map<String, String[]> ssc = new HashMap<String, String[]>();
 		for (Map.Entry<String, String[]> entry : courses.entrySet()) {
 			if (entry.getValue()[1].length() == 0
@@ -235,11 +248,12 @@ public class StiSysManager2 implements IStiSysManager {
 				ssc.put(entry.getKey(), entry.getValue());
 			}
 		}
+		db.clearSocialSienceCourses();
+		db.saveSocialSienceCourses(ssc);
 		return ssc;
 	}
 
-	@Override
-	public Map<String, String[]> getRegisteredTests() {
+	public Map<String, String[]> getRegisteredTestsIntern() {
 		Map<String, String[]> tr = new HashMap<String, String[]>();
 		String f = " ";
 
@@ -249,22 +263,26 @@ public class StiSysManager2 implements IStiSysManager {
 				tr.put(entry.getKey(), entry.getValue());
 			}
 		}
+		db.clearRegisteredTests();
+		db.saveRegisteredTests(tr);
 		return tr;
 	}
 
-	@Override
-	public Map<String, String[]> getRegisteredChosenCourses() {
+	
+	public Map<String, String[]> getRegisteredChosenCoursesIntern() {
 		Map<String, String[]> tr = new HashMap<String, String[]>();
 		for (Map.Entry<String, String[]> entry : courses.entrySet()) {
 			if (entry.getValue()[2].equals("-")) {
 				tr.put(entry.getKey(), entry.getValue());
 			}
 		}
+		db.clearChosenCourses();
+		db.saveChosenCourses(tr);
 		return tr;
 	}
 
-	@Override
-	public Map<String, String[]> getRegisteredTrainings() {
+	
+	public Map<String, String[]> getRegisteredTrainingsIntern() {
 		Map<String, String[]> tr = new HashMap<String, String[]>();
 		for (Map.Entry<String, String[]> entry : courses.entrySet()) {
 			if (!(entry.getValue()[2].length() == 0)
@@ -272,17 +290,19 @@ public class StiSysManager2 implements IStiSysManager {
 				tr.put(entry.getKey(), entry.getValue());
 			}
 		}
+		db.clearRegisteredTrainings();
+		db.saveRegisteredTrainings(tr);
 		return tr;
 	}
 
 	@Override
 	public Map<String, Integer> getSolvedTests() {
-		return solvedTests;
+		return db.getSolvedTests();
 	}
 
 	@Override
 	public Map<String, Boolean> getSolvedTrainings() {
-		return solvedTrainings;
+		return db.getSolvedTrainings();
 	}
 
 	private Document profileDoc() {
@@ -456,6 +476,10 @@ public class StiSysManager2 implements IStiSysManager {
 						Integer.parseInt(table2.get(i + 6).text()));
 			}
 		}
+		db.clearSolvedTrainings();
+		db.saveSolvedTrainings(solvedTrainings);
+		db.clearSolvedTests();
+		db.saveSolvedTests(solvedTests);
 	}
 
 	private void getPrintQuote() {
@@ -464,6 +488,7 @@ public class StiSysManager2 implements IStiSysManager {
 		String a = table1.split("i")[0];
 		printQuote = Integer.parseInt((a.split(",")[0] + a.split(",")[1]
 				.substring(0, 2)));
+		db.setPrintCredit(printQuote);
 	}
 
 	// TODO:does not work, no site available
@@ -477,7 +502,8 @@ public class StiSysManager2 implements IStiSysManager {
 		for (int i = 0; i < table1.size(); i++) {
 			println(table1.get(i).text());
 		}
-
+		db.clearMailinglists();
+		db.saveMailinglists(mailLists);
 	}
 
 	// TODO:problems with session -> no need for first site
@@ -494,6 +520,8 @@ public class StiSysManager2 implements IStiSysManager {
 		} catch (IOException e) {
 			println(e.getMessage());
 		}
+		db.clearNextApplicationDates();
+		db.saveNextApplicationDates(nextApps);
 	}
 
 	private class Session {
@@ -546,6 +574,60 @@ public class StiSysManager2 implements IStiSysManager {
 
 	private void println(Object o) {
 		System.out.println(o);
+	}
+
+
+	@Override
+	public String getStudentName() {		
+		return db.getName();
+	}
+
+
+	@Override
+	public String getUserName() {
+		return db.getUserName();
+	}
+
+
+	@Override
+	public DateTime getPasswordExpirationDate() {
+		return db.getPasswordExpirationDate();
+	}
+
+
+	@Override
+	public int getMatriculationNumber() {		
+		return db.getMatricularNumber();
+	}
+
+
+	@Override
+	public DateTime getBirthday() {		
+		return db.getBirthday();
+	}
+
+
+	@Override
+	public Map<String, String[]> getRegisteredSocialSciencesCourses() {
+		return db.getSocialSciencesCourses();
+	}
+
+
+	@Override
+	public Map<String, String[]> getRegisteredTests() {
+		return db.getRegisteredTests();
+	}
+
+
+	@Override
+	public Map<String, String[]> getRegisteredChosenCourses() {
+		return db.getChosenCourses();
+	}
+
+
+	@Override
+	public Map<String, String[]> getRegisteredTrainings() {		
+		return db.getRegisteredTrainings();
 	}
 
 
