@@ -30,7 +30,7 @@ public class Student implements IStudent {
 
 	
 	private Student(Context context) {
-		sm = StiSysManagerFactory.getInstance();
+		sm = StiSysManagerFactory.getInstance(context);
 		userName = sm.getUserName();
 		//Datenbankverbindung
 		if (userName == "")
@@ -59,7 +59,7 @@ public class Student implements IStudent {
 		ret = sm.getRegisteredTrainings();
 		newLecture = ret.keySet();
 		
-		//alte praktikas löschen
+		//alte praktikas lï¿½schen
 		/*for (String sLecture : oldLecture) {
 			if (!newLecture.contains(sLecture)) {
 				deletePraktika(sLecture);
@@ -68,8 +68,8 @@ public class Student implements IStudent {
 
 		}*/
 		
-		//Über die Praktia iterieren.
-		//Praktika die er noch in seine Liste hat, werden nicht überschrieben.
+		//ï¿½ber die Praktia iterieren.
+		//Praktika die er noch in seine Liste hat, werden nicht ï¿½berschrieben.
 		//Die neuen Praktika werden im DB gespeichert.
 		for (String sLecture : newLecture) {
 			if (!oldLecture.contains(sLecture)) {
@@ -93,12 +93,12 @@ public class Student implements IStudent {
 	public boolean deletePraktika(String lecture) {
 		Integer id = getPraktikaID(lecture);
 		IPraktika p = getPraktika(lecture);
-		//alle Partner löschen mit der er diesen Praktika zusammen bearbeitet
+		//alle Partner lï¿½schen mit der er diesen Praktika zusammen bearbeitet
 		p.deletePartnerLecture(lecture);
-		//praktika aus dem hashmap löschen
+		//praktika aus dem hashmap lï¿½schen
 		praktikas.remove(id);
 		SQLiteDatabase db = dbSF.getWritableDatabase();
-		//praktika aus dem DB löschen
+		//praktika aus dem DB lï¿½schen
 		db.delete(DB_TABLE_PRAKTIKA, "id" + " = " + id, null);
 		db.close();
 		return true;
