@@ -18,13 +18,15 @@ public class Util {
 	 */
 	public static DateTime createDateTimeFromString(String date)
 	{
-		if (date.trim().length()!= 10 || date.trim().length()!= 15 )
+		if (date.trim().length()!= 10 && date.trim().length()!= 16 )
 			return null;
 		
 		int year, month, day,hours,minutes;
 		String[] ary = date.split("-");
-		if(ary[0].length()!=4 || ary[1].length()!= 2 || (ary[2].length()!=2 && ary[2].length()!=8))
+		if(ary[0].length()!=4 || ary[1].length()!= 2 || (ary[2].length()!=2 && ary[2].length()!=8)){
+			Log.d("DateTime","Incorrect String");	
 			return null;
+		}
 		year = Integer.parseInt(ary[0]);
 		month = Integer.parseInt(ary[1]);
 		if(ary[2].length()==2){
