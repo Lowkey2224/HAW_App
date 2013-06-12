@@ -49,7 +49,7 @@ public class StiSysManager2 implements IStiSysManager {
 		session = new Session(userName, password);
 		parent = mParent;
 		db = new SQLiteConnector(parent);
-		syncData();
+		//syncData();
 	}
 	
 	

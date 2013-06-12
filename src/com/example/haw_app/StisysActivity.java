@@ -72,6 +72,7 @@ public class StisysActivity extends Activity {
 		Thread stisysThread = new Thread() {
 			public void run() {
 				sm = StiSysManagerFactory.getInstance(username, passwrd,p);
+				sm.syncData();
 			}
 		};
 		stisysThread.start();
