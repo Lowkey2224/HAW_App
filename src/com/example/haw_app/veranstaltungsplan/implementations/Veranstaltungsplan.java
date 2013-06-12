@@ -6,6 +6,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -25,15 +26,15 @@ import org.joda.time.DateTime;
 import com.example.haw_app.VeranstaltungsplanAnzeigenActivity;
 import com.example.haw_app.VeranstaltungsplanExportierenActivity;
 
-import android.content.Context;
+//import android.content.Context;
 import android.util.Log;
 
 public class Veranstaltungsplan implements com.example.haw_app.veranstaltungsplan.interfaces.Iveranstaltungsplan{
 	
 	private static Veranstaltungsplan instance = null;
 		
-	//private File datei = new File("veranstaltungsplan.txt");
-	private String datei = "veranstaltungsplan.txt";
+	private File datei = new File("/data/data/com.example.haw_app/veranstaltungsplan.txt");
+	//private String datei = "veranstaltungsplan.txt";
 	private String url = "http://ec2-176-34-76-54.eu-west-1.compute.amazonaws.com:8080/HawServer/files/Sem_I.txt";
 	
 	private List<String> belegteFaecher = new ArrayList<String>();
@@ -52,12 +53,11 @@ public class Veranstaltungsplan implements com.example.haw_app.veranstaltungspla
      * aufgerufen werden kann
      * @param vpAActivity 
      */
-    private Veranstaltungsplan() {
-    }
+    private Veranstaltungsplan() {}
  
     /**
      * Statische Methode, liefert die einzige Instanz dieser
-     * Klasse zur�ck
+     * Klasse zurueck
      * @param vpAActivity 
      */
     public static Veranstaltungsplan getInstance() {
@@ -80,7 +80,9 @@ public class Veranstaltungsplan implements com.example.haw_app.veranstaltungspla
 	@Override
 	public void exportieren() throws Exception {
 		
-		File file = new File("veranstaltungsplan.ics");
+		File file = new File("/data/data/com.example.haw_app/veranstaltungsplan.ics");
+		
+		file.createNewFile();
 		
 		FileWriter fw= new FileWriter(file);
 		
@@ -200,21 +202,26 @@ public class Veranstaltungsplan implements com.example.haw_app.veranstaltungspla
 
 	}
 	
-	private void saveFile(String file, InputStreamReader is) throws IOException{
+	private void saveFile(File file, InputStreamReader is) throws IOException{
 		
+			file.createNewFile();
 			BufferedReader br = new BufferedReader(is);
-			//FileWriter fw = new FileWriter(file);
-			Context cn =vpAActivity.getApplicationContext();
-			FileOutputStream fos = cn.openFileOutput(file.toString(), Context.MODE_PRIVATE);
+			FileWriter fw = new FileWriter(file);
+			
+			//Context cn =vpAActivity.getApplicationContext();
+			//FileOutputStream fos = cn.openFileOutput(file.toString(), Context.MODE_PRIVATE);
+			
 			String line = br.readLine();
+			
 			while (line != null) {
-				fos.write(line.getBytes());
+				//fos.write(line.getBytes());
+				fw.write(line);
 				line = br.readLine();
 			}
 			
-			//fw.flush();
-			//fw.close();
-			fos.close();
+			fw.flush();
+			fw.close();
+			//fos.close();
 			br.close();
 			
 	}
@@ -243,9 +250,9 @@ public class Veranstaltungsplan implements com.example.haw_app.veranstaltungspla
 
 	@Override
 	public void setzeDatei(String file) {
-		//File f = new File(file);
-		//datei = f;
-		datei = file;
+		File f = new File(file);
+		datei = f;
+		//datei = file;
 	}
 	
 	@Override
@@ -257,23 +264,23 @@ public class Veranstaltungsplan implements com.example.haw_app.veranstaltungspla
 		
 		termine.clear();
 		
-		Context cn =vpAActivity.getApplicationContext();
-		FileInputStream fis;
-		fis = cn.openFileInput(datei);
-		String line ;
-		byte[] buffer = new byte[1024];
+		//Context cn =vpAActivity.getApplicationContext();
+		//FileInputStream fis;
+		//fis = cn.openFileInput(datei);
+		//String line ;
+		//byte[] buffer = new byte[1024];
 		
 		
 		
-		//BufferedReader br = new BufferedReader(new FileReader(datei));
+		BufferedReader br = new BufferedReader(new FileReader(datei));
 		
-		//String line = br.readLine();
+		String line = br.readLine();
 		
 		
 		
-		//while(line != null){
-		while (fis.read(buffer) != -1) {
-			line = new String(buffer);
+		while(line != null){
+		//while (fis.read(buffer) != -1) {
+			//line = new String(buffer);
 			if(		   line.equals("") 
 					|| line.startsWith("Stundenplan")  
 					|| line.startsWith("Name")) { // Unwichtige Zeilen
@@ -284,8 +291,8 @@ public class Veranstaltungsplan implements com.example.haw_app.veranstaltungspla
 				
 				if(splittedLine.size() != 2){
 					System.out.println(line);
-					//br.close();
-					fis.close();
+					br.close();
+					//fis.close();
 					throw new Exception("Fehlerhafte Datei");
 				}
 				
@@ -329,8 +336,8 @@ public class Veranstaltungsplan implements com.example.haw_app.veranstaltungspla
 				
 				if(splittedLine.size() != 6){
 					System.out.println(line);
-					//br.close();
-					fis.close();
+					br.close();
+					//fis.close();
 					throw new Exception("Fehlerhafte Datei");
 				}
 				
@@ -350,8 +357,8 @@ public class Veranstaltungsplan implements com.example.haw_app.veranstaltungspla
 					wochentag = 7;
 				} else {
 					System.out.println(line);
-					//br.close();
-					fis.close();
+					br.close();
+					//fis.close();
 					throw new Exception("Fehlerhafte Datei");
 				}
 				
@@ -379,12 +386,14 @@ public class Veranstaltungsplan implements com.example.haw_app.veranstaltungspla
 				
 			} else { // Nicht bedachte Zeilen
 				System.out.println(line + "\n" + "wurde nicht beachtet!");
+				br.close();
+				throw new Exception("Parser-Fehler" + line + "\n" + "wurde nicht beachtet!");
 			}
 			
-			//line = br.readLine(); // naechste Zeile
+			line = br.readLine(); // naechste Zeile
 		}
-		fis.close();
-		//br.close();
+		//fis.close();
+		br.close();
 		
 	}
 	
