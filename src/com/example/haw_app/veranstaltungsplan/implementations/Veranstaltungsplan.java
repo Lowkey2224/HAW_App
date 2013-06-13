@@ -4,8 +4,6 @@ import static com.example.haw_app.veranstaltungsplan.implementations.Utility.ter
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -23,11 +21,12 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.joda.time.DateTime;
 
+import android.util.Log;
+
+import com.example.haw_app.VeranstaltungsplanActivity;
 import com.example.haw_app.VeranstaltungsplanAnzeigenActivity;
 import com.example.haw_app.VeranstaltungsplanExportierenActivity;
-
 //import android.content.Context;
-import android.util.Log;
 
 public class Veranstaltungsplan implements com.example.haw_app.veranstaltungsplan.interfaces.Iveranstaltungsplan{
 	
@@ -46,8 +45,7 @@ public class Veranstaltungsplan implements com.example.haw_app.veranstaltungspla
 	private String semesterGruppe = null;
 	
 	private int wochentag = 0;
-	VeranstaltungsplanAnzeigenActivity vpAActivity = null;
-	VeranstaltungsplanExportierenActivity vpEActivity = null;
+	VeranstaltungsplanActivity vpAActivity = null;
     /**
      * Default-Konstruktor, der nicht au�erhalb dieser Klasse
      * aufgerufen werden kann
@@ -68,13 +66,8 @@ public class Veranstaltungsplan implements com.example.haw_app.veranstaltungspla
     }
     
 	//@Override
-	public void setvpAnzeigeActivity(VeranstaltungsplanAnzeigenActivity vpAActivity) {
-		this.vpAActivity = vpAActivity;
-	}
-
-	//@Override
-	public void setvpExpotierenActivity(VeranstaltungsplanExportierenActivity vpEActivity) {
-		this.vpEActivity = vpEActivity;
+	public void setvpAnzeigeActivity(VeranstaltungsplanActivity vpActivity) {
+		this.vpAActivity = vpActivity;
 	}
 	
 	@Override

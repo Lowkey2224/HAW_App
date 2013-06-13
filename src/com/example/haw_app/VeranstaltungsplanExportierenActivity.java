@@ -39,7 +39,6 @@ public class VeranstaltungsplanExportierenActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		
 		setContentView(R.layout.vp_exportieren);
-		vp.setvpExpotierenActivity(this);
 		// Find the ListView resource.
 		mainListView = (ListView) findViewById(R.id.veranstaltungsplan_listview);
 

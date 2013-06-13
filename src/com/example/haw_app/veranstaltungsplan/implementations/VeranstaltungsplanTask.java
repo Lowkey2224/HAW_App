@@ -1,17 +1,17 @@
 package com.example.haw_app.veranstaltungsplan.implementations;
 
-import com.example.haw_app.VeranstaltungsplanAnzeigenActivity;
+import com.example.haw_app.VeranstaltungsplanActivity;
 
 import android.os.AsyncTask;
 
 public class VeranstaltungsplanTask extends
-		AsyncTask<VeranstaltungsplanAnzeigenActivity, Void, Veranstaltungsplan> {
+		AsyncTask<VeranstaltungsplanActivity, Void, Veranstaltungsplan> {
 
-	private VeranstaltungsplanAnzeigenActivity activity;
+	private VeranstaltungsplanActivity activity;
 
 	@Override
 	protected Veranstaltungsplan doInBackground(
-			VeranstaltungsplanAnzeigenActivity... arg0) {
+			VeranstaltungsplanActivity... arg0) {
 
 		this.activity = arg0[0];
 		Veranstaltungsplan vp = activity.vp;
