@@ -11,7 +11,11 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import org.apache.http.HttpEntity;
@@ -21,37 +25,44 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.joda.time.DateTime;
 
+import android.annotation.SuppressLint;
 import android.util.Log;
 
 import com.example.haw_app.VeranstaltungsplanActivity;
-import com.example.haw_app.VeranstaltungsplanAnzeigenActivity;
-import com.example.haw_app.VeranstaltungsplanExportierenActivity;
-//import android.content.Context;
 
+@SuppressLint("SdCardPath")
 public class Veranstaltungsplan implements com.example.haw_app.veranstaltungsplan.interfaces.Iveranstaltungsplan{
 	
 	private static Veranstaltungsplan instance = null;
-		
-	private File datei = new File("/data/data/com.example.haw_app/veranstaltungsplan.txt");
-	//private String datei = "veranstaltungsplan.txt";
-	private String url = "http://ec2-176-34-76-54.eu-west-1.compute.amazonaws.com:8080/HawServer/files/Sem_I.txt";
 	
+	private File datei = new File("/data/data/com.example.haw_app/veranstaltungsplan.txt");
+	private String url = "http://ec2-176-34-76-54.eu-west-1.compute.amazonaws.com:8080/HawServer/files/Sem_I.txt";
 	private List<String> belegteFaecher = new ArrayList<String>();
+	private List<Integer> kws = new ArrayList<Integer>();
+	private String semesterGruppe = null;
+	private int wochentag = 0;
+	private Set<String> veranstaltungsSet = new HashSet<String>();
+	private Set<String> praktikaRaume = new HashSet<String>();
 	
 	public List<Termin> termine = new ArrayList<Termin>();
 	
-	private List<Integer> kws = new ArrayList<Integer>();
-	
-	private String semesterGruppe = null;
-	
-	private int wochentag = 0;
 	VeranstaltungsplanActivity vpAActivity = null;
+	
     /**
-     * Default-Konstruktor, der nicht au�erhalb dieser Klasse
+     * Default-Konstruktor, der nicht ausserhalb dieser Klasse
      * aufgerufen werden kann
      * @param vpAActivity 
      */
-    private Veranstaltungsplan() {}
+    private Veranstaltungsplan() {
+    	
+    	praktikaRaume.add("1101a");
+    	praktikaRaume.add("1101b");
+    	praktikaRaume.add("1102");
+    	praktikaRaume.add("1104");
+    	praktikaRaume.add("1105");
+    	praktikaRaume.add("1165");
+    	
+    }
  
     /**
      * Statische Methode, liefert die einzige Instanz dieser
@@ -64,12 +75,8 @@ public class Veranstaltungsplan implements com.example.haw_app.veranstaltungspla
         }
         return instance;
     }
-    
-	//@Override
-	public void setvpAnzeigeActivity(VeranstaltungsplanActivity vpActivity) {
-		this.vpAActivity = vpActivity;
-	}
 	
+	@SuppressLint("SdCardPath")
 	@Override
 	public void exportieren() throws Exception {
 		
@@ -201,13 +208,9 @@ public class Veranstaltungsplan implements com.example.haw_app.veranstaltungspla
 			BufferedReader br = new BufferedReader(is);
 			FileWriter fw = new FileWriter(file);
 			
-			//Context cn =vpAActivity.getApplicationContext();
-			//FileOutputStream fos = cn.openFileOutput(file.toString(), Context.MODE_PRIVATE);
-			
 			String line = br.readLine();
 			
 			while (line != null) {
-				//fos.write(line.getBytes());
 				fw.write(line);
 				fw.write(System.getProperty("line.separator"));
 				line = br.readLine();
@@ -215,15 +218,13 @@ public class Veranstaltungsplan implements com.example.haw_app.veranstaltungspla
 			
 			fw.flush();
 			fw.close();
-			//fos.close();
 			br.close();
 			
 	}
 
 	@Override
 	public void aktualisieren() throws Exception {
-//		DownloadThread dlt = new DownloadThread();
-//		datei = dlt.doInBackground(datei);
+		
 		InputStreamReader is = retrieveReader(url);
 		saveFile(datei,is);
 		
@@ -246,7 +247,6 @@ public class Veranstaltungsplan implements com.example.haw_app.veranstaltungspla
 	public void setzeDatei(String file) {
 		File f = new File(file);
 		datei = f;
-		//datei = file;
 	}
 	
 	@Override
@@ -258,14 +258,6 @@ public class Veranstaltungsplan implements com.example.haw_app.veranstaltungspla
 		
 		termine.clear();
 		
-		//Context cn =vpAActivity.getApplicationContext();
-		//FileInputStream fis;
-		//fis = cn.openFileInput(datei);
-		//String line ;
-		//byte[] buffer = new byte[1024];
-		
-		
-		
 		BufferedReader br = new BufferedReader(new FileReader(datei));
 		
 		String line = br.readLine();
@@ -273,8 +265,7 @@ public class Veranstaltungsplan implements com.example.haw_app.veranstaltungspla
 		
 		
 		while(line != null){
-		//while (fis.read(buffer) != -1) {
-			//line = new String(buffer);
+			
 			if(		   line.equals("") 
 					|| line.startsWith("Stundenplan")  
 					|| line.startsWith("Name")) { // Unwichtige Zeilen
@@ -331,7 +322,6 @@ public class Veranstaltungsplan implements com.example.haw_app.veranstaltungspla
 				if(splittedLine.size() != 6){
 					System.out.println(line);
 					br.close();
-					//fis.close();
 					throw new Exception("Fehlerhafte Datei");
 				}
 				
@@ -352,7 +342,6 @@ public class Veranstaltungsplan implements com.example.haw_app.veranstaltungspla
 				} else {
 					System.out.println(line);
 					br.close();
-					//fis.close();
 					throw new Exception("Fehlerhafte Datei");
 				}
 				
@@ -386,9 +375,45 @@ public class Veranstaltungsplan implements com.example.haw_app.veranstaltungspla
 			
 			line = br.readLine(); // naechste Zeile
 		}
-		//fis.close();
+		
 		br.close();
 		
+	}
+
+	@Override
+	public Set<String> veranstaltungsSet() {
+		
+		for(Termin t : this.termine) {
+			veranstaltungsSet.add(t.name());
+		}
+		
+		return veranstaltungsSet;
+	}
+
+	@Override
+	public Map<String, String> pcPoolAktuell() {
+		
+		Map<String, String> pcPool = new HashMap<String,String>();
+		
+		for(String r : praktikaRaume) {
+			pcPool.put(r, "frei");
+		}
+		
+		for(Termin t : this.termine) {
+			
+			if(pcPool.containsKey(t.raum())) {
+				
+				if(t.von().minusHours(1).isBeforeNow() && t.bis().isAfterNow()) {
+					
+					pcPool.put(t.raum(), t.name() + " von " + t.von().toString("HH:mm") + " Uhr bis " + t.bis().toString("HH:mm") + " Uhr.");
+					
+				}
+				
+			}
+			
+		}
+		
+		return pcPool;
 	}
 	
 }
