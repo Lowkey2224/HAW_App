@@ -19,7 +19,6 @@ public class VeranstaltungsplanActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		vp.setvpAnzeigeActivity(this);
 		setContentView(R.layout.vp_menu);
 	}
 	
