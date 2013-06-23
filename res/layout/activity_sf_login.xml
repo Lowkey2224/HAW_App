@@ -21,22 +21,24 @@
         android:singleLine="true" />
 
     <Button
+        android:id="@+id/loginButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="sendLogin"
         android:text="@string/login_send_chat" />
-    
-        <Button
+
+    <Button
+        android:id="@+id/regButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="sendRegistration"
         android:text="@string/login_registration_chat" />
 
-        <TextView
-            android:id="@+id/login_failure"
-            android:layout_width="257dp"
-            android:layout_height="wrap_content"
-            android:text="@string/login_failure"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+    <TextView
+        android:id="@+id/login_failure"
+        android:layout_width="257dp"
+        android:layout_height="wrap_content"
+        android:text="@string/login_failure"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 </LinearLayout>

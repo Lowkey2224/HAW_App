@@ -33,13 +33,13 @@ public class Student implements IStudent {
 		sm = StiSysManagerFactory.getInstance(context);
 		userName = sm.getUserName();
 		//Datenbankverbindung
-		if (userName == "")
-			try {
-				throw new Exception("Stisys muss einmal gestartet werden");
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+//		if (userName != null)
+//			try {
+//				throw new Exception("Stisys muss einmal gestartet werden");
+//			} catch (Exception e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
 		dbSF = new DatabaseSocialFeatures(context);
 		//Daten vom DB holen
 		getPraktikasfromDB();
