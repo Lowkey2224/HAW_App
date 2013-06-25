@@ -1,8 +1,12 @@
 package com.example.haw_app;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -23,14 +27,15 @@ import com.example.haw_app.mensa.implementation.UpdateMenusTask;
 
 public class MensaActivity extends Activity {
 
-	ArrayAdapter<Date> adapter;
+	ArrayAdapter<String> adapter;
+	private DateFormat df = new SimpleDateFormat("dd.MM.yyyy",Locale.GERMANY);
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_mensa);
-		adapter = new ArrayAdapter<Date>(this,
-				android.R.layout.simple_list_item_1, new ArrayList<Date>());
+		adapter = new ArrayAdapter<String>(this,
+				android.R.layout.simple_list_item_1, new ArrayList<String>());
 		final ListView listview = (ListView) findViewById(R.id.mensa_listview);
 		Log.w(this.getClass().getSimpleName(), "ListView: " + listview);
 		Log.w(this.getClass().getSimpleName(), "ListView: " + adapter);
@@ -43,7 +48,13 @@ public class MensaActivity extends Activity {
 					int position, long id) {
 				Intent intent = new Intent(self, MenuItemsActivity.class);
 
-				Date date = (Date) listview.getItemAtPosition(position);
+				String rawDate = (String) listview.getItemAtPosition(position);
+				Date date=null;
+				try{
+					date=df.parse(rawDate);
+				} catch (ParseException e){
+					Log.w(this.getClass().getSimpleName(), e.getMessage());
+				}
 				if (date != null) {
 					intent.putExtra("date", date.getTime());
 					startActivity(intent);
@@ -94,7 +105,7 @@ public class MensaActivity extends Activity {
 		adapter.clear();
 		for (Date date : dates) {
 			Log.w(this.getClass().getSimpleName(), "Added item: " + date);
-			adapter.add(date);
+			adapter.add(df.format(date));
 		}
 		adapter.notifyDataSetChanged();
 	}
