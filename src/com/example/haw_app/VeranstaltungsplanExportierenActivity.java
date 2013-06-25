@@ -37,6 +37,20 @@ public class VeranstaltungsplanExportierenActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.vp_exportieren);
+		if (vp.termine.size() == 0) {
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+			builder.setMessage(
+					"Veranstaltungsplan.txt wurde nicht gefunden. Probiere bitte erst zu aktualisieren!")
+					.setNeutralButton("OK",
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int id) {
+								}
+							});
+			AlertDialog alertDialog = builder.create();
+			alertDialog.show();
+		} else {
 		// Find the ListView resource.
 		mainListView = (ListView) findViewById(R.id.veranstaltungsplan_listview);
 
@@ -57,6 +71,7 @@ public class VeranstaltungsplanExportierenActivity extends Activity {
 		getTermineList();
 		listAdapter = new TerminArrayAdapter(this, termine);
 		mainListView.setAdapter(listAdapter);
+		}
 	}
 
 	private static class TerminViewHolder {
@@ -229,7 +244,6 @@ public class VeranstaltungsplanExportierenActivity extends Activity {
 		}
 		AlertDialog alertDialog = builder.create();
 		alertDialog.show();
-		this.finishActivity(1);
 	}
 	
 	@Override

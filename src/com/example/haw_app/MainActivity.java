@@ -20,47 +20,42 @@ public class MainActivity extends Activity {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
+
+	public void veranstaltungsClick(View view) {
+		startActivity(new Intent(MainActivity.this,
+				VeranstaltungsplanActivity.class));
+	}
+
+	public void essensClick(View view) {
+		// setContentView(R.layout.essensplan);
+		startActivity(new Intent(MainActivity.this, MensaActivity.class));
+	}
+
+	public void socialClick(View view) {
+		startActivity(new Intent(MainActivity.this,
+				SocialFeaturesActivity.class));
+	}
+
 	
-
-	public void veranstaltungsClick(View view){
-		startActivity(new Intent(MainActivity.this,VeranstaltungsplanActivity.class));
+	public void poolClick(View view){ //setContentView(R.layout.pcpool);
+		startActivity(new Intent(MainActivity.this,
+				PcPoolPlanActivity.class));
 	}
-	    
-	public void essensClick(View view){
-	    	//setContentView(R.layout.essensplan);
-		startActivity(new Intent(MainActivity.this,MensaActivity.class));
-	}
-	    
-	    public void socialClick(View view){
-	    	startActivity(new Intent(MainActivity.this,SocialFeaturesActivity.class));
-	    }
-	    
-	    /*
-	    public void poolClick(View view){
-	    	//setContentView(R.layout.pcpool);
-	    	
-	    }
-	    */
-	    
-	    public void stisysClick(View view){
-	    	//setContentView(R.layout.stisys);
-	    	startActivity(new Intent(MainActivity.this,StisysActivity.class));
-	    }
-	    
-	    
-	    public void schnitzelClick(View view){
-	    	//setContentView(R.layout.schnitzeljagd);
-	    	startActivity(new Intent(MainActivity.this,SchnitzeljagdActivity.class));
-	    }
-	    
-	    public void optionClick(View view){
-	    	//setContentView(R.layout.optionen);
-	    	startActivity(new Intent(MainActivity.this,OptionenActivity.class));
-	    }
-	    
+	 
 
-
+	public void stisysClick(View view) {
+		// setContentView(R.layout.stisys);
+		// startActivity(new Intent(MainActivity.this,StisysActivity.class));
 	}
 
+	public void schnitzelClick(View view) {
+		// setContentView(R.layout.schnitzeljagd);
+		startActivity(new Intent(MainActivity.this, SchnitzeljagdActivity.class));
+	}
 
+	public void optionClick(View view) {
+		// setContentView(R.layout.optionen);
+		startActivity(new Intent(MainActivity.this, OptionenActivity.class));
+	}
 
+}
