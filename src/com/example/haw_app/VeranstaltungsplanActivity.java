@@ -12,7 +12,7 @@ import com.example.haw_app.veranstaltungsplan.implementations.Veranstaltungsplan
 import com.example.haw_app.veranstaltungsplan.implementations.VeranstaltungsplanTask;
 
 public class VeranstaltungsplanActivity extends Activity {
-	public static Veranstaltungsplan vp = Veranstaltungsplan.getInstance();
+	public static Veranstaltungsplan vp;
 	private ProgressDialog mDialog;
 
 	/** Called when the activity is first created. */
@@ -21,17 +21,16 @@ public class VeranstaltungsplanActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.vp_menu);
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		if (vp.termine.size() == 0) {
-			try {
-				vp.aktualisierenOhneDownload();
-
-			} catch (Exception e) {
-				builder.setMessage("Fehler beim laden des Veranstaltungsplans! Error: " + e.toString()).setNeutralButton("OK",
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog, int id) {
-							}
-						});
-			}
+		try {
+			vp = Veranstaltungsplan.getInstance();
+		} catch (Exception e) {
+			builder.setMessage(
+					"Fehler beim laden des Veranstaltungsplans! Error: "
+							+ e.toString()).setNeutralButton("OK",
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int id) {
+						}
+					});
 		}
 		AlertDialog alertDialog = builder.create();
 		alertDialog.show();

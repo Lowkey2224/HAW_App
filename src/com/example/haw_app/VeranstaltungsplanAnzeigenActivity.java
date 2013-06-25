@@ -113,9 +113,9 @@ public class VeranstaltungsplanAnzeigenActivity extends Activity {
 				List<String> zeiten = new ArrayList<String>();
 				for (Termin termin2 : vp.termine) {
 					if (termin2.name().equals(termin.name())) {
-						zeiten.add("\n\nVon: "
-								+ termin2.von().toDate() + "\nBis: "
-								+ termin2.bis().toDate());		
+						zeiten.add("\n\nAm: "+ termin2.von().toString("dd.MM.yyyy") + "\nVon: "
+								+ termin2.von().toString("HH:mm:ss") + "\nBis: "
+								+ termin2.bis().toString("HH:mm:ss"));		
 					}
 				}
 				Collections.sort(zeiten);
