@@ -90,8 +90,8 @@ import org.joda.time.DateTime;
 	    
 	 
 	     /**
-	     * Liefert die Praktika zurueck, zu denen der Student angemeldet ist(inklusive WP-Praktika)
-	     * @return Map<String,String[3]> - Map mit Kursname -> Array<Prof,Gruppe,Status>
+	     * Liefert die Praktika zurueck, zu denen der Student angemeldet ist(inklusive WP-Praktika). Gibt null zurueck wenn keine Praktika gespeichert wurden.
+	     * @return Map<String,String[3]> - Map mit Kursname -> Array<Prof,Gruppe,Status>. Gibt null zurueck wenn keine Praktika gespeichert wurden.
 	     */
 	    public Map<String,String[]> getRegisteredTrainings();
 	    

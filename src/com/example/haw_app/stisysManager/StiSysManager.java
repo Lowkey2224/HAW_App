@@ -1,6 +1,7 @@
 package com.example.haw_app.stisysManager;
 
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -74,9 +75,18 @@ public class StiSysManager implements IStiSysManager{
 	public Map<String, String[]> getRegisteredTests() {
 		Map<String, String[]> ret = new HashMap<String, String[]>();
 		String[] ary = new String[2];
-		ary[0]="Stallman";
+		ary[0]="Astley";
 		ary[1]="OK";
-		ret.put("Compiler und Interpreter", ary);
+		ret.put("Never gonna give you up", ary);
+		ret.put("Never gonna let you down ", ary);
+		ret.put("Never gonna run around and desert you", ary);
+		ret.put("Never gonna make you cry,", ary);
+		ret.put("Never gonna say goodbye,", ary);
+		ret.put("Never gonna tell a lie and hurt you", ary);
+		
+		
+//		Never gonna say goodbye
+//		Never gonna tell a lie and hurt you 
 		return ret;
 	}
 
@@ -84,9 +94,14 @@ public class StiSysManager implements IStiSysManager{
 	public Map<String, String[]> getRegisteredChosenCourses() {
 		Map<String, String[]> ret = new HashMap<String, String[]>();
 		String[] ary = new String[2];
-		ary[0]="Morgan";
+		ary[0]="Astley";
 		ary[1]="OK";
-		ret.put("K�nstliche Intelligenzen", ary);
+		ret.put("Never gonna give you up", ary);
+		ret.put("Never gonna let you down ", ary);
+		ret.put("Never gonna run around and desert you", ary);
+		ret.put("Never gonna make you cry,", ary);
+		ret.put("Never gonna say goodbye,", ary);
+		ret.put("Never gonna tell a lie and hurt you", ary);
 		return ret;
 	}
 
@@ -94,10 +109,15 @@ public class StiSysManager implements IStiSysManager{
 	public Map<String, String[]> getRegisteredTrainings() {
 		Map<String, String[]> ret = new HashMap<String, String[]>();
 		String[] ary = new String[3];
-		ary[0]="Stallman";
-		ary[1]="3";
-		ary[3]="OK";
-		ret.put("Compiler und Interpreter", ary);
+		ary[0]="Astley";
+		ary[1]="OK";
+		ary[2]="1";
+		ret.put("Never gonna give you up", ary);
+		ret.put("Never gonna let you down ", ary);
+		ret.put("Never gonna run around and desert you", ary);
+		ret.put("Never gonna make you cry,", ary);
+		ret.put("Never gonna say goodbye,", ary);
+		ret.put("Never gonna tell a lie and hurt you", ary);
 		return ret;
 	}
 
@@ -122,7 +142,7 @@ public class StiSysManager implements IStiSysManager{
 	public Map<String,String> getMailingLists() {
 		return new HashMap<String,String>(){{
 			put("Compiler und Interpreter","bai4cip@haw-hamburg.de");
-			put("Projekt K�nstliche Intelligenzen","po_mgn@haw-hamburg.de");
+			put("Projekt Kuenstliche Intelligenzen","po_mgn@haw-hamburg.de");
 			put("Semestergruppe bai4","bai4@haw-hamburg.de");
 		}};		
 	}
@@ -137,8 +157,7 @@ public class StiSysManager implements IStiSysManager{
 	}
 
 	@Override
-	public int getSolvedCP() {
-		// TODO Auto-generated method stub
+	public int getSolvedCP() {		
 		return 30;
 	}
 
@@ -150,8 +169,7 @@ public class StiSysManager implements IStiSysManager{
 
 	@Override
 	public void subscribeCourse(String name) {
-		// TODO Auto-generated method stub
-		
+		//TODO Auto-generated method stub
 	}
 
 	@Override
@@ -162,14 +180,32 @@ public class StiSysManager implements IStiSysManager{
 
 	@Override
 	public List<String> getUnsubscribeableCourses() {
-		// TODO Auto-generated method stub
-		return null;
+		return new ArrayList<String>(){/**
+			 * 
+			 */
+			private static final long serialVersionUID = 7696659396862865869L;
+
+		{
+			add("Fach1");
+			add("Fach2");
+			add("Fach3");
+		}};
+		
 	}
 
 	@Override
 	public List<String> getSubscribeableCourses() {
-		// TODO Auto-generated method stub
-		return null;
+		return new ArrayList<String>(){/**
+			 * 
+			 */
+			private static final long serialVersionUID = -4142609465343678617L;
+
+		{
+			add("Fach4");
+			add("Fach5");
+			add("Fach6");
+		}};
+		
 	}
 
 

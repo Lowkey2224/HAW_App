@@ -8,16 +8,21 @@ public class StiSysManagerFactory {
 	
 
 	public static IStiSysManager getInstance(Context mParent)
-	{
-		sm = new StiSysManager2("","",mParent);
+	{	
+		sm = StiSysManager.getInstance();
+		if (sm == null){
+		sm = new StiSysManager2("","",mParent);		
+		}
 		return sm;
 	}
 	
 	
 	public static IStiSysManager getInstance(String username, String password, Context mParent)
 	{
-		if (sm == null) 
+		sm = StiSysManager.getInstance();
+		if (sm == null) {
 			sm = new StiSysManager2(username, password, mParent);
+		}
 		return sm;
 	}
 }
