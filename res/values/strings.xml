@@ -30,5 +30,13 @@
     <string name="sf_praktika">Praktika</string>
     <string name="sf_chat">Chat</string>
     <string name="veranstaltungsplan">Veranstaltungsplan</string>
+    <string name="partnerLoeschen">Löschen</string>
+    <string name="partnerAendern">Ändern</string>
+    <string name="hinzufuegen">Partner hinzufügen</string>
+    <string name="vorname">Vorname</string>
+    <string name="nachname">Nachname</string>
+    <string name="matNr">Matrikelnummer</string>
+    <string name="email">E-Mail-Adresse</string>
+    <string name="handy">Handynummer</string>
 
 </resources>

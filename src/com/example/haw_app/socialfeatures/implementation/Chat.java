@@ -83,6 +83,9 @@ public class Chat implements IChat {
 		case 2:
 			loginActivity.setError("Register fehlgeschlagen");
 			break;
+		case 3:
+			loginActivity.setError("");
+			break;
 		}
 
 		mHandler.post(new Runnable() {
@@ -189,7 +192,7 @@ public class Chat implements IChat {
 	}
 
 	/**
-	 * Im Hintergrund wird eine Verbindung und login durchgeführt.
+	 * Im Hintergrund wird eine Verbindung und login durchgefï¿½hrt.
 	 * 
 	 */
 	private class startConnectBackground extends AsyncTask<String, Void, Void> {
@@ -207,6 +210,7 @@ public class Chat implements IChat {
 			try {
 				// SASLAuthentication.supportSASLMechanism("PLAIN", 0);
 				connection.login(userName, password);
+				sendError(3);
 				loginActivity.changeActivity();
 
 				// Setzt Status auf Online
@@ -228,7 +232,7 @@ public class Chat implements IChat {
 	}
 
 	/**
-	 * Im Hintergrund wird eine Verbindung, Registierung und login durchgeführt.
+	 * Im Hintergrund wird eine Verbindung, Registierung und login durchgefï¿½hrt.
 	 * 
 	 */
 	private class registerUserBackground extends AsyncTask<String, Void, Void> {
@@ -267,7 +271,7 @@ public class Chat implements IChat {
 
 	/**
 	 * Kontaktliste erstellen. Zuerst werden alle Kontakte geholt und dann eine
-	 * Funktion aufgerufen die für die Aktualisierung zuständig ist.
+	 * Funktion aufgerufen die fï¿½r die Aktualisierung zustï¿½ndig ist.
 	 * 
 	 */
 	private class ContactFetcher extends AsyncTask<String, Void, Void> {

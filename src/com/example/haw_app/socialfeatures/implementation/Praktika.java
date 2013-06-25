@@ -39,6 +39,7 @@ public class Praktika implements IPraktika {
 	public boolean createPartner(String matNr, String firstname,
 			String surname, String email, String handy) {
 		Integer pID = null;
+		System.out.println("mega " + lecture);
 		if (getPartnerID(matNr) == null) {
 			SQLiteDatabase db = dbSF.getWritableDatabase();
 			db.execSQL("INSERT INTO "
@@ -46,14 +47,16 @@ public class Praktika implements IPraktika {
 					+ " (matNr,firstname, surname,email,handy,lecture) VALUES ('"
 					+ matNr + "','" + firstname + "','" + surname + "','"
 					+ email + "','" + handy + "','" + lecture + "');");
+			db.close();
 			pID = getPartnerID(matNr);
-			// Zusätzliche DB um zu merken welche Partner in die im Chat eingetragen werden müssen.
+			// Zusï¿½tzliche DB um zu merken welche Partner in die im Chat eingetragen werden mï¿½ssen.
 			String userName = firstname + " " + surname;
+			db = dbSF.getWritableDatabase();
 			db.execSQL("INSERT INTO " + DB_TABLE_CHAT + " (matNr, userName) VALUES ('"
 					+ matNr + "','" + userName + "');");
+			db.close();
 			partners.put(pID, new Partner(matNr, firstname, surname, email,
 					handy, lecture));
-			db.close();
 			return true;
 		} else {
 			return false;
@@ -85,10 +88,10 @@ public class Praktika implements IPraktika {
 	public boolean deletePartnerID(String matNr) {
 		// Sollte der Partner noch in einem anderen Praktika sein, bleibt er
 		// noch erhalten
-		SQLiteDatabase db = dbSF.getWritableDatabase();
 		Integer pID = null;
 		pID = getPartnerID(matNr);
-		db.delete(DB_TABLE_PARTNER, "pID" + " = '" + pID + "'", null);
+		SQLiteDatabase db = dbSF.getWritableDatabase();
+		db.delete(DB_TABLE_PARTNER, "parID" + " = '" + pID + "'", null);
 		db.close();
 
 		return partners.remove(pID) != null;
@@ -156,8 +159,10 @@ public class Praktika implements IPraktika {
 
 		if (c != null) {
 			if (c.moveToFirst()) {
+				do {
 				id = c.getInt(c.getColumnIndex("parID"));
 				pList.add(partners.get(id));
+				} while (c.moveToNext());
 			}
 		}
 		db.close();

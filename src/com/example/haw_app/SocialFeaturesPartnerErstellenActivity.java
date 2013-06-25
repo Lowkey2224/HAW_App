@@ -1,8 +1,5 @@
 package com.example.haw_app;
 
-import java.util.Iterator;
-import java.util.Set;
-
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -14,27 +11,25 @@ import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
-import android.widget.ListView;
+import android.widget.EditText;
 
 import com.example.haw_app.socialfeatures.implementation.Student;
+import com.example.haw_app.socialfeatures.interfaces.IPraktika;
 import com.example.haw_app.socialfeatures.interfaces.IStudent;
 
-public class SocialFeaturesPraktikaActivity extends Activity {
+public class SocialFeaturesPartnerErstellenActivity extends Activity {
 	IStudent student;
-	String[] pratikaArray;
+	String intentString;
+	IPraktika praktikum;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.sf_menu);
-		// Show the Up button in the action bar.
-		setupActionBar();
+		setContentView(R.layout.sf_partner_erstellen);
+
 		student = Student.getInstance(this.getApplicationContext());
-		Aktualisieren();
+		intentString = getIntent().getStringExtra("selected").toString();
+		praktikum = student.getPraktika(intentString);
 	}
 
 	/**
@@ -70,56 +65,41 @@ public class SocialFeaturesPraktikaActivity extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
-    public void sfAktualisieren(View view){
-    	student.updatePraktikas();
-    	Aktualisieren();
-    }
-    
-    public void Aktualisieren(){
-    	AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-		builder.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+	public void partnerHinzufuegenClick(View view) {
+		EditText editVorname = (EditText) findViewById(R.id.editText1);
+		String vorname = editVorname.getText().toString();
+		EditText editNachname = (EditText) findViewById(R.id.editText2);
+		String nachname = editNachname.getText().toString();
+		EditText editMatNr = (EditText) findViewById(R.id.editText3);
+		String matNr = editMatNr.getText().toString();
+		EditText editEmail = (EditText) findViewById(R.id.editText4);
+		String email = editEmail.getText().toString();
+		EditText editHandy = (EditText) findViewById(R.id.editText5);
+		String handy = editHandy.getText().toString();
+		
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+		builder.setMessage(
+				"Partner wurde erfolgreich erstellt!").setNeutralButton("OK",
+				new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
 					}
 				});
-
-		try {
-			Set<String> pratikaSet = student.getPraktikasLectureSet();
-			
-			pratikaArray = new String[pratikaSet.size()];
-			int i = 0;
-			for ( Iterator<String> it = pratikaSet.iterator(); it.hasNext(); )
-			{
-				pratikaArray[i] = (String)it.next();
-			    i++;
-			}
-			ListAdapter adapter = new ArrayAdapter<String>(
-					getApplicationContext(),
-					android.R.layout.simple_list_item_1, pratikaArray);
-
-			final ListView lv = (ListView) findViewById(R.id.sf_listview);
-
-			lv.setAdapter(adapter);
-			lv.setOnItemClickListener(new OnItemClickListener() {
-
-				@Override
-				public void onItemClick(AdapterView<?> arg0, View arg1,
-						int position, long arg3) {
-					Intent intent = new Intent();
-					intent.setClassName(getPackageName(), getPackageName()
-							+ ".SocialFeaturesPraktikumsPartnerActivity");
-					intent.putExtra("selected", pratikaArray[position]);
-					startActivity(intent);
-				}
-			});
-
-		} catch (Exception e) {
-			builder.setMessage(e.toString());
-			AlertDialog alertDialog = builder.create();
-			alertDialog.show();
-		}
-    }
-    
-
+//		try {
+			praktikum.createPartner(matNr, vorname, nachname, email, handy);
+//		} catch (Exception e) {
+//
+//			builder.setMessage(
+//					"Partner konnte nicht erstellt werden! Error: "
+//							+ e).setNeutralButton("OK",
+//					new DialogInterface.OnClickListener() {
+//						public void onClick(DialogInterface dialog, int id) {
+//						}
+//					});
+//		}
+//		AlertDialog alertDialog = builder.create();
+//		alertDialog.show();
+		startActivity(new Intent(SocialFeaturesPartnerErstellenActivity.this,SocialFeaturesPraktikaActivity.class));
+	}
 }

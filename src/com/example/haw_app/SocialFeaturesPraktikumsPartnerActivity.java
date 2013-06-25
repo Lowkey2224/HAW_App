@@ -1,12 +1,12 @@
 package com.example.haw_app;
 
-import java.util.Iterator;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,10 +15,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.AdapterView.OnItemClickListener;
+import android.widget.TextView;
 
 import com.example.haw_app.socialfeatures.implementation.Student;
 import com.example.haw_app.socialfeatures.interfaces.IPartner;
@@ -27,6 +28,8 @@ import com.example.haw_app.socialfeatures.interfaces.IStudent;
 
 public class SocialFeaturesPraktikumsPartnerActivity extends Activity {
 	IStudent student;
+	String intentString;
+	List<IPartner> partner;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -35,43 +38,7 @@ public class SocialFeaturesPraktikumsPartnerActivity extends Activity {
 		// Show the Up button in the action bar.
 		setupActionBar();
 		student = Student.getInstance(this.getApplicationContext());
-		Intent intent = getIntent();
-		IPraktika praktikum = student.getPraktika(intent.getStringExtra("selected").toString());
-		praktikum.createPartner("1234", "test", "surname", "email", "handy");
-		List<IPartner> partner = praktikum.getPartnerLecture(intent.getStringExtra("selected").toString());
-		
-		try {
-			
-			String[] partnerArray = new String[partner.size()];
-			for (int i = 0; i < partner.size(); i++) {
-				partnerArray[i] = partner.get(i).getFirstname() + " " + partner.get(i).getSurname();
-			}
-			ListAdapter adapter = new ArrayAdapter<String>(
-					getApplicationContext(),
-					android.R.layout.simple_list_item_1, partnerArray);
-
-			final ListView lv = (ListView) findViewById(R.id.sf_praktikumspartner_listview);
-
-			lv.setAdapter(adapter);
-//			lv.setOnItemClickListener(new OnItemClickListener() {
-//
-//				@Override
-//				public void onItemClick(AdapterView<?> arg0, View arg1,
-//						int arg2, long arg3) {
-//					Intent intent = new Intent();
-//					intent.setClassName(getPackageName(), getPackageName()
-//							+ ".SocialFeaturesPraktikumsPartnerActivity");
-//					intent.putExtra("selected", lv.getAdapter().getItem(arg2)
-//							.toString());
-//					startActivity(intent);
-//				}
-//			});
-
-		} catch (Exception e) {
-//			builder.setMessage(e.toString());
-//			AlertDialog alertDialog = builder.create();
-//			alertDialog.show();
-		}
+		partnerAktualisieren();
 	}
 
 	/**
@@ -107,10 +74,65 @@ public class SocialFeaturesPraktikumsPartnerActivity extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
-    public void sfAktualisieren(View view){
-    	
-    }
-    
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		partnerAktualisieren();
+	}
+
+	public void partnerHinzufuegenClick(View view) {
+		Intent intent = new Intent();
+		intent.setClassName(getPackageName(), getPackageName()
+				+ ".SocialFeaturesPartnerErstellenActivity");
+		intent.putExtra("selected", intentString);
+		startActivity(intent);
+	}
+
+	public void partnerAktualisieren() {
+		intentString = getIntent().getStringExtra("selected").toString();
+		IPraktika praktikum = student.getPraktika(intentString);
+		// praktikum.createPartner("1234", "test", "surname", "email", "handy");
+
+		partner = praktikum.getPartnerLecture(intentString);
+		
+		
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setMessage(partner.toString()).setNeutralButton("OK",
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+					}
+				});
+		AlertDialog alertDialog = builder.create();
+		alertDialog.show();
+		
+		
+		TextView pratkikumTextView = (TextView) findViewById(R.id.textView1);
+		pratkikumTextView.setText(intentString);
+		List<String> partnerArray = new ArrayList<String>();
+		for (int i = 0; i < partner.size(); i++) {
+			partnerArray.add(partner.get(i).getFirstname() + " "
+					+ partner.get(i).getSurname());
+		}
+		ListAdapter adapter = new ArrayAdapter<String>(getApplicationContext(),
+				android.R.layout.simple_list_item_1, partnerArray);
+
+		final ListView lv = (ListView) findViewById(R.id.sf_praktikumspartner_listview);
+
+		lv.setAdapter(adapter);
+		lv.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1,
+					int position, long arg3) {
+				Intent intent = new Intent();
+				intent.setClassName(getPackageName(), getPackageName()
+						+ ".SocialFeaturesPraktikumsPartnerZeigenActivity");
+				intent.putExtra("matNr", partner.get(position).getMatNr());
+				intent.putExtra("selected", intentString);
+				startActivity(intent);
+			}
+		});
+	}
 
 }

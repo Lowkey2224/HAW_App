@@ -53,7 +53,7 @@ public class Student implements IStudent {
 		Set<String> oldLecture = getPraktikasLectureSet();
 		Set<String> newLecture;
 		String[] valuePraktika = new String[3];;
-		SQLiteDatabase db = dbSF.getWritableDatabase();
+//		SQLiteDatabase db = dbSF.getWritableDatabase();
 		
 		
 		ret = sm.getRegisteredTrainings();
@@ -75,17 +75,20 @@ public class Student implements IStudent {
 			if (!oldLecture.contains(sLecture)) {
 				//Map<String,String[2]> - Map mit Kursname -> Array<Prof,Status>
 				valuePraktika = ret.get(sLecture);
+				SQLiteDatabase db = dbSF.getWritableDatabase();
 				db.execSQL("INSERT INTO " + DB_TABLE_PRAKTIKA
 						+ " (lecture, profName,groupNr,status) VALUES ('"
 						+ sLecture + "','" + valuePraktika[0] + "','"
 						+ valuePraktika[1] + "','" + valuePraktika[2] + "');");
 				//ID des Praktikas holen die es beim Insert bekommen hat
 				pID = getPraktikaID(sLecture);
+				db.close();
 				praktikas.put(pID, new Praktika(sLecture, valuePraktika[0],
 						valuePraktika[1], valuePraktika[2], dbSF));
+				
 			}
 		}
-		db.close();
+//		db.close();
 		return true;
 	}
 

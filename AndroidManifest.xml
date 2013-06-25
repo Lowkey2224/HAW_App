@@ -110,6 +110,22 @@
                 android:value="com.example.haw_app.SocialFeaturesPraktikaActivity" />
         </activity>
         <activity
+            android:name="com.example.haw_app.SocialFeaturesPraktikumsPartnerZeigenActivity"
+            android:label="@string/title_activity_social_features"
+            android:parentActivityName="com.example.haw_app.SocialFeaturesPraktikumsPartnerActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.haw_app.SocialFeaturesPraktikumsPartnerActivity" />
+        </activity>
+        <activity
+            android:name="com.example.haw_app.SocialFeaturesPartnerErstellenActivity"
+            android:label="@string/title_activity_social_features"
+            android:parentActivityName="com.example.haw_app.SocialFeaturesPraktikumsPartnerActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.haw_app.SocialFeaturesPraktikumsPartnerActivity" />
+        </activity>
+        <activity
             android:name="com.example.haw_app.VeranstaltungsplanActivity"
             android:label="@string/title_activity_veranstaltungsplan"
             android:parentActivityName="com.example.haw_app.MainActivity" >

@@ -1,14 +1,19 @@
 package com.example.haw_app;
 
-import android.os.Bundle;
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Build;
+import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.support.v4.app.NavUtils;
-import android.annotation.TargetApi;
-import android.content.Intent;
-import android.os.Build;
+
+import com.example.haw_app.stisysManager.IStiSysManager;
+import com.example.haw_app.stisysManager.StiSysManagerFactory;
 
 public class SocialFeaturesActivity extends Activity {
 
@@ -16,8 +21,28 @@ public class SocialFeaturesActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_social_features);
-		// Show the Up button in the action bar.
-		setupActionBar();
+		IStiSysManager sm = StiSysManagerFactory.getInstance(this.getApplicationContext());
+		if (sm.getUserName() == null) {
+			findViewById(R.id.sf_chat).setVisibility(View.GONE);
+			findViewById(R.id.sf_praktika).setVisibility(View.GONE);
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+			builder.setMessage(
+					"Bitte erst in Stisys einloggen!")
+					.setNeutralButton("OK",
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int id) {
+								}
+							});
+			AlertDialog alertDialog = builder.create();
+			alertDialog.show();
+		} else {
+			findViewById(R.id.sf_chat).setVisibility(View.VISIBLE);
+			findViewById(R.id.sf_praktika).setVisibility(View.VISIBLE);
+			// Show the Up button in the action bar.
+			setupActionBar();
+		}
 	}
 
 	/**
