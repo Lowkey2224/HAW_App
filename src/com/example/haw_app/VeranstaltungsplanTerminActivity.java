@@ -18,6 +18,4 @@ public class VeranstaltungsplanTerminActivity extends Activity {
 	    textview.setText(intent.getStringExtra("selected"));
 	    textview.setMovementMethod(new ScrollingMovementMethod());
 	}
-	
-
 }

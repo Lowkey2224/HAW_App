@@ -1,6 +1,7 @@
 package com.example.haw_app;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import android.app.Activity;
@@ -22,19 +23,14 @@ import com.example.haw_app.veranstaltungsplan.implementations.Termin;
 import com.example.haw_app.veranstaltungsplan.implementations.Veranstaltungsplan;
 
 public class VeranstaltungsplanAnzeigenActivity extends Activity {
-	Veranstaltungsplan vp = Veranstaltungsplan.getInstance();
+	Veranstaltungsplan vp = VeranstaltungsplanActivity.getVp();
 
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		vpAnzeigenLayout();
-		try {
-			vp.aktualisierenOhneDownload();
-			if (vp.termine.equals(null) || vp.termine.equals("")) {
-				throw new Exception("vp.termine empty");
-			}
-		} catch (Exception e) {
+		if (vp.termine.size() == 0) {
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
 			builder.setMessage(
@@ -47,7 +43,7 @@ public class VeranstaltungsplanAnzeigenActivity extends Activity {
 							});
 			AlertDialog alertDialog = builder.create();
 			alertDialog.show();
-		}
+		} else {
 		List<String> termine = new ArrayList<String>();
 		for (Termin termin : vp.termine) {
 			if (!termine.contains(termin.semesterGruppe())) {
@@ -55,6 +51,7 @@ public class VeranstaltungsplanAnzeigenActivity extends Activity {
 			}
 		}
 		setSemesterGrpListView(termine);
+		}
 	}
 
 	private void vpAnzeigenLayout() {
@@ -63,7 +60,6 @@ public class VeranstaltungsplanAnzeigenActivity extends Activity {
 
 	private void setSemesterGrpListView(List<String> arrayAdapterList) {
 
-		
 		final ListView lv = (ListView) findViewById(R.id.veranstaltungsplan_listview);
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
 				R.layout.vp_simple_list_item, arrayAdapterList);
@@ -91,9 +87,10 @@ public class VeranstaltungsplanAnzeigenActivity extends Activity {
 						containsName = true;
 					}
 				}
-				if (!containsName){
+				if (!containsName) {
 					termine.add(termin);
 				}
+				
 			}
 		}
 		final ListView lv = (ListView) findViewById(R.id.veranstaltungsplan_listview);
@@ -113,11 +110,17 @@ public class VeranstaltungsplanAnzeigenActivity extends Activity {
 				String terminString = "Name: " + termin.name() + "\nDozent: "
 						+ termin.prof() + "\nRaum: " + termin.raum()
 						+ "\nSemester: " + termin.semesterGruppe();
+				List<String> zeiten = new ArrayList<String>();
 				for (Termin termin2 : vp.termine) {
 					if (termin2.name().equals(termin.name())) {
-						terminString = terminString + "\n\nVon: " + termin2.von().toDate() + "\nBis: "
-								+ termin2.bis().toDate();
+						zeiten.add("\n\nVon: "
+								+ termin2.von().toDate() + "\nBis: "
+								+ termin2.bis().toDate());		
 					}
+				}
+				Collections.sort(zeiten);
+				for (String zeit : zeiten){
+					terminString = terminString + zeit;
 				}
 				if (termin != null) {
 					intent.putExtra("selected", terminString);
@@ -126,7 +129,7 @@ public class VeranstaltungsplanAnzeigenActivity extends Activity {
 
 			}
 		});
-		
+
 	}
 
 	public class TerminAdapter extends ArrayAdapter<Termin> {

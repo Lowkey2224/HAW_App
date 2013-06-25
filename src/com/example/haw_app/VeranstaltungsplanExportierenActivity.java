@@ -1,6 +1,7 @@
 package com.example.haw_app;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import android.annotation.TargetApi;
@@ -22,22 +23,19 @@ import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.haw_app.veranstaltungsplan.implementations.Termin;
 import com.example.haw_app.veranstaltungsplan.implementations.Veranstaltungsplan;
 
 public class VeranstaltungsplanExportierenActivity extends Activity {
 
 	private ListView mainListView;
-	private TerminForView[] termine;
+	private List<TerminForView> termine;
 	private ArrayAdapter<TerminForView> listAdapter;
-	private List<TerminForView> termineList;
-	private Veranstaltungsplan vp = Veranstaltungsplan.getInstance();
+	private Veranstaltungsplan vp = VeranstaltungsplanActivity.getVp();
 
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
 		setContentView(R.layout.vp_exportieren);
 		// Find the ListView resource.
 		mainListView = (ListView) findViewById(R.id.veranstaltungsplan_listview);
@@ -56,12 +54,16 @@ public class VeranstaltungsplanExportierenActivity extends Activity {
 						viewHolder.getCheckBox().setChecked(termin.isChecked());
 					}
 				});
+		getTermineList();
+		listAdapter = new TerminArrayAdapter(this, termine);
+		mainListView.setAdapter(listAdapter);
 	}
 
 	private static class TerminViewHolder {
 		private CheckBox checkBox;
 		private TextView textView;
 
+		@SuppressWarnings("unused")
 		public TerminViewHolder() {
 		}
 
@@ -74,6 +76,7 @@ public class VeranstaltungsplanExportierenActivity extends Activity {
 			return checkBox;
 		}
 
+		@SuppressWarnings("unused")
 		public void setCheckBox(CheckBox checkBox) {
 			this.checkBox = checkBox;
 		}
@@ -82,32 +85,33 @@ public class VeranstaltungsplanExportierenActivity extends Activity {
 			return textView;
 		}
 
+		@SuppressWarnings("unused")
 		public void setTextView(TextView textView) {
 			this.textView = textView;
 		}
 	}
 
 	class TerminForView {
-		private Termin termin;
+		private String termin;
 		private boolean checked = false;
 
 		public TerminForView() {
 		}
 
-		public TerminForView(Termin termin) {
+		public TerminForView(String termin) {
 			this.termin = termin;
 		}
 
-		public TerminForView(Termin termin, boolean checked) {
+		public TerminForView(String termin, boolean checked) {
 			this.termin = termin;
 			this.checked = checked;
 		}
 
-		public Termin getTermin() {
+		public String getTermin() {
 			return termin;
 		}
 
-		public void setTermin(Termin termin) {
+		public void setTermin(String termin) {
 			this.termin = termin;
 		}
 
@@ -120,7 +124,7 @@ public class VeranstaltungsplanExportierenActivity extends Activity {
 		}
 
 		public String toString() {
-			return termin.name();
+			return termin;
 		}
 
 		public void toggleChecked() {
@@ -207,42 +211,25 @@ public class VeranstaltungsplanExportierenActivity extends Activity {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 			getActionBar().setDisplayHomeAsUpEnabled(true);
 		}
-	}
-
-	public void vpAktualisieren(View view) {
-		AlertDialog.Builder builder = DiaglogBuilder("Aktualisierung erfolgreich!");
-		try {
-			getTermineList();
-			listAdapter = new TerminArrayAdapter(this, termineList);
-			mainListView.setAdapter(listAdapter);
-
-		} catch (Exception e) {
-			builder.setMessage("Aktualisierung war nicht erfolgreich!");
-		}
-		AlertDialog alertDialog = builder.create();
-		alertDialog.show();
-
-	}
-
-	
+	}	
 
 	public void vpExportieren(View view) {
 		List<String> list = new ArrayList<String>();
-
 		AlertDialog.Builder builder = DiaglogBuilder("Exportieren erfolgreich!");
 		try {
-			for (int i = 0; i < termine.length; i++) {
-				list.add(termine[i].toString());
+			for (TerminForView termin : termine) {
+				if (termin.checked) {
+				list.add(termin.termin);
+				}
 			}
 			vp.setzeBelegteFaecher(list);
 			vp.exportieren();
 		} catch (Exception e) {
-			builder.setMessage("Exportieren war nicht erfolgreich!");
+			builder.setMessage("Exportieren war nicht erfolgreich! Error: " + e.toString());
 		}
-
 		AlertDialog alertDialog = builder.create();
 		alertDialog.show();
-
+		this.finishActivity(1);
 	}
 	
 	@Override
@@ -269,14 +256,17 @@ public class VeranstaltungsplanExportierenActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 
-	public void getTermineList() throws Exception {
-		List<TerminForView> termine = new ArrayList<TerminForView>();
-		
-		vp.aktualisieren();
-		for (int i = 0; i < vp.termine.size(); i++) {
-			termine.add(new TerminForView(vp.termine.get(i)));
+	public void getTermineList() {
+		List<TerminForView> termineTmp = new ArrayList<TerminForView>();
+		List<String> list = new ArrayList<String>();
+		for (String termin : vp.veranstaltungsSet()) {
+			list.add(termin);
 		}
-		termineList = termine;
+		Collections.sort(list);
+		for (String termin : list) {
+			termineTmp.add(new TerminForView(termin));
+		}
+		termine = termineTmp;
 	}
 	
 	public AlertDialog.Builder DiaglogBuilder(String message) {
