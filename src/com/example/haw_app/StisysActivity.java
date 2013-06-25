@@ -1,24 +1,30 @@
 package com.example.haw_app;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.joda.time.DateTime;
 
 import com.example.haw_app.stisysManager.IStiSysManager;
+import com.example.haw_app.stisysManager.StiSysManager;
 import com.example.haw_app.stisysManager.StiSysManagerFactory;
 import com.example.haw_app.stisysManager.StisysUtil;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.support.v4.app.NavUtils;
 import android.annotation.TargetApi;
@@ -33,6 +39,7 @@ public class StisysActivity extends Activity {
 	String loginPassword;
 	Button buttonLogin;
 	IStiSysManager sm;
+	boolean untermenue = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -70,10 +77,11 @@ public class StisysActivity extends Activity {
 	private void createInstance(final String username,final String passwrd){
 		final Context p = this;
 		Thread stisysThread = new Thread() {
-			public void run() {
-				sm = StiSysManagerFactory.getInstance(username, passwrd,p);
+			public void run() {				sm = StiSysManagerFactory.getInstance(username, passwrd,p);
+				
+				
 				String _tmp = sm.getUserName();
-				if(_tmp==null || _tmp.equals(username)){
+				if(_tmp==null || !_tmp.equals(username)){
 				sm.syncData();
 				}
 			}
@@ -129,64 +137,88 @@ public class StisysActivity extends Activity {
 	// TODO -> dateTime auch einbinden
 	public void kommendeAnmeldungenClick(View view) {
 		setContentView(R.layout.stisys_kommende_anmeldungen);
-		TextView appsm = (TextView) findViewById(R.id.applicateList);
-		
-		Set<String> apps = new HashSet<String>(); 
+		untermenue = true;
+		ListView lv = (ListView) findViewById(R.id.applicateListsm);
+		List<String> apps = new ArrayList<String>(); 
+		apps.add("<h>Kommende Anmeldungen");
 		  for (Map.Entry<String, DateTime[]> entry : sm.getNextApplicationDates().entrySet()) {
-		  for(int i = 0; i < entry.getValue().length; i+=2){
-		  apps.add(entry.getKey() + ": von " + entry.getValue()[i] + " bis " + entry.getValue()[i+1]);
+			  for(int i = 0; i < entry.getValue().length; i+=2){
+			  apps.add(entry.getKey() + ": von " + entry.getValue()[i] + " bis " + entry.getValue()[i+1]);
+			  }
 		  }
-		  }
-		 
-		  appsm.setText(apps.toString());
+		 lv.setAdapter(new StiSysListAdapter(StisysActivity.this, R.layout.stisyslistview, apps));		  
 		
 
 	}
 
 	public void meineAnmeldungenClick(View view) {
 		setContentView(R.layout.stisys_meine_anmeldungen);
-
-		// Praktika Anzeige
-		TextView praktikasm = (TextView) findViewById(R.id.praktikaList);
-		Set<String> praktika = sm.getRegisteredTrainings().keySet();
-		praktikasm.setText(praktika.toString());
-
-		// Klausuren Anzeige
-		TextView klausurensm = (TextView) findViewById(R.id.klausurenList);
-		Set<String> klausuren = sm.getRegisteredTests().keySet();
-		klausurensm.setText(klausuren.toString());
-		// WP-Kurse Anzeige
-		TextView wpsm = (TextView) findViewById(R.id.wpKurseList);
-		Set<String> wp = sm.getRegisteredChosenCourses().keySet();
-		wpsm.setText(wp.toString());
-		// GW-Kurse Anzeige
-		TextView gwsm = (TextView) findViewById(R.id.gwKurseList);
-		Set<String> gw = sm.getRegisteredSocialSciencesCourses().keySet();
-		gwsm.setText(gw.toString());
-		// Projekte-Kurse Anzeige
-		TextView projektesm = (TextView) findViewById(R.id.projekteList);
-		Set<String> projekte = sm.getRegisteredTrainings().keySet();
-		projektesm.setText("TODO");
-		// Seminar-Kurse Anzeige
-		TextView seminarsm = (TextView) findViewById(R.id.seminareList);
-
-		Set<String> seminar = sm.getRegisteredTrainings().keySet();
-		seminarsm.setText("TODO");
+		untermenue = true;
+		// ##### Lustige Listensache Anfang
+		ListView praktikasm = (ListView) findViewById(R.id.praktikaList);
+		List<String> content = new ArrayList<String>();
+		content.add("<h>Praktika");
+		content.addAll(sm.getRegisteredTrainings().keySet());
+		content.add("<h>Klausuren");
+		content.addAll(sm.getRegisteredTests().keySet());		
+		content.add("<h>WP-Kurse");
+		content.addAll(sm.getRegisteredChosenCourses().keySet());
+		content.add("<h>GW-Kurse");
+		content.addAll(sm.getRegisteredSocialSciencesCourses().keySet());
+		content.add("<h>Projekte");
+		content.add("TODO");
+		content.add("<h>Seminare");
+		content.add("TODO");
+		praktikasm.setAdapter(new StiSysListAdapter(StisysActivity.this, R.layout.stisyslistview, content));
+		//##### Lustige Listensache Ende
+		
+//		// Klausuren Anzeige
+//		ListView klausurensm = (ListView) findViewById(R.id.klausurenList);
+//		List<String> klausuren = new ArrayList<String>(sm.getRegisteredTests().keySet());
+//		klausurensm.setAdapter(new StiSysListAdapter(StisysActivity.this, R.layout.stisyslistview, klausuren));
+//		// WP-Kurse Anzeige
+//		TextView wpsm = (TextView) findViewById(R.id.wpKurseList);
+//		Set<String> wp = sm.getRegisteredChosenCourses().keySet();
+//		wpsm.setText(wp.toString());
+//		// GW-Kurse Anzeige
+//		TextView gwsm = (TextView) findViewById(R.id.gwKurseList);
+//		Set<String> gw = sm.getRegisteredSocialSciencesCourses().keySet();
+//		gwsm.setText(gw.toString());
+//		// Projekte-Kurse Anzeige
+//		TextView projektesm = (TextView) findViewById(R.id.projekteList);
+//		Set<String> projekte = sm.getRegisteredTrainings().keySet();
+//		projektesm.setText("TODO");
+//		// Seminar-Kurse Anzeige
+//		TextView seminarsm = (TextView) findViewById(R.id.seminareList);
+//
+//		Set<String> seminar = sm.getRegisteredTrainings().keySet();
+//		seminarsm.setText("TODO");
 	}
 
 	public void anmeldenClick(View view) {
+		untermenue = true;
 		setContentView(R.layout.stisys_anmelden);
-		TextView subscribe = (TextView) findViewById(R.id.Anmelde);
-		subscribe.setText(sm.getSubscribeableCourses().toString());
+		List<String> l = new ArrayList<String>();
+		l.add("<h>Anmeldbare Kurse");
+		l.addAll(sm.getUnsubscribeableCourses());
+		ListView lv = (ListView)findViewById(R.id.lvAnmeldesm);
+		StiSysListAdapter adapter = new StiSysListAdapter(StisysActivity.this, R.layout.stisyslistview, l);
+		lv.setAdapter(adapter);
 	}
 
 	public void abmeldenClick(View view) {
+		untermenue = true;
 		setContentView(R.layout.stisys_abmelden);
-		TextView unsubscribe = (TextView) findViewById(R.id.Abmelde);
-		unsubscribe.setText(sm.getUnsubscribeableCourses().toString());
+		List<String> l = new ArrayList<String>();
+		l.add("<h>Abmeldbare Kurse");
+		l.addAll(sm.getUnsubscribeableCourses());
+		ListView lv = (ListView)findViewById(R.id.lvAbmeldesm);
+		StiSysListAdapter adapter = new StiSysListAdapter(StisysActivity.this, R.layout.stisyslistview, l);
+		lv.setAdapter(adapter);
 	}
 
 	public void meineNotenClick(View view) {
+		untermenue = true;
 		setContentView(R.layout.stisys_meine_noten);
 		
 		TextView notensm = (TextView) findViewById(R.id.Noten);
@@ -200,6 +232,7 @@ public class StisysActivity extends Activity {
 	}
 	
 	public void einstellungenStisysClick(View view){
+		untermenue = true;
 		setContentView(R.layout.stisys_einstellungen);
 	}
 	
@@ -208,7 +241,20 @@ public class StisysActivity extends Activity {
 	}
 	
 	public void passwordClick(View view){
+		untermenue = true;
 		setContentView(R.layout.test);
 		//TODO LOKI: Dauerhafte Speicherung Username/Passwort - Kombi
+	}
+	
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event){
+		if(keyCode == KeyEvent.KEYCODE_BACK && untermenue == true)
+		{
+			setContentView(R.layout.activity_stisys);
+			untermenue = false;
+			return true;
+		}
+		
+		return super.onKeyDown(keyCode,event);
 	}
 }
