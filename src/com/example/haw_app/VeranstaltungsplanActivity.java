@@ -1,11 +1,16 @@
 package com.example.haw_app;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.example.haw_app.veranstaltungsplan.implementations.Veranstaltungsplan;
@@ -59,9 +64,7 @@ public class VeranstaltungsplanActivity extends Activity {
 	}
 
 	public void exportierenClick(View view) {
-		int requestCode = 1;
-		startActivityForResult(new Intent(this,
-				VeranstaltungsplanExportierenActivity.class), requestCode);
+		startActivity(new Intent(this, VeranstaltungsplanExportierenActivity.class));
 	}
 
 	public void aktualisierenClick(View view) {
@@ -84,5 +87,29 @@ public class VeranstaltungsplanActivity extends Activity {
 			alertDialog.show();
 		}
 		;
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.optionen, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			// This ID represents the Home or Up button. In the case of this
+			// activity, the Up button is shown. Use NavUtils to allow users
+			// to navigate up one level in the application structure. For
+			// more details, see the Navigation pattern on Android Design:
+			//
+			// http://developer.android.com/design/patterns/navigation.html#up-vs-back
+			//
+			NavUtils.navigateUpFromSameTask(this);
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 }

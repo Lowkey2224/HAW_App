@@ -62,6 +62,14 @@
                 android:value="com.example.haw_app.MainActivity" />
         </activity>
         <activity
+            android:name="com.example.haw_app.PcPoolPlanActivity"
+            android:label="@string/pc_pool"
+            android:parentActivityName="com.example.haw_app.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.haw_app.MainActivity" />
+        </activity>
+        <activity
             android:name="com.example.haw_app.SocialFeaturesActivity"
             android:label="@string/title_activity_social_features"
             android:parentActivityName="com.example.haw_app.MainActivity" >
