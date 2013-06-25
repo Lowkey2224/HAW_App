@@ -134,7 +134,7 @@ public class Praktika implements IPraktika {
 		Integer id = null;
 
 		Cursor c = db.rawQuery("SELECT parID FROM " + DB_TABLE_PARTNER
-				+ " WHERE matNr = '" + matNr + "'", null);
+				+ " WHERE matNr = '" + matNr + "' and lecture = '"+ lecture +"'", null);
 
 		if (c != null) {
 			if (c.moveToFirst()) {
