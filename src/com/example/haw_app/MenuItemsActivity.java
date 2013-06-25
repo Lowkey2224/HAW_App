@@ -1,14 +1,19 @@
 package com.example.haw_app;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.text.Html;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,7 +25,7 @@ import com.example.haw_app.mensa.interfaces.IMenuItem;
 
 public class MenuItemsActivity extends Activity {
 
-	private ArrayAdapter<IMenuItem> adapter;
+	private ArrayAdapter<Spanned> adapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -29,8 +34,8 @@ public class MenuItemsActivity extends Activity {
 		long dateMs = extras.getLong("date");
 		Date date = new Date(dateMs);
 		setContentView(R.layout.activity_menuitems);
-		adapter = new ArrayAdapter<IMenuItem>(this,
-				android.R.layout.simple_list_item_1, new ArrayList<IMenuItem>());
+		adapter = new ArrayAdapter<Spanned>(this,
+				android.R.layout.simple_list_item_1, new ArrayList<Spanned>());
 		final ListView listview = (ListView) findViewById(R.id.menuitems_listview);
 		Log.w(this.getClass().getSimpleName(), "ListView: " + listview);
 		Log.w(this.getClass().getSimpleName(), "ListView: " + adapter);
@@ -75,9 +80,12 @@ public class MenuItemsActivity extends Activity {
 
 	public void setMenuItems(List<IMenuItem> list) {
 		adapter.clear();
+		DecimalFormatSymbols symbols=new DecimalFormatSymbols(Locale.GERMANY);
+		DecimalFormat decf = new DecimalFormat("#0.00",symbols);
 		for (IMenuItem item : list) {
 			Log.w(this.getClass().getSimpleName(), "Added item: " + item);
-			adapter.add(item);
+			Spanned html=Html.fromHtml("<b>"+item.getDescription()+"</b><br />Preis (Student): "+decf.format((item.getStudentPrice()*1d)/100d) +" €<br /> Preis (Gast): "+decf.format((item.getNonStudentPrice()*1d)/100d)+" €<br /><i>"+item.getCategory()+"</i>");
+			adapter.add(html);
 		}
 		adapter.notifyDataSetChanged();
 	}
