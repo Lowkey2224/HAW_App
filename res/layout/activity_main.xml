@@ -105,21 +105,4 @@
         android:text="@string/schnitzeljagd"
         android:textColor="@color/white" />
 
-    <Button
-        android:id="@+id/button7"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/button6"
-        android:layout_alignRight="@+id/button6"
-        android:layout_below="@+id/button6"
-        android:layout_marginTop="10dp"
-        android:background="@color/black"
-        android:drawableLeft="@drawable/options"
-        android:drawablePadding="@dimen/activity_horizontal_margin"
-        android:gravity="center_vertical"
-        android:onClick="optionClick"
-        android:text="@string/optionen"
-        android:textColor="@color/white"
-        android:visibility="visible" />
-
 </RelativeLayout>
