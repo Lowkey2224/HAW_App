@@ -210,6 +210,7 @@ public class Chat implements IChat {
 			try {
 				// SASLAuthentication.supportSASLMechanism("PLAIN", 0);
 				connection.login(userName, password);
+				addUserAutomatic();
 				sendError(3);
 				loginActivity.changeActivity();
 
@@ -336,6 +337,7 @@ public class Chat implements IChat {
 	public boolean addUser(String matNr, String userName) {
 		try {
 			Roster roster = connection.getRoster();
+			matNr = matNr+ "@" + SERVICE;
 			roster.createEntry(matNr, userName, null);
 		} catch (XMPPException e) {
 			return false;
@@ -346,7 +348,7 @@ public class Chat implements IChat {
 	@Override
 	public void addUserAutomatic() {
 		DatabaseSocialFeatures dbSF = new DatabaseSocialFeatures(
-				chatActivity.getApplicationContext());
+				loginActivity.getApplicationContext());
 		SQLiteDatabase db = dbSF.getReadableDatabase();
 
 		Cursor c = db.rawQuery("SELECT * FROM "

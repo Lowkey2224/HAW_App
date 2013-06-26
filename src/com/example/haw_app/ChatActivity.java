@@ -37,7 +37,7 @@ public class ChatActivity extends Activity implements OnItemSelectedListener {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_sf_chat);
-		contactList.add(" "); // Damit man auch keinen Nutzer wählen kann.
+		contactList.add(" "); // Damit man auch keinen Nutzer wï¿½hlen kann.
 		ci = Chat.getInstance();
 		ci.setChatActivity(this);
 
@@ -50,11 +50,11 @@ public class ChatActivity extends Activity implements OnItemSelectedListener {
 		ci.showOfflineMessages(); // Offlinemessage holen
 		setContactAdapter(); // Kontaktfenster initialisieren
 
-		ci.addUserAutomatic(); // User automatisch adden die in Praktika eingetragen worden sind
+//		ci.addUserAutomatic(); // User automatisch adden die in Praktika eingetragen worden sind
 		Button send = (Button) this.findViewById(R.id.sendBtn);
 		send.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
-				if (!selectTo.equals(" ")) { // PRÜFEN OB ES GEHT
+				if (!selectTo.equals(" ")) { // PRï¿½FEN OB ES GEHT
 					// String to = recipient.getText().toString();
 					String to = selectTo;
 					String text = textMessage.getText().toString();
@@ -138,7 +138,7 @@ public class ChatActivity extends Activity implements OnItemSelectedListener {
 	public void onItemSelected(AdapterView<?> parent, View view, int pos,
 			long id) {
 		//Name muss zurechtgeschnitten werden, da beim senden nicht
-		//zusätzlich Offline/Online stehen darf.
+		//zusï¿½tzlich Offline/Online stehen darf.
 		String temp = parent.getItemAtPosition(pos).toString();
 		String[] tempcon = temp.split("-");
 		selectTo = tempcon[0];
