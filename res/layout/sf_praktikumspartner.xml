@@ -7,6 +7,12 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin" >
+
+    <TextView
+        android:id="@+id/ueberschrift"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white" />
     
     <ListView
         android:id="@+id/sf_praktikumspartner_listview"
@@ -22,8 +28,8 @@
         android:id="@+id/sf_partner_hinzufuegen"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/sf_praktikumspartner_listview"
-        android:layout_below="@+id/textView1"
+        android:layout_alignLeft="@+id/ueberschrift"
+        android:layout_below="@+id/ueberschrift"
         android:background="@color/black"
         android:drawableLeft="@drawable/platzhalter"
         android:drawablePadding="@dimen/activity_horizontal_margin"
@@ -32,12 +38,5 @@
         android:text="@string/hinzufuegen"
         android:textColor="@color/white"
         android:textColorHint="@color/black" />
-
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

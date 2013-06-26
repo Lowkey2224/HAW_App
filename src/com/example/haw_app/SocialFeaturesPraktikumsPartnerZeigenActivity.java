@@ -40,7 +40,7 @@ public class SocialFeaturesPraktikumsPartnerZeigenActivity extends Activity {
 		TextView textViewUeberschrift = (TextView) findViewById(R.id.textView6);
 		textViewUeberschrift.setText(praktikum.getLecture());
 
-		TextView textViewVorname = (TextView) findViewById(R.id.textView1);
+		TextView textViewVorname = (TextView) findViewById(R.id.ueberschrift);
 		textViewVorname.setText("Vorname: " + partner.getFirstname());
 
 		TextView textViewNachname = (TextView) findViewById(R.id.textView2);

@@ -95,20 +95,9 @@ public class SocialFeaturesPraktikumsPartnerActivity extends Activity {
 		// praktikum.createPartner("1234", "test", "surname", "email", "handy");
 
 		partner = praktikum.getPartnerLecture(intentString);
+		TextView pratkikumTextView = (TextView) findViewById(R.id.ueberschrift);
+		pratkikumTextView.setText(praktikum.getLecture() + "\nGruppe: " + praktikum.getGroupNr() + "\nProf: " + praktikum.getProfName());
 		
-		
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setMessage(partner.toString()).setNeutralButton("OK",
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
-					}
-				});
-		AlertDialog alertDialog = builder.create();
-		alertDialog.show();
-		
-		
-		TextView pratkikumTextView = (TextView) findViewById(R.id.textView1);
-		pratkikumTextView.setText(intentString);
 		List<String> partnerArray = new ArrayList<String>();
 		for (int i = 0; i < partner.size(); i++) {
 			partnerArray.add(partner.get(i).getFirstname() + " "

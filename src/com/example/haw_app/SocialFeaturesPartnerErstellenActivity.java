@@ -79,6 +79,17 @@ public class SocialFeaturesPartnerErstellenActivity extends Activity {
 		String handy = editHandy.getText().toString();
 		
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		if (matNr.equals("") || vorname.equals("")) {
+			builder.setMessage(
+					"Bitte Vorname und Matrikelnummer angeben!").setNeutralButton("OK",
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int id) {
+						}
+					});
+			AlertDialog alertDialog = builder.create();
+			alertDialog.show();
+		}else{
+		
 
 		builder.setMessage(
 				"Partner wurde erfolgreich erstellt!").setNeutralButton("OK",
@@ -86,20 +97,21 @@ public class SocialFeaturesPartnerErstellenActivity extends Activity {
 					public void onClick(DialogInterface dialog, int id) {
 					}
 				});
-//		try {
+		try {
 			praktikum.createPartner(matNr, vorname, nachname, email, handy);
-//		} catch (Exception e) {
-//
-//			builder.setMessage(
-//					"Partner konnte nicht erstellt werden! Error: "
-//							+ e).setNeutralButton("OK",
-//					new DialogInterface.OnClickListener() {
-//						public void onClick(DialogInterface dialog, int id) {
-//						}
-//					});
-//		}
-//		AlertDialog alertDialog = builder.create();
-//		alertDialog.show();
+		} catch (Exception e) {
+
+			builder.setMessage(
+					"Partner konnte nicht erstellt werden! Error: "
+							+ e).setNeutralButton("OK",
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int id) {
+						}
+					});
+		}
+		AlertDialog alertDialog = builder.create();
+		alertDialog.show();
 		startActivity(new Intent(SocialFeaturesPartnerErstellenActivity.this,SocialFeaturesPraktikaActivity.class));
+		}
 	}
 }

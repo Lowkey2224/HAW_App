@@ -8,7 +8,8 @@
     android:layout_width="wrap_content" 
     android:layout_height="wrap_content"
     android:padding="10dp"
-    android:textSize="16sp" >
+    android:textSize="16sp"
+    android:textColor="@color/white" >
   </TextView>
   
   <CheckBox android:id="@+id/CheckBox01" 
@@ -16,7 +17,8 @@
     android:layout_height="wrap_content" 
     android:padding="10dp"
     android:layout_alignParentRight="true" android:layout_marginRight="6sp"
-    android:focusable="false">
+    android:focusable="false"
+    android:textColor="@color/white">
   </CheckBox>
   
 </RelativeLayout>

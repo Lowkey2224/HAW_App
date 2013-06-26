@@ -24,7 +24,7 @@
         android:textColorHint="@color/black" />
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/ueberschrift"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/sf_partner_loeschen"
@@ -37,7 +37,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/sf_partner_loeschen"
-        android:layout_below="@+id/textView1" 
+        android:layout_below="@+id/ueberschrift" 
         android:textColor="@color/white"/>
 
     <TextView
@@ -70,7 +70,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_marginLeft="40dp"
-        android:layout_toRightOf="@+id/textView1"
+        android:layout_toRightOf="@+id/ueberschrift"
         android:textColor="@color/white" />
 
 </RelativeLayout>

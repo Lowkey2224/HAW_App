@@ -79,12 +79,12 @@ public class Student implements IStudent {
 				db.execSQL("INSERT INTO " + DB_TABLE_PRAKTIKA
 						+ " (lecture, profName,groupNr,status) VALUES ('"
 						+ sLecture + "','" + valuePraktika[0] + "','"
-						+ valuePraktika[1] + "','" + valuePraktika[2] + "');");
+						+ valuePraktika[2] + "','" + valuePraktika[1] + "');");
 				//ID des Praktikas holen die es beim Insert bekommen hat
 				pID = getPraktikaID(sLecture);
 				db.close();
 				praktikas.put(pID, new Praktika(sLecture, valuePraktika[0],
-						valuePraktika[1], valuePraktika[2], dbSF));
+						valuePraktika[2], valuePraktika[1], dbSF));
 				
 			}
 		}

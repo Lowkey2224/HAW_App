@@ -19,7 +19,7 @@ public class VeranstaltungsplanTerminActivity extends Activity {
 	    setContentView(R.layout.vp_termin);
 
 	    Intent intent = getIntent();
-	    TextView textview = (TextView)(findViewById(R.id.textView1));
+	    TextView textview = (TextView)(findViewById(R.id.ueberschrift));
 	    textview.setText(intent.getStringExtra("selected"));
 	    textview.setMovementMethod(new ScrollingMovementMethod());
 	}
