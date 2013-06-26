@@ -53,9 +53,9 @@ public class MainActivity extends Activity {
 		startActivity(new Intent(MainActivity.this, SchnitzeljagdActivity.class));
 	}
 
-	public void optionClick(View view) {
-		// setContentView(R.layout.optionen);
-		startActivity(new Intent(MainActivity.this, OptionenActivity.class));
-	}
+//	public void optionClick(View view) {
+//		// setContentView(R.layout.optionen);
+//		startActivity(new Intent(MainActivity.this, OptionenActivity.class));
+//	}
 
 }

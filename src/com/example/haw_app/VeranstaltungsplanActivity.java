@@ -1,12 +1,10 @@
 package com.example.haw_app;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
@@ -25,20 +23,7 @@ public class VeranstaltungsplanActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.vp_menu);
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		try {
-			vp = Veranstaltungsplan.getInstance();
-		} catch (Exception e) {
-			builder.setMessage(
-					"Fehler beim laden des Veranstaltungsplans! Error: "
-							+ e.toString()).setNeutralButton("OK",
-					new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int id) {
-						}
-					});
-		}
-		AlertDialog alertDialog = builder.create();
-		alertDialog.show();
+		vp = Veranstaltungsplan.getInstance();
 	}
 
 	public void vpAktualisieren(Veranstaltungsplan vpnew) {

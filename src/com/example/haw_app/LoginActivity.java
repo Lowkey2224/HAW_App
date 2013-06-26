@@ -1,18 +1,16 @@
 package com.example.haw_app;
 
-import com.example.haw_app.socialfeatures.implementation.Chat;
-//import com.example.haw_app.socialfeatures.implementation.Student;
-import com.example.haw_app.stisysManager.IStiSysManager;
-import com.example.haw_app.stisysManager.StiSysManagerFactory;
-
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.example.haw_app.socialfeatures.implementation.Chat;
+import com.example.haw_app.stisysManager.IStiSysManager;
+import com.example.haw_app.stisysManager.StiSysManagerFactory;
+//import com.example.haw_app.socialfeatures.implementation.Student;
 
 /**
  * Login Fenster

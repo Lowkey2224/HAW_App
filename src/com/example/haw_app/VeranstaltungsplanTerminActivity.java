@@ -1,9 +1,7 @@
 package com.example.haw_app;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.text.method.ScrollingMovementMethod;
