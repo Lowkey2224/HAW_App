@@ -84,7 +84,7 @@ public class MenuItemsActivity extends Activity {
 		DecimalFormat decf = new DecimalFormat("#0.00",symbols);
 		for (IMenuItem item : list) {
 			Log.w(this.getClass().getSimpleName(), "Added item: " + item);
-			Spanned html=Html.fromHtml("<b>"+item.getDescription()+"</b><br />Preis (Student): "+decf.format((item.getStudentPrice()*1d)/100d) +" €<br /> Preis (Gast): "+decf.format((item.getNonStudentPrice()*1d)/100d)+" €<br /><i>"+item.getCategory()+"</i>");
+			Spanned html=Html.fromHtml("<b>"+item.getCategory()+"</b><br/><i>"+item.getDescription()+"</i><br />Preis (Student): "+decf.format((item.getStudentPrice()*1d)/100d) +" €<br /> Preis (Gast): "+decf.format((item.getNonStudentPrice()*1d)/100d)+" €");
 			adapter.add(html);
 		}
 		adapter.notifyDataSetChanged();
