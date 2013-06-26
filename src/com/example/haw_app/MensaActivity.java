@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -40,6 +41,7 @@ public class MensaActivity extends Activity {
 		Log.w(this.getClass().getSimpleName(), "ListView: " + listview);
 		Log.w(this.getClass().getSimpleName(), "ListView: " + adapter);
 		listview.setAdapter(adapter);
+		df.setTimeZone(TimeZone.getTimeZone("GMT"));
 		final MensaActivity self = this;
 		listview.setOnItemClickListener(new OnItemClickListener() {
 
