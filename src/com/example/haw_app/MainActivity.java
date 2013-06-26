@@ -44,12 +44,12 @@ public class MainActivity extends Activity {
 	 
 
 	public void stisysClick(View view) {
-		// setContentView(R.layout.stisys);
-		// startActivity(new Intent(MainActivity.this,StisysActivity.class));
+//		 setContentView(R.layout.activity_stisys);
+		 startActivity(new Intent(MainActivity.this,StisysActivity.class));
 	}
 
 	public void schnitzelClick(View view) {
-		// setContentView(R.layout.schnitzeljagd);
+//		 setContentView(R.layout.activity_schnitzeljagd);
 		startActivity(new Intent(MainActivity.this, SchnitzeljagdActivity.class));
 	}
 
