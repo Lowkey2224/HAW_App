@@ -55,9 +55,7 @@ public class SchnitzelJagdManager implements ISchnitzelJagdManager  {
 				
 				@Override
 				public void call(boolean b) {
-					if (b)
-						getGPSPosition();
-					
+					;
 				}
 			};
 			gm.showSettingsAlert(cb);
